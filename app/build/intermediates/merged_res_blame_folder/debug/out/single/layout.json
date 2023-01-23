@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_main.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_user_profile.xml",
+        "source": "com.abig.myloplay.app-main-71:/layout/activity_user_profile.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/owner_playlist_item.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/owner_playlist_item.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_home.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_home.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/others_playlist_item.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/others_playlist_item.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_edit_playlist.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_edit_playlist.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_playlist_details.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_playlist_details.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/dialog_add_playlist.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/dialog_add_playlist.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_sign_up.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_sign_up.xml"
+    },
+    {
+        "merged": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-68:/layout/activity_user_profile.xml",
+        "source": "/Users/mac/.gradle/daemon/7.5/com.abig.myloplay.app-main-71:/layout/activity_user_profile.xml"
+    }
+]

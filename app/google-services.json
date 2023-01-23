@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "985014054396",
+    "firebase_url": "https://playlist-app-17331.firebaseio.com",
+    "project_id": "playlist-app-17331",
+    "storage_bucket": "playlist-app-17331.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985014054396:android:35d5a623d7cfb3e0d81679",
+        "android_client_info": {
+          "package_name": "code.name.monkey.retromusic.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-GRBHufpVFcWR1MkuPsLymHsyKhEeRD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985014054396:android:2b72a958e5030a03d81679",
+        "android_client_info": {
+          "package_name": "com.abig.myloplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-GRBHufpVFcWR1MkuPsLymHsyKhEeRD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985014054396:android:8a4f38f5327ada64d81679",
+        "android_client_info": {
+          "package_name": "com.abig.plap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-GRBHufpVFcWR1MkuPsLymHsyKhEeRD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985014054396-gl9291bl77e0sd82n7srf1286qqv8gbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
