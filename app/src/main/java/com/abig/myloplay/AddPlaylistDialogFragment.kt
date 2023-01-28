@@ -30,7 +30,7 @@ class AddPlaylistDialogFragment(private var songs: List<String>) : DialogFragmen
                 // Create the playlist
                 val playlistName = binding.editTextPlaylistName.text.toString()
                 val playlist = Playlist(
-                    null,
+                    "",
                     playlistName,
                     FirebaseAuth.getInstance().currentUser!!.uid,
                     songs,

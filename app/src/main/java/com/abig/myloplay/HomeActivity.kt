@@ -118,7 +118,6 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             activityResultLauncher!!.launch(intent)
 
-
 //            val dialog = AddPlaylistDialogFragment()
 //            dialog.show(supportFragmentManager, "addPlaylistDialog")
         }

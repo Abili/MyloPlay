@@ -2,14 +2,15 @@ package com.abig.myloplay
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.firebase.Timestamp
+import androidx.room.TypeConverters
+import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
 @Entity(tableName = "playlists")
-
+@TypeConverters(StringListConverter::class)
 data class Playlist(
     @PrimaryKey
-    var id: String? = "",
+    var id: String,
     var name: String = "",
     val userId: String = "",
     var songIds: List<String>,
@@ -19,5 +20,5 @@ data class Playlist(
 ) : Serializable {
 
 
-    constructor() : this(id = null, name = "", userId = "", songIds = emptyList(), userName = null)
+    constructor() : this(id = "", name = "", userId = "", songIds = emptyList(), userName = null)
 }

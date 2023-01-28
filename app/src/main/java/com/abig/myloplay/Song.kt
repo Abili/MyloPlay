@@ -1,7 +1,6 @@
 package com.abig.myloplay
 
 import android.content.Context
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
@@ -11,15 +10,17 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "songs")
 data class Song(
-    @PrimaryKey val id: String,
-    val name: String,
-    val artist: String,
-    val album: String,
-    val uri: String
+    @PrimaryKey val id: String="",
+    val name: String="",
+    val artist: String="",
+    val album: String="",
+    val duration: String="",
+    val uri: String=""
 ) :
     Parcelable {
 
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -32,6 +33,8 @@ data class Song(
         parcel.writeString(name)
         parcel.writeString(artist)
         parcel.writeString(album)
+        parcel.writeString(duration)
+        parcel.writeString(uri)
     }
 
     override fun describeContents(): Int {
@@ -66,10 +69,12 @@ data class Song(
                 val artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
                 val albumColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
                 val idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID)
+                val duration = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
                 val thisTitle = musicCursor.getString(titleColumn)
                 val thisArtist = musicCursor.getString(artistColumn)
                 val thisId = musicCursor.getString(idColumn)
-                song = Song(thisId, thisTitle, thisArtist, albumColumn.toString(), uri.toString())
+                val thisDuration = musicCursor.getString(duration)
+                song = Song(thisId, thisTitle, thisArtist, albumColumn.toString(),thisDuration.toString(), uri.toString())
             }
             musicCursor?.close()
             return song!!

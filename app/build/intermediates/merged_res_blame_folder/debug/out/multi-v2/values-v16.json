@@ -1,20 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-67:/values-v16/values-v16.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-68:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-3/0128535dac6ec0b76fceac234e84ea5f/transformed/core-1.10.0-alpha01/res/values-v16/values-v16.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "65",
-                        "endOffsets": "116"
-                    }
-                },
-                {
-                    "source": "/Users/mac/.gradle/caches/transforms-3/9995f99777d9072a318e98cb3715c140/transformed/appcompat-1.5.1/res/values-v16/values-v16.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/9995f99777d9072a318e98cb3715c140/transformed/appcompat-1.5.1/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -30,6 +20,16 @@
                         "endLines": "6",
                         "endColumns": "12",
                         "endOffsets": "289"
+                    }
+                },
+                {
+                    "source": "/Users/user/.gradle/caches/transforms-3/8af8376c93940efe83b8f6d4e756a0d7/transformed/core-1.9.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
                     }
                 }
             ]

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout-land/playlist_item.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout-land/playlist_item.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout-land/song_item.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout-land/song_item.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout-land/activity_playlist_details.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout-land/activity_playlist_details.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout-land/activity_playlists.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout-land/activity_playlists.xml"
+    }
+]
