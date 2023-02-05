@@ -4,6 +4,7 @@ package com.abig.myloplay.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -11,13 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import com.abig.myloplay.R;
-import de.hdodenhof.circleimageview.CircleImageView;
 import java.lang.Deprecated;
 import java.lang.Object;
 
 public abstract class OthersPlaylistItemBinding extends ViewDataBinding {
   @NonNull
-  public final CircleImageView othersProfileImage;
+  public final ImageView othersProfileImage;
 
   @NonNull
   public final TextView textViewNumSongs;
@@ -35,7 +35,7 @@ public abstract class OthersPlaylistItemBinding extends ViewDataBinding {
   public final LinearLayout textViewsContainer2;
 
   protected OthersPlaylistItemBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      CircleImageView othersProfileImage, TextView textViewNumSongs, TextView textViewPlaylistName,
+      ImageView othersProfileImage, TextView textViewNumSongs, TextView textViewPlaylistName,
       TextView textViewUserName, LinearLayout textViewsContainer,
       LinearLayout textViewsContainer2) {
     super(_bindingComponent, _root, _localFieldCount);

@@ -1,14 +1,17 @@
 package com.abig.myloplay
 
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abig.myloplay.databinding.ActivityHomeBinding
 import com.google.android.material.snackbar.Snackbar
@@ -41,8 +44,8 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
         setContentView(binding.root)
 
         // Initialize FirebaseAuth and FirebaseDatabase
-        auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         //open the audio files
         openAudioFiles()
@@ -56,13 +59,21 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
         binding.currentUserPlaylists.adapter = currentUserOwnersAdapter
         binding.otherUsersPlaylists.adapter = otherUsersPlaylistsAdapter
 
+        //val gridLayoutManager = GridLayoutManager(this, 2)
         // Set the layout managers for the RecyclerViews
         binding.currentUserPlaylists.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.HORIZONTAL, false
         )
-        binding.otherUsersPlaylists.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.VERTICAL, false
-        )
+        val displayMetrics = Resources.getSystem().displayMetrics
+        val columnWidth = resources.getDimension(R.dimen.column_width).toInt()
+        val numberOfColumns = displayMetrics.widthPixels / columnWidth
+
+        val gridLayoutManager = GridLayoutManager(this, numberOfColumns)
+        binding.otherUsersPlaylists.layoutManager = gridLayoutManager
+
+
+
+        //recyclerView.layoutManager = gridLayoutManager
 //        binding.otherUsersPlaylists
 //            .addItemDecoration(
 //                GridSpacingItemDecoration(
@@ -71,6 +82,12 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 //                    true
 //                )
 //            )
+
+        if (auth.currentUser == null) {
+            binding.otherUsersPlaylists.visibility = View.GONE
+        } else {
+            binding.otherUsersPlaylists.visibility = View.VISIBLE
+        }
 
         // Listen for changes to the playlists collection
         database.reference.child("playlists")

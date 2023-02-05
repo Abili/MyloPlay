@@ -7,5 +7,5 @@ class User(
     var phone: String = "",
     var email: String? = ""
 ) {
-
+    constructor(): this(id="", imageUrl="", username="", phone="", email="")
 }

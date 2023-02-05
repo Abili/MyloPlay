@@ -15,7 +15,7 @@
     <string name="num_songs">Songs: %d</string>
     <string name="edit_playlist">Edit Playlist</string>
     <string name="save">Save</string>
-    <string name="my_friends_playslists">My Friends Playslists</string>
+    <string name="my_friends_playslists">Friends Playslists</string>
     <string name="my_playlists">My Playlists</string>
     <string name="floating_action_button">floating action button</string>
     <string name="title_activity_user_profile">User Profile</string>

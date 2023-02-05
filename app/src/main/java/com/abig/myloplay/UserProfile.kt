@@ -50,7 +50,9 @@ class UserProfile : AppCompatActivity() {
 
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+        val ref = FirebaseDatabase.getInstance().getReference("playlists")
+        ref.keepSynced(true)
         // Initialize FirebaseAuth and FirebaseDatabase
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
@@ -125,7 +127,7 @@ class UserProfile : AppCompatActivity() {
 
         // Add the playlist to the Firebase database
         val playlistRef = FirebaseDatabase.getInstance().reference.child("users")
-        val userId = playlistRef.push().key
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
         user.id = userId!!
         if (!(firstName.isEmpty() || lastName.isEmpty()
                     || email.isEmpty()

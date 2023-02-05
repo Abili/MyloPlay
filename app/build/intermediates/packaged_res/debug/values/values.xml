@@ -7,6 +7,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="white">#FFFFFFFF</color>
+    <dimen name="column_width">180dp</dimen>
     <string name="add_playlist">Add Playlist</string>
     <string name="app_name">MyloPlay</string>
     <string name="cancel">Cancel</string>
@@ -24,7 +25,7 @@
     <string name="google_storage_bucket" translatable="false">playlist-app-17331.appspot.com</string>
     <string name="last_name">Last Name</string>
     <string name="log_in">LogIn</string>
-    <string name="my_friends_playslists">My Friends Playslists</string>
+    <string name="my_friends_playslists">Friends Playslists</string>
     <string name="my_playlists">My Playlists</string>
     <string name="num_songs">Songs: %d</string>
     <string name="password">Password</string>

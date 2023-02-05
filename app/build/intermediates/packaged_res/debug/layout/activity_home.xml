@@ -17,7 +17,7 @@
         android:paddingBottom="10dp"
         android:text="@string/my_playlists"
         android:textColor="@color/white"
-        android:textSize="36sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
 
@@ -41,7 +41,7 @@
         android:paddingBottom="10dp"
         android:text="@string/my_friends_playslists"
         android:textColor="@color/white"
-        android:textSize="36sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <GridLayout
@@ -55,7 +55,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/owner_playlist_item" />
+            tools:listitem="@layout/others_playlist_item" />
 
 
     </GridLayout>
