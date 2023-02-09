@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.lifecycleScope
 import com.abig.myloplay.databinding.ActivityUserProfileBinding
@@ -22,6 +21,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
 class UserProfile : AppCompatActivity() {
@@ -32,6 +32,7 @@ class UserProfile : AppCompatActivity() {
     // FirebaseAuth instance
     private lateinit var auth: FirebaseAuth
     val imageUri = mutableStateOf<Uri?>(null)
+    private lateinit var downloadUrl: Uri
 
     // FirebaseDatabase instance
     private lateinit var database: FirebaseDatabase
@@ -110,7 +111,7 @@ class UserProfile : AppCompatActivity() {
         private const val TAG = "HomeActivity"
     }
 
-    private fun uploadImage(imageUri: MutableState<Uri?>) {
+    private fun uploadImage(imageUri: Uri) {
         val firstName = binding.editTextTextPersonFirstName.text.toString()
         //var imageUrl = binding.imageView.setImageURI(imageUri.value)
         val lastName = binding.editTextTextPersonLastName.text.toString()
@@ -119,7 +120,7 @@ class UserProfile : AppCompatActivity() {
         val username = "$firstName $lastName"
         val user = User(
             FirebaseAuth.getInstance().currentUser!!.uid,
-            imageUri.value.toString(),
+            downloadUrl.toString(),
             username,
             phone,
             email
@@ -214,7 +215,39 @@ class UserProfile : AppCompatActivity() {
                     Snackbar.make(binding.root, "Email already Exists", Snackbar.LENGTH_SHORT)
                         .show()
                 } else {
-                    uploadImage(imageUri)
+
+                    binding.progressBar.visibility = View.VISIBLE
+                    downloadUrl = imageUri.value!!
+                    //val downloadUrl = it.metadata!!.reference!!.downloadUrl
+
+                    val filePath = downloadUrl
+
+                    val storageRef = FirebaseStorage.getInstance().reference
+                    val imageRef = storageRef.child("userimages/" + filePath.lastPathSegment)
+                    val uploadTask = imageRef.putFile(filePath)
+
+                    uploadTask.continueWithTask { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        imageRef.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUrl = task.result
+                            // save downloadUrl to database
+                            uploadImage(downloadUrl)
+                        } else {
+                            // Handle failure
+                            Snackbar.make(binding.root, "Uploading...", Snackbar.LENGTH_SHORT)
+                                .show()
+                        }
+
+
+                    }
+
+
                 }
             }
 
