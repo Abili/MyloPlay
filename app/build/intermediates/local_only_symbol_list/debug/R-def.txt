@@ -92,6 +92,7 @@ id toolbar
 layout activity_edit_playlist
 layout activity_home
 layout activity_main
+layout activity_my_account
 layout activity_mylo_player
 layout activity_playlist_details
 layout activity_playlists

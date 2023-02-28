@@ -3,14 +3,22 @@ package com.abig.myloplay
 import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.app.AlertDialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abig.myloplay.databinding.ActivityHomeBinding
@@ -25,6 +33,8 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 
     // ViewBinding variable for the activity layout
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var readExternalStoragePermissionLauncher: ActivityResultLauncher<String>
+
 
     // FirebaseAuth instance
     private lateinit var auth: FirebaseAuth
@@ -47,8 +57,10 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        //open the audio files
+
         openAudioFiles()
+        //open the audio files
+
         // Set up the RecyclerView
         // ...
         // Initialize the adapters for the RecyclerViews
@@ -70,7 +82,6 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 
         val gridLayoutManager = GridLayoutManager(this, numberOfColumns)
         binding.otherUsersPlaylists.layoutManager = gridLayoutManager
-
 
 
         //recyclerView.layoutManager = gridLayoutManager
@@ -142,6 +153,68 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 
     }
 
+    private fun checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            ) {
+                AlertDialog.Builder(this)
+                    .setTitle("give permission")
+                    .setMessage("Allow Access External Storage")
+                    .setPositiveButton(
+                        "OK"
+                    ) { dialogInterface, i ->
+                        ActivityCompat.requestPermissions(
+                            this@HomeActivity,
+                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            1
+                        )
+                    }
+                    .create()
+                    .show()
+            } else {
+                ActivityCompat.requestPermissions(
+                    this@HomeActivity,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    1
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        openAudioFiles()
+                    }
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "Please provide the permission",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
     private fun openAudioFiles() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -149,8 +222,7 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
                     imageUri.value = Uri.parse(result.data.toString())
                     val selectedSongs = getSelectedAudioFiles(result.data)
                     // Get the song ids
-
-                    // Create and show the add playlist dialogr
+                    // Create and show the add playlist dialog
                     val addPlaylistDialogFragment =
                         AddPlaylistDialogFragment.newInstance(this, selectedSongs)
                     addPlaylistDialogFragment.show(supportFragmentManager, "add_playlist_dialog")
@@ -161,6 +233,7 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
     companion object {
         private const val REQUEST_CODE_SELECT_SONGS = 3
         private const val TAG = "HomeActivity"
+        private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -179,8 +252,8 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 
     }
 
-    private fun getSelectedAudioFiles(data: Intent?): List<String> {
-        val selectedSongs = mutableListOf<String>()
+    private fun getSelectedAudioFiles(data: Intent?): List<Uri> {
+        val selectedSongs = mutableListOf<Uri>()
         // Check if the Intent contains a clip data
         if (data?.clipData != null) {
             // Iterate over the clip data items
@@ -188,12 +261,12 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
                 val item = data.clipData!!.getItemAt(i)
                 // Get the URI of the audio file
                 val uri = item.uri
-                selectedSongs.add(uri.toString())
+                selectedSongs.add(uri)
             }
         } else if (data?.data != null) {
             // Get the URI of the audio file
             val uri = data.data
-            selectedSongs.add(uri.toString())
+            selectedSongs.add(uri!!)
         }
         return selectedSongs
     }

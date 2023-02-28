@@ -34,6 +34,9 @@
         android:testOnly="true"
         android:theme="@style/Theme.MyloPlay" >
         <activity
+            android:name="com.abig.myloplay.MyAccount"
+            android:exported="false" />
+        <activity
             android:name="com.abig.myloplay.MyloPlayer"
             android:exported="false" />
         <activity

@@ -4,12 +4,12 @@
         "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/owner_playlist_item.xml"
     },
     {
-        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout/others_playlist_item.xml",
-        "source": "com.abig.myloplay.app-main-72:/layout/others_playlist_item.xml"
-    },
-    {
         "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_user_profile.xml",
         "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_user_profile.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_my_account.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout/activity_my_account.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_home.xml",
