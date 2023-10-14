@@ -90,7 +90,7 @@ class OthersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         binding.textViewUserName.text = userName
                         binding.textViewPlaylistName.text = playlist.name
                         binding.textViewNumSongs.text =
-                            itemView.context.getString(R.string.num_songs, playlist.songIds.size)
+                            itemView.context.getString(R.string.num_songs, playlist.songIds!!.size)
 
 
                     }

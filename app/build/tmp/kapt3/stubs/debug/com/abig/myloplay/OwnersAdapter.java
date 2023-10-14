@@ -10,26 +10,26 @@ public final class OwnersAdapter extends androidx.recyclerview.widget.RecyclerVi
         super();
     }
     
-    public final void add(@org.jetbrains.annotations.NotNull()
+    public final void add(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Playlist playlist) {
     }
     
     public final void clear() {
     }
     
-    @org.jetbrains.annotations.NotNull()
-    @java.lang.Override()
-    public com.abig.myloplay.ViewHolder onCreateViewHolder(@org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
+    @java.lang.Override
+    public com.abig.myloplay.ViewHolder onCreateViewHolder(@org.jetbrains.annotations.NotNull
     android.view.ViewGroup parent, int viewType) {
         return null;
     }
     
-    @java.lang.Override()
-    public void onBindViewHolder(@org.jetbrains.annotations.NotNull()
+    @java.lang.Override
+    public void onBindViewHolder(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.ViewHolder holder, int position) {
     }
     
-    @java.lang.Override()
+    @java.lang.Override
     public int getItemCount() {
         return 0;
     }

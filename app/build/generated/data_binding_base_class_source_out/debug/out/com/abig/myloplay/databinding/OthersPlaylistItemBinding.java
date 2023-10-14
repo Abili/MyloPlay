@@ -29,21 +29,16 @@ public abstract class OthersPlaylistItemBinding extends ViewDataBinding {
   public final TextView textViewUserName;
 
   @NonNull
-  public final LinearLayout textViewsContainer;
-
-  @NonNull
   public final LinearLayout textViewsContainer2;
 
   protected OthersPlaylistItemBinding(Object _bindingComponent, View _root, int _localFieldCount,
       ImageView othersProfileImage, TextView textViewNumSongs, TextView textViewPlaylistName,
-      TextView textViewUserName, LinearLayout textViewsContainer,
-      LinearLayout textViewsContainer2) {
+      TextView textViewUserName, LinearLayout textViewsContainer2) {
     super(_bindingComponent, _root, _localFieldCount);
     this.othersProfileImage = othersProfileImage;
     this.textViewNumSongs = textViewNumSongs;
     this.textViewPlaylistName = textViewPlaylistName;
     this.textViewUserName = textViewUserName;
-    this.textViewsContainer = textViewsContainer;
     this.textViewsContainer2 = textViewsContainer2;
   }
 

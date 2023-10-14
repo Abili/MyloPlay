@@ -26,19 +26,15 @@ public abstract class OwnerPlaylistItemBinding extends ViewDataBinding {
   public final TextView textViewPlaylistName;
 
   @NonNull
-  public final TextView textViewUserName;
-
-  @NonNull
   public final LinearLayout textViewsContainer;
 
   protected OwnerPlaylistItemBinding(Object _bindingComponent, View _root, int _localFieldCount,
       ImageView ownersProfileImage, TextView textViewNumSongs, TextView textViewPlaylistName,
-      TextView textViewUserName, LinearLayout textViewsContainer) {
+      LinearLayout textViewsContainer) {
     super(_bindingComponent, _root, _localFieldCount);
     this.ownersProfileImage = ownersProfileImage;
     this.textViewNumSongs = textViewNumSongs;
     this.textViewPlaylistName = textViewPlaylistName;
-    this.textViewUserName = textViewUserName;
     this.textViewsContainer = textViewsContainer;
   }
 

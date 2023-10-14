@@ -10,9 +10,9 @@ public final class PlaylistDetailsActivity extends androidx.appcompat.app.AppCom
     private com.abig.myloplay.PlaylistRepository repository;
     private com.google.firebase.database.DatabaseReference playlistsRef;
     private com.abig.myloplay.PlaylistDetailsViewModel viewModel;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final com.abig.myloplay.PlaylistDetailsActivity.Companion Companion = null;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final java.lang.String EXTRA_PLAYLIST_ID = "playlist_id";
     public static final int REQUEST_EDIT_PLAYLIST = 1;
     
@@ -20,13 +20,13 @@ public final class PlaylistDetailsActivity extends androidx.appcompat.app.AppCom
         super();
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
     
-    @java.lang.Override()
-    protected void onActivityResult(int requestCode, int resultCode, @org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onActivityResult(int requestCode, int resultCode, @org.jetbrains.annotations.Nullable
     android.content.Intent data) {
     }
     

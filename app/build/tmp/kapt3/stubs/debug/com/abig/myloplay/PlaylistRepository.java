@@ -6,43 +6,43 @@ import java.lang.System;
 public final class PlaylistRepository {
     private final com.abig.myloplay.PlaylistDao playlistDao = null;
     
-    public PlaylistRepository(@org.jetbrains.annotations.NotNull()
+    public PlaylistRepository(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.PlaylistDao playlistDao) {
         super();
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.LiveData<java.util.List<com.abig.myloplay.Playlist>> getPlaylists() {
         return null;
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final com.abig.myloplay.Playlist getPlaylist(@org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final com.abig.myloplay.Playlist getPlaylist(@org.jetbrains.annotations.NotNull
     java.lang.String id) {
         return null;
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.Object savePlaylist(@org.jetbrains.annotations.NotNull()
-    com.abig.myloplay.Playlist playlist, @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object savePlaylist(@org.jetbrains.annotations.NotNull
+    com.abig.myloplay.Playlist playlist, @org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super kotlin.Unit> continuation) {
         return null;
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.Object deletePlaylist(@org.jetbrains.annotations.NotNull()
-    com.abig.myloplay.Playlist playlist, @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object deletePlaylist(@org.jetbrains.annotations.NotNull
+    com.abig.myloplay.Playlist playlist, @org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super kotlin.Unit> continuation) {
         return null;
     }
     
-    @org.jetbrains.annotations.NotNull()
-    public final java.util.List<com.abig.myloplay.Song> getSongs(@org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
+    public final java.util.List<com.abig.myloplay.Song> getSongs(@org.jetbrains.annotations.NotNull
     java.util.List<java.lang.String> songIds) {
         return null;
     }
     
-    public final void updatePlaylist(@org.jetbrains.annotations.NotNull()
+    public final void updatePlaylist(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Playlist playlist) {
     }
 }

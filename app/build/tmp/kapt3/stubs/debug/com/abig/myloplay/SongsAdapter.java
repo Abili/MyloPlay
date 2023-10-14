@@ -10,27 +10,27 @@ public final class SongsAdapter extends androidx.recyclerview.widget.RecyclerVie
         super();
     }
     
-    public final void add(@org.jetbrains.annotations.NotNull()
+    public final void add(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Song song) {
     }
     
     public final void clear() {
     }
     
-    @org.jetbrains.annotations.NotNull()
-    @java.lang.Override()
-    public com.abig.myloplay.SongsAdapter.PlaylistViewHolder onCreateViewHolder(@org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
+    @java.lang.Override
+    public com.abig.myloplay.SongsAdapter.PlaylistViewHolder onCreateViewHolder(@org.jetbrains.annotations.NotNull
     android.view.ViewGroup parent, int viewType) {
         return null;
     }
     
-    @java.lang.Override()
+    @java.lang.Override
     public int getItemCount() {
         return 0;
     }
     
-    @java.lang.Override()
-    public void onBindViewHolder(@org.jetbrains.annotations.NotNull()
+    @java.lang.Override
+    public void onBindViewHolder(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.SongsAdapter.PlaylistViewHolder holder, int position) {
     }
     
@@ -39,12 +39,12 @@ public final class SongsAdapter extends androidx.recyclerview.widget.RecyclerVie
         private final com.abig.myloplay.databinding.SongItemBinding binding = null;
         private int currentIndex = -1;
         
-        public PlaylistViewHolder(@org.jetbrains.annotations.NotNull()
+        public PlaylistViewHolder(@org.jetbrains.annotations.NotNull
         android.view.View itemView) {
             super(null);
         }
         
-        public final void bind(@org.jetbrains.annotations.NotNull()
+        public final void bind(@org.jetbrains.annotations.NotNull
         com.abig.myloplay.Song song) {
         }
     }

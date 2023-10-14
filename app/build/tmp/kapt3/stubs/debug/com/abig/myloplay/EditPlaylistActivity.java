@@ -7,19 +7,19 @@ public final class EditPlaylistActivity extends androidx.appcompat.app.AppCompat
     private com.abig.myloplay.databinding.ActivityEditPlaylistBinding binding;
     private com.abig.myloplay.EditPlaylistViewModel viewModel;
     private com.abig.myloplay.Playlist playlist;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final com.abig.myloplay.EditPlaylistActivity.Companion Companion = null;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final java.lang.String EXTRA_PLAYLIST_ID = "playlist_id";
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final java.lang.String EXTRA_PLAYLIST = "EXTRA_PLAYLIST";
     
     public EditPlaylistActivity() {
         super();
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
     

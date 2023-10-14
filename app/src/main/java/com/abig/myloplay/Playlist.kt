@@ -13,7 +13,7 @@ data class Playlist(
     var id: String,
     var name: String = "",
     val userId: String = "",
-    var songIds: List<String>,
+    var songIds: List<String>?=null,
     val userName: String? = "",// Add this field
     //val time: Timestamp = Timestamp.now()
     var time: Long = System.currentTimeMillis()

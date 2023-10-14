@@ -23,14 +23,14 @@ class EditPlaylistViewModel(
         viewModelScope.launch {
             val playlist = repository.getPlaylist(playlistId)
             _playlist.value = playlist
-            _songs.value = repository.getSongs(playlist!!.songIds)
+            _songs.value = repository.getSongs(playlist!!.songIds!!)
         }
     }
 
     fun addSong(song: Song) {
         viewModelScope.launch {
             val playlist = _playlist.value!!
-            val songIds = playlist.songIds.toMutableList()
+            val songIds = playlist.songIds!!.toMutableList()
             songIds.add(song.id.toString())
             playlist.songIds = songIds
             repository.updatePlaylist(playlist)
@@ -40,7 +40,7 @@ class EditPlaylistViewModel(
     fun removeSong(song: Song) {
         viewModelScope.launch {
             val playlist = _playlist.value!!
-            val songIds = playlist.songIds.toMutableList()
+            val songIds = playlist.songIds!!.toMutableList()
             songIds.remove(song.id.toString())
             playlist.songIds = songIds
             repository.updatePlaylist(playlist)

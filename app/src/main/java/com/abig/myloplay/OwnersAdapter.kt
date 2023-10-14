@@ -66,10 +66,10 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         // Set the user name, playlist name, and number of songs
 
-        binding.textViewUserName.text = playlist.userName
+        //binding.textViewPlaylistName.text = playlist.userName
         binding.textViewPlaylistName.text = playlist.name
         binding.textViewNumSongs.text =
-            itemView.context.getString(R.string.num_songs, playlist.songIds.size)
+            itemView.context.getString(R.string.num_songs, playlist.songIds!!.size)
 
         // Set up click listener for the playlist
         itemView.setOnClickListener {

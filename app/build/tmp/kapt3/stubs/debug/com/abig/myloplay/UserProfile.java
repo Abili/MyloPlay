@@ -6,7 +6,7 @@ import java.lang.System;
 public final class UserProfile extends androidx.appcompat.app.AppCompatActivity {
     private com.abig.myloplay.databinding.ActivityUserProfileBinding binding;
     private com.google.firebase.auth.FirebaseAuth auth;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     private final androidx.compose.runtime.MutableState<android.net.Uri> imageUri = null;
     private android.net.Uri downloadUrl;
     private com.google.firebase.database.FirebaseDatabase database;
@@ -17,7 +17,7 @@ public final class UserProfile extends androidx.appcompat.app.AppCompatActivity 
     private java.lang.String firstName;
     private java.lang.String lastName;
     private com.abig.myloplay.OwnersAdapter adapter;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final com.abig.myloplay.UserProfile.Companion Companion = null;
     private static final int REQUEST_CODE_SELECT_SONGS = 3;
     private static final java.lang.String TAG = "HomeActivity";
@@ -26,13 +26,13 @@ public final class UserProfile extends androidx.appcompat.app.AppCompatActivity 
         super();
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.compose.runtime.MutableState<android.net.Uri> getImageUri() {
         return null;
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
     

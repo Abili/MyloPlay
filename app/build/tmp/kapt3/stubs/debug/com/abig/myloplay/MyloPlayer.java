@@ -11,17 +11,17 @@ public final class MyloPlayer extends androidx.appcompat.app.AppCompatActivity {
     private final java.util.List<com.abig.myloplay.Song> playlists = null;
     private final java.util.List<com.abig.myloplay.Song> songs = null;
     private java.lang.String songUri;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final com.abig.myloplay.MyloPlayer.Companion Companion = null;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final java.lang.String EXTRA_SONG_URI = "song_uri";
     
     public MyloPlayer() {
         super();
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
     

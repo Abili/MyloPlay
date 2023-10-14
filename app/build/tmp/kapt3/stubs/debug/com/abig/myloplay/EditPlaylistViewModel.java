@@ -8,48 +8,48 @@ public final class EditPlaylistViewModel extends androidx.lifecycle.ViewModel {
     private final android.content.Context context = null;
     private final androidx.lifecycle.MutableLiveData<com.abig.myloplay.Playlist> _playlist = null;
     private final com.abig.myloplay.PlaylistDao playlistDao = null;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     private final androidx.lifecycle.MutableLiveData<java.util.List<java.lang.Long>> selectedSongIds = null;
     private final androidx.lifecycle.MutableLiveData<java.util.List<com.abig.myloplay.Song>> _songs = null;
     
-    public EditPlaylistViewModel(long playlistId, @org.jetbrains.annotations.NotNull()
-    com.abig.myloplay.PlaylistRepository repository, @org.jetbrains.annotations.NotNull()
+    public EditPlaylistViewModel(long playlistId, @org.jetbrains.annotations.NotNull
+    com.abig.myloplay.PlaylistRepository repository, @org.jetbrains.annotations.NotNull
     android.content.Context context) {
         super();
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.MutableLiveData<java.util.List<java.lang.Long>> getSelectedSongIds() {
         return null;
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.LiveData<com.abig.myloplay.Playlist> getPlaylist() {
         return null;
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.LiveData<java.util.List<com.abig.myloplay.Song>> getSongs() {
         return null;
     }
     
-    public final void start(@org.jetbrains.annotations.NotNull()
+    public final void start(@org.jetbrains.annotations.NotNull
     java.lang.String playlistId) {
     }
     
-    public final void addSong(@org.jetbrains.annotations.NotNull()
+    public final void addSong(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Song song) {
     }
     
-    public final void removeSong(@org.jetbrains.annotations.NotNull()
+    public final void removeSong(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Song song) {
     }
     
-    public final void updatePlaylist(@org.jetbrains.annotations.NotNull()
+    public final void updatePlaylist(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Playlist playlist) {
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final com.abig.myloplay.PlaylistResult getPlaylist(long playlistId) {
         return null;
     }

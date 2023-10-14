@@ -10,12 +10,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "songs")
 data class Song(
-    @PrimaryKey val id: String="",
-    val name: String="",
-    val artist: String="",
-    val album: String="",
-    val duration: String="",
-    val uri: String=""
+    @PrimaryKey val id: String = "",
+    val name: String = "",
+    val artist: String = "",
+    val album: String = "",
+    val duration: String = "",
+    val uri: String = ""
 ) :
     Parcelable {
 
@@ -53,7 +53,7 @@ data class Song(
             }
         }
 
-        fun fromUri(context: Context, uri: Uri): Song {
+        fun fromUri(context: Context, uri: Uri): Song? {
             val musicResolver = context.contentResolver
             val musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             val musicCursor = musicResolver.query(
@@ -72,12 +72,13 @@ data class Song(
                 val duration = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
                 val thisTitle = musicCursor.getString(titleColumn)
                 val thisArtist = musicCursor.getString(artistColumn)
+                val thisAlbum = musicCursor.getString(albumColumn)
                 val thisId = musicCursor.getString(idColumn)
                 val thisDuration = musicCursor.getString(duration)
-                song = Song(thisId, thisTitle, thisArtist, albumColumn.toString(),thisDuration.toString(), uri.toString())
+                song = Song(thisId, thisTitle, thisArtist, thisAlbum, thisDuration, uri.toString())
             }
             musicCursor?.close()
-            return song!!
+            return song
         }
     }
 

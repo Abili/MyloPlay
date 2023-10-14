@@ -31,7 +31,7 @@ class PlaylistDetailsViewModel(
             val playlist = playlistRepository.getPlaylist(playlistId)
             if (playlist != null) {
                 _playlist.value = playlist
-                _songList.value = playlistRepository.getSongs(playlist.songIds)
+                _songList.value = playlistRepository.getSongs(playlist.songIds!!)
             }
         }
     }

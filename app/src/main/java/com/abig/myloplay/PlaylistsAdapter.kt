@@ -43,7 +43,7 @@ class PlaylistsAdapter : RecyclerView.Adapter<PlaylistsAdapter.PlaylistViewHolde
         fun bind(playlist: Playlist) {
             binding.playlistName.text = playlist.name
             binding.playlistNumSongs.text =
-                itemView.context.getString(R.string.num_songs, playlist.songIds.size)
+                itemView.context.getString(R.string.num_songs, playlist.songIds!!.size)
 
             // Set up click listener for the playlist
             itemView.setOnClickListener {

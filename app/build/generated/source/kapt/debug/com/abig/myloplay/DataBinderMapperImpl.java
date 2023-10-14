@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding;
 import com.abig.myloplay.databinding.ActivityEditPlaylistBindingImpl;
 import com.abig.myloplay.databinding.ActivityUserProfileBindingImpl;
 import com.abig.myloplay.databinding.OthersPlaylistItemBindingImpl;
+import com.abig.myloplay.databinding.OwnerPlItemBindingImpl;
 import com.abig.myloplay.databinding.OwnerPlaylistItemBindingImpl;
 import java.lang.IllegalArgumentException;
 import java.lang.Integer;
@@ -27,14 +28,17 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_OTHERSPLAYLISTITEM = 3;
 
-  private static final int LAYOUT_OWNERPLAYLISTITEM = 4;
+  private static final int LAYOUT_OWNERPLITEM = 4;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(4);
+  private static final int LAYOUT_OWNERPLAYLISTITEM = 5;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(5);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.activity_edit_playlist, LAYOUT_ACTIVITYEDITPLAYLIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.activity_user_profile, LAYOUT_ACTIVITYUSERPROFILE);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.others_playlist_item, LAYOUT_OTHERSPLAYLISTITEM);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.owner_pl_item, LAYOUT_OWNERPLITEM);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.owner_playlist_item, LAYOUT_OWNERPLAYLISTITEM);
   }
 
@@ -64,6 +68,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
             return new OthersPlaylistItemBindingImpl(component, view);
           }
           throw new IllegalArgumentException("The tag for others_playlist_item is invalid. Received: " + tag);
+        }
+        case  LAYOUT_OWNERPLITEM: {
+          if ("layout/owner_pl_item_0".equals(tag)) {
+            return new OwnerPlItemBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for owner_pl_item is invalid. Received: " + tag);
         }
         case  LAYOUT_OWNERPLAYLISTITEM: {
           if ("layout/owner_playlist_item_0".equals(tag)) {
@@ -125,12 +135,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(4);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(5);
 
     static {
       sKeys.put("layout/activity_edit_playlist_0", com.abig.myloplay.R.layout.activity_edit_playlist);
       sKeys.put("layout/activity_user_profile_0", com.abig.myloplay.R.layout.activity_user_profile);
       sKeys.put("layout/others_playlist_item_0", com.abig.myloplay.R.layout.others_playlist_item);
+      sKeys.put("layout/owner_pl_item_0", com.abig.myloplay.R.layout.owner_pl_item);
       sKeys.put("layout/owner_playlist_item_0", com.abig.myloplay.R.layout.owner_playlist_item);
     }
   }

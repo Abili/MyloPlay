@@ -7,12 +7,12 @@ public final class ViewHolder extends androidx.recyclerview.widget.RecyclerView.
     private com.google.firebase.auth.FirebaseAuth auth;
     private final com.abig.myloplay.databinding.OwnerPlaylistItemBinding binding = null;
     
-    public ViewHolder(@org.jetbrains.annotations.NotNull()
+    public ViewHolder(@org.jetbrains.annotations.NotNull
     android.view.View itemView) {
         super(null);
     }
     
-    public final void bind(@org.jetbrains.annotations.NotNull()
+    public final void bind(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Playlist playlist) {
     }
 }

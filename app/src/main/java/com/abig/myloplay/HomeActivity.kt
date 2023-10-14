@@ -6,13 +6,10 @@ import android.net.Uri
 import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -58,7 +55,7 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
         auth = FirebaseAuth.getInstance()
 
 
-        openAudioFiles()
+       checkLocationPermission()
         //open the audio files
 
         // Set up the RecyclerView
@@ -252,8 +249,9 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
 
     }
 
-    private fun getSelectedAudioFiles(data: Intent?): List<Uri> {
-        val selectedSongs = mutableListOf<Uri>()
+    private fun getSelectedAudioFiles(data: Intent?): List<Song> {
+        val selectedSongs = mutableListOf<Song>()
+
         // Check if the Intent contains a clip data
         if (data?.clipData != null) {
             // Iterate over the clip data items
@@ -261,15 +259,29 @@ class HomeActivity : AppCompatActivity(), AddPlaylistDialogFragment.AddPlaylistD
                 val item = data.clipData!!.getItemAt(i)
                 // Get the URI of the audio file
                 val uri = item.uri
-                selectedSongs.add(uri)
+                // Create a Song object from the URI
+                val song = Song.fromUri(this, uri)
+                if (song != null) {
+                    selectedSongs.add(song)
+                }
             }
         } else if (data?.data != null) {
             // Get the URI of the audio file
             val uri = data.data
-            selectedSongs.add(uri!!)
+            if (uri != null) {
+                // Create a Song object from the URI
+                val song = Song.fromUri(this, uri)
+                if (song != null) {
+                    selectedSongs.add(song)
+                }
+            }
         }
+
         return selectedSongs
     }
+
+
+
 
 
     override fun onPlaylistCreated(playlist: Playlist) {

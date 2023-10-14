@@ -30,46 +30,34 @@
                     android:src="@drawable/utubemusic"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="0.7dp" />
-
-                <LinearLayout
-                    android:id="@+id/textViewsContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|bottom"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textViewNumSongs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/textViewUserName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="username"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/textViewPlaylistName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#80000000"
-                        android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:text="@string/playlist_name"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/textViewsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewNumSongs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 songs"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewPlaylistName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/playlist_name"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

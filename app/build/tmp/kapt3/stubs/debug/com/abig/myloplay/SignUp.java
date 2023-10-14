@@ -9,8 +9,8 @@ public final class SignUp extends androidx.appcompat.app.AppCompatActivity {
         super();
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
 }

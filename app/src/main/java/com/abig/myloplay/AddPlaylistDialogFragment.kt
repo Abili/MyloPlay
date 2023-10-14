@@ -8,14 +8,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.mutableStateOf
 import androidx.fragment.app.DialogFragment
 import com.abig.myloplay.databinding.DialogAddPlaylistBinding
-import com.google.android.gms.tasks.Tasks
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 
-class AddPlaylistDialogFragment(private var songs: List<Uri>) : DialogFragment() {
+class AddPlaylistDialogFragment(private var songs: List<Song>) : DialogFragment() {
 
     interface AddPlaylistDialogListener {
         fun onPlaylistCreated(playlist: Playlist)
@@ -42,8 +41,8 @@ class AddPlaylistDialogFragment(private var songs: List<Uri>) : DialogFragment()
 // Loop through the list of songs and create an upload task for each song
                 for (song in songs) {
                     val storageRef = FirebaseStorage.getInstance().reference
-                    val imageRef = storageRef.child("playlistsongs/${song.lastPathSegment}")
-                    val uploadTask = imageRef.putFile(song)
+                    val imageRef = storageRef.child("playlistsongs/${song}")
+                    val uploadTask = imageRef.putFile(Uri.parse(song.uri))
                     uploadTasks.add(uploadTask)
                     uploadTask.continueWithTask { it ->
                         if (!it.isSuccessful) {
@@ -109,7 +108,7 @@ class AddPlaylistDialogFragment(private var songs: List<Uri>) : DialogFragment()
     }
 
     companion object {
-        fun newInstance(context: Context, songIds: List<Uri>): AddPlaylistDialogFragment {
+        fun newInstance(context: Context, songIds: List<Song>): AddPlaylistDialogFragment {
             return AddPlaylistDialogFragment(songIds)
         }
 

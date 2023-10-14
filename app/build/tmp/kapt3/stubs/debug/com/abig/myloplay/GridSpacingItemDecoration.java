@@ -12,11 +12,11 @@ public final class GridSpacingItemDecoration extends androidx.recyclerview.widge
         super();
     }
     
-    @java.lang.Override()
-    public void getItemOffsets(@org.jetbrains.annotations.NotNull()
-    android.graphics.Rect outRect, @org.jetbrains.annotations.NotNull()
-    android.view.View view, @org.jetbrains.annotations.NotNull()
-    androidx.recyclerview.widget.RecyclerView parent, @org.jetbrains.annotations.NotNull()
+    @java.lang.Override
+    public void getItemOffsets(@org.jetbrains.annotations.NotNull
+    android.graphics.Rect outRect, @org.jetbrains.annotations.NotNull
+    android.view.View view, @org.jetbrains.annotations.NotNull
+    androidx.recyclerview.widget.RecyclerView parent, @org.jetbrains.annotations.NotNull
     androidx.recyclerview.widget.RecyclerView.State state) {
     }
 }

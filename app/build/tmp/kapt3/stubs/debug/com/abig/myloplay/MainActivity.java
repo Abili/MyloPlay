@@ -6,7 +6,7 @@ import java.lang.System;
 public final class MainActivity extends androidx.appcompat.app.AppCompatActivity {
     private com.abig.myloplay.databinding.ActivityMainBinding binding;
     private com.google.firebase.auth.FirebaseAuth auth;
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public static final com.abig.myloplay.MainActivity.Companion Companion = null;
     private static final java.lang.String TAG = "MainActivity";
     
@@ -14,8 +14,8 @@ public final class MainActivity extends androidx.appcompat.app.AppCompatActivity
         super();
     }
     
-    @java.lang.Override()
-    protected void onCreate(@org.jetbrains.annotations.Nullable()
+    @java.lang.Override
+    protected void onCreate(@org.jetbrains.annotations.Nullable
     android.os.Bundle savedInstanceState) {
     }
     

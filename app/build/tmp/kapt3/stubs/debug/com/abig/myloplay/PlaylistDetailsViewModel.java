@@ -8,22 +8,22 @@ public final class PlaylistDetailsViewModel extends androidx.lifecycle.ViewModel
     private final androidx.lifecycle.MutableLiveData<com.abig.myloplay.Playlist> _playlist = null;
     private final androidx.lifecycle.MutableLiveData<java.util.List<com.abig.myloplay.Song>> _songList = null;
     
-    public PlaylistDetailsViewModel(@org.jetbrains.annotations.NotNull()
+    public PlaylistDetailsViewModel(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.PlaylistRepository playlistRepository) {
         super();
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.LiveData<com.abig.myloplay.Playlist> getPlaylist() {
         return null;
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public final androidx.lifecycle.LiveData<java.util.List<com.abig.myloplay.Song>> getSongList() {
         return null;
     }
     
-    public final void loadPlaylist(@org.jetbrains.annotations.NotNull()
+    public final void loadPlaylist(@org.jetbrains.annotations.NotNull
     java.lang.String playlistId) {
     }
     
@@ -31,15 +31,15 @@ public final class PlaylistDetailsViewModel extends androidx.lifecycle.ViewModel
     public static final class Factory implements androidx.lifecycle.ViewModelProvider.Factory {
         private final com.abig.myloplay.PlaylistRepository playlistRepository = null;
         
-        public Factory(@org.jetbrains.annotations.NotNull()
+        public Factory(@org.jetbrains.annotations.NotNull
         com.abig.myloplay.PlaylistRepository playlistRepository) {
             super();
         }
         
-        @org.jetbrains.annotations.NotNull()
+        @org.jetbrains.annotations.NotNull
         @kotlin.Suppress(names = {"UNCHECKED_CAST"})
-        @java.lang.Override()
-        public <T extends androidx.lifecycle.ViewModel>T create(@org.jetbrains.annotations.NotNull()
+        @java.lang.Override
+        public <T extends androidx.lifecycle.ViewModel>T create(@org.jetbrains.annotations.NotNull
         java.lang.Class<T> modelClass) {
             return null;
         }

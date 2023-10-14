@@ -1,242 +1,278 @@
 [
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_sign_up.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_sign_up.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout-land_activity_home.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout-land/activity_home.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout-land_activity_playlists.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout-land/activity_playlists.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-v24/ic_launcher_foreground.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xhdpi/ic_launcher.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-hdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_save.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_save.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_user_profile.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_user_profile.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_playlist_details.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_playlist_details.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_next.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/next.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xxxhdpi/ic_launcher.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_next.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/next.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout-land_song_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout-land/song_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_more_vert.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_more_vert.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_pause.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/pause.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_home.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_home.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_song_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/song_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_all_playlists.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_all_playlists.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_user.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_user.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_playlist_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/playlist_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_background_img.jpeg.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/background_img.jpeg"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_main.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_main.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_utubemusic.jpeg.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/utubemusic.jpeg"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout-land_playlist_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout-land/playlist_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_myloplay_logo.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/myloplay_logo.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_others_playlist_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/others_playlist_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_edit.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_edit.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/xml_data_extraction_rules.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_launcher_background.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_launcher_background.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_owner_pl_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/owner_pl_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xhdpi/ic_launcher_round.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_custom_snackbar_layout.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/custom_snackbar_layout.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout-land_activity_home.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout-land/activity_home.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_home.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_home.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_baseline_add_24.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_baseline_add_24.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_password.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_password.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_previous.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/previous.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_my_account.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_my_account.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-mdpi/ic_launcher.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_phone.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_phone.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_mylo_player.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_mylo_player.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout-land_playlist_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout-land/playlist_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_dialog_add_playlist.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/dialog_add_playlist.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xhdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_nice_bg.jpeg.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/nice_bg.jpeg"
+        "merged": "com.abig.myloplay.app-merged_res-70:/layout_activity_all_playlists.xml.flat",
+        "source": "com.abig.myloplay.app-main-72:/layout/activity_all_playlists.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/ic_launcher_round.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_myloplay_logo.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/myloplay_logo.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_play_circle.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_play_circle.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_owner_playlist_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/owner_playlist_item.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/xml_data_extraction_rules.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/xml/data_extraction_rules.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_edit_playlist.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_edit_playlist.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-hdpi/ic_launcher_round.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_playlists.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_playlists.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-v24_ic_launcher_foreground.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-v24/ic_launcher_foreground.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_utubemusic.jpeg.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/utubemusic.jpeg"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_play.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/play.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_email.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_email.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xxxhdpi/ic_launcher_round.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_placeholder_with.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/placeholder_with.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/xml_backup_rules.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/xml/backup_rules.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_background_img.jpeg.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/background_img.jpeg"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_dark_bg.jpeg.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/dark_bg.jpeg"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_play.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/play.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-hdpi/ic_launcher.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-mdpi/ic_launcher_round.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_edit.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_edit.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_placeholder.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/placeholder.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_dialog_add_playlist.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/dialog_add_playlist.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_edit_playlist.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_edit_playlist.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_launcher_background.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_launcher_background.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_playlists.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_playlists.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_nice_bg.jpeg.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/nice_bg.jpeg"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_owner_playlist_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/owner_playlist_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_playlist.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_playlist.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_password.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_password.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_save.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_save.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_myloplay_logo.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/myloplay_logo.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_audio.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_audio.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout-land_song_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout-land/song_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_music_note.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/music_note.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_myloplay_logo.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/myloplay_logo.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-mdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_playlist_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/playlist_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_item_song.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/item_song.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_play.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_play.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_more_vert.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_more_vert.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_user.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_user.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_pause.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/pause.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-mdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_playlist.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_playlist.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_playlist_add_check.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/playlist_add_check.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_others_playlist_item.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/others_playlist_item.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_playlist_details.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_playlist_details.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout-land_activity_playlist_details.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout-land/activity_playlist_details.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_baseline_add_24.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_baseline_add_24.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_main.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_main.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_placeholder.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/placeholder.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_placeholder_with.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/placeholder_with.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_play.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_play.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_music_note.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/music_note.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_audio.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_audio.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/layout_activity_user_profile.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/layout/activity_user_profile.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_stop.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/stop.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_stop.png.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable-nodpi/stop.png"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_playlist_add.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_playlist_add.xml"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/mipmap-xxhdpi/ic_launcher.webp"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_previous.png.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/previous.png"
     },
     {
-        "merged": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-merged_res-70:/drawable_ic_email.xml.flat",
-        "source": "/Users/user/.gradle/daemon/7.5/com.abig.myloplay.app-main-72:/drawable/ic_email.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_song_item.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/song_item.xml"
     },
     {
-        "merged": "com.abig.myloplay.app-merged_res-70:/layout_activity_my_account.xml.flat",
-        "source": "com.abig.myloplay.app-main-72:/layout/activity_my_account.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_phone.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_phone.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_mylo_player.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_mylo_player.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout_activity_sign_up.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_sign_up.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout-land_activity_playlist_details.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout-land/activity_playlist_details.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/xml_backup_rules.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable_ic_play_circle.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable/ic_play_circle.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/drawable-nodpi_dark_bg.jpeg.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/drawable-nodpi/dark_bg.jpeg"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-merged_res-70:/layout-land_activity_playlists.xml.flat",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout-land/activity_playlists.xml"
     }
 ]

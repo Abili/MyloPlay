@@ -9,12 +9,12 @@ public final class OthersViewHolder extends androidx.recyclerview.widget.Recycle
     private final com.google.firebase.database.DatabaseReference userProfile = null;
     private final com.google.firebase.database.DatabaseReference playlistId = null;
     
-    public OthersViewHolder(@org.jetbrains.annotations.NotNull()
+    public OthersViewHolder(@org.jetbrains.annotations.NotNull
     android.view.View itemView) {
         super(null);
     }
     
-    public final void bind(@org.jetbrains.annotations.NotNull()
+    public final void bind(@org.jetbrains.annotations.NotNull
     com.abig.myloplay.Playlist playlist) {
     }
 }
