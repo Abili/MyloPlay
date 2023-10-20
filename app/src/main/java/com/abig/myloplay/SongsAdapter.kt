@@ -64,7 +64,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.PlaylistViewHolder>() {
 //                itemView.context.startActivity(intent)
 
                 val intent = Intent(itemView.context, MyloPlayer::class.java)
-                intent.putExtra(MyloPlayer.EXTRA_SONG_URI,song.uri)
+                intent.putExtra(MyloPlayer.SONG_ID,song.uri)
                 itemView.context.startActivity(intent)
                 currentIndex = adapterPosition
             }

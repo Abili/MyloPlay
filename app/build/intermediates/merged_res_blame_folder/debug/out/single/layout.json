@@ -20,6 +20,10 @@
         "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/custom_snackbar_layout.xml"
     },
     {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_settings.xml",
+        "source": "com.abig.myloplay.app-main-72:/layout/activity_settings.xml"
+    },
+    {
         "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-mergeDebugResources-69:/layout/owner_pl_item.xml",
         "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/owner_pl_item.xml"
     },
@@ -64,8 +68,8 @@
         "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/item_song.xml"
     },
     {
-        "merged": "com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_all_playlists.xml",
-        "source": "com.abig.myloplay.app-main-72:/layout/activity_all_playlists.xml"
+        "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_settings.xml",
+        "source": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-main-72:/layout/activity_settings.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.0/com.abig.myloplay.app-mergeDebugResources-69:/layout/activity_playlist_details.xml",

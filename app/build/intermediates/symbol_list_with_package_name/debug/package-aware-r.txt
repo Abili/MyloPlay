@@ -2613,6 +2613,7 @@ drawable googleg_standard_color_18
 drawable ic_audio
 drawable ic_baseline_add_24
 drawable ic_clock_black_24dp
+drawable ic_download
 drawable ic_edit
 drawable ic_email
 drawable ic_keyboard_black_24dp
@@ -2632,6 +2633,7 @@ drawable ic_play
 drawable ic_play_circle
 drawable ic_playlist
 drawable ic_playlist_add
+drawable ic_recommend
 drawable ic_save
 drawable ic_user
 drawable m3_appbar_background
@@ -2927,6 +2929,8 @@ id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
 id fade
+id fileSizeReference
+id fileSizeSeekBar
 id fill
 id fill_horizontal
 id fill_vertical
@@ -2994,6 +2998,7 @@ id line3
 id linear
 id listMode
 id list_item
+id lyrics_text_view
 id marquee
 id masked
 id match_constraint
@@ -3124,6 +3129,7 @@ id right
 id rightToLeft
 id right_icon
 id right_side
+id root_layout
 id rounded
 id row_index_key
 id saveButton
@@ -3147,6 +3153,7 @@ id search_mag_icon
 id search_plate
 id search_src_text
 id search_voice_btn
+id seekbar
 id select_dialog_listview
 id selected
 id selection_type
@@ -3158,6 +3165,7 @@ id shortcut
 id showCustom
 id showHome
 id showTitle
+id signOutButton
 id sin
 id skipCollapsed
 id skipped
@@ -3172,7 +3180,10 @@ id songCard
 id songDuration
 id songTitle
 id song_artist
+id song_download
 id song_duration
+id song_menu
+id song_recommend
 id song_title
 id south
 id spacer
@@ -3415,6 +3426,7 @@ layout activity_my_account
 layout activity_mylo_player
 layout activity_playlist_details
 layout activity_playlists
+layout activity_settings
 layout activity_sign_up
 layout activity_user_profile
 layout browser_actions_context_menu_page
@@ -3501,6 +3513,7 @@ layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout song_item
 layout support_simple_spinner_dropdown_item
+menu song_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 mipmap myloplay_logo

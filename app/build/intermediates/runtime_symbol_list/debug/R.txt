@@ -2612,6 +2612,7 @@ int drawable googleg_standard_color_18 0x7f070097
 int drawable ic_audio 0x7f070100
 int drawable ic_baseline_add_24 0x7f070098
 int drawable ic_clock_black_24dp 0x7f070099
+int drawable ic_download 0x7f070103
 int drawable ic_edit 0x7f07009a
 int drawable ic_email 0x7f07009b
 int drawable ic_keyboard_black_24dp 0x7f07009c
@@ -2631,6 +2632,7 @@ int drawable ic_play 0x7f0700a9
 int drawable ic_play_circle 0x7f0700aa
 int drawable ic_playlist 0x7f0700ab
 int drawable ic_playlist_add 0x7f070101
+int drawable ic_recommend 0x7f070104
 int drawable ic_save 0x7f0700ac
 int drawable ic_user 0x7f0700ad
 int drawable m3_appbar_background 0x7f0700ae
@@ -2926,6 +2928,8 @@ int id exitUntilCollapsed 0x7f0800cc
 int id expand_activities_button 0x7f0800cd
 int id expanded_menu 0x7f0800ce
 int id fade 0x7f0800cf
+int id fileSizeReference 0x7f08023e
+int id fileSizeSeekBar 0x7f08023c
 int id fill 0x7f0800d0
 int id fill_horizontal 0x7f0800d1
 int id fill_vertical 0x7f0800d2
@@ -2993,6 +2997,7 @@ int id line3 0x7f08010f
 int id linear 0x7f080110
 int id listMode 0x7f080111
 int id list_item 0x7f080112
+int id lyrics_text_view 0x7f080237
 int id marquee 0x7f080113
 int id masked 0x7f080114
 int id match_constraint 0x7f080115
@@ -3123,6 +3128,7 @@ int id right 0x7f08018f
 int id rightToLeft 0x7f080190
 int id right_icon 0x7f080191
 int id right_side 0x7f080192
+int id root_layout 0x7f080238
 int id rounded 0x7f080193
 int id row_index_key 0x7f080194
 int id saveButton 0x7f080195
@@ -3146,6 +3152,7 @@ int id search_mag_icon 0x7f0801a6
 int id search_plate 0x7f0801a7
 int id search_src_text 0x7f0801a8
 int id search_voice_btn 0x7f0801a9
+int id seekbar 0x7f080236
 int id select_dialog_listview 0x7f0801aa
 int id selected 0x7f0801ab
 int id selection_type 0x7f0801ac
@@ -3157,6 +3164,7 @@ int id shortcut 0x7f0801b0
 int id showCustom 0x7f0801b1
 int id showHome 0x7f0801b2
 int id showTitle 0x7f0801b3
+int id signOutButton 0x7f08023d
 int id sin 0x7f0801b4
 int id skipCollapsed 0x7f0801b5
 int id skipped 0x7f0801b6
@@ -3171,7 +3179,10 @@ int id songCard 0x7f0801bd
 int id songDuration 0x7f0801be
 int id songTitle 0x7f0801bf
 int id song_artist 0x7f0801c0
+int id song_download 0x7f080239
 int id song_duration 0x7f0801c1
+int id song_menu 0x7f08023a
+int id song_recommend 0x7f08023b
 int id song_title 0x7f0801c2
 int id south 0x7f0801c3
 int id spacer 0x7f0801c4
@@ -3414,6 +3425,7 @@ int layout activity_my_account 0x7f0b0020
 int layout activity_mylo_player 0x7f0b0021
 int layout activity_playlist_details 0x7f0b0022
 int layout activity_playlists 0x7f0b0023
+int layout activity_settings 0x7f0b007b
 int layout activity_sign_up 0x7f0b0024
 int layout activity_user_profile 0x7f0b0025
 int layout browser_actions_context_menu_page 0x7f0b0026
@@ -3500,6 +3512,7 @@ int layout select_dialog_multichoice_material 0x7f0b0074
 int layout select_dialog_singlechoice_material 0x7f0b0075
 int layout song_item 0x7f0b0076
 int layout support_simple_spinner_dropdown_item 0x7f0b0077
+int menu song_menu 0x7f140000
 int mipmap ic_launcher 0x7f0d0000
 int mipmap ic_launcher_round 0x7f0d0001
 int mipmap myloplay_logo 0x7f0d0002

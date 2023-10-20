@@ -1,12 +1,15 @@
 package com.abig.myloplay
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,13 +19,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abig.myloplay.databinding.ActivityAudioBinding
 import com.abig.myloplay.databinding.DialogAddPlaylistBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 import java.util.UUID
+import kotlin.properties.Delegates
 
 class AudioActivity : AppCompatActivity() {
 
@@ -30,19 +36,29 @@ class AudioActivity : AppCompatActivity() {
     private val requestCodePermission = 123
     private val requestCodeAudioSelection = 456
     private lateinit var binding: ActivityAudioBinding
+    private lateinit var playlistId: String
+    private lateinit var userId: String
     private val selectedAudioFiles = mutableListOf<AudioFile>()
+    private lateinit var preferences: SharedPreferences
+    private var maxFileSizeBytes by Delegates.notNull<Long>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Initialize SharedPreferences
+
+        preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+
+// Retrieve the maxFileSizeBytes or use a default value
+         maxFileSizeBytes = preferences.getInt("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE).toLong()
 
         binding.audioRecycler.layoutManager = LinearLayoutManager(this)
         audioListAdapter = AudioListAdapter()
         binding.audioRecycler.adapter = audioListAdapter
 
-        val playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID)
-        val userId = intent.getStringExtra(EXTRA_USER_ID)
+        playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID)!!
+        userId = intent.getStringExtra(EXTRA_USER_ID)!!
 
 //        if (checkPermissions()) {
 //            openAudioSelection()
@@ -131,7 +147,7 @@ class AudioActivity : AppCompatActivity() {
                 val id = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DOCUMENT_ID)
 
                 // Check if the "artist" column exists before retrieving its value
-                val artistColumnIndex = it.getColumnIndex(MediaStore.Audio.Media.ARTIST)
+                val artistColumnIndex = it.getColumnIndex(MediaStore.Audio.Media.ALBUM_ARTIST)
                 val artist = if (artistColumnIndex != -1) {
                     it.getString(artistColumnIndex)
                 } else {
@@ -265,10 +281,11 @@ class AudioActivity : AppCompatActivity() {
 
                             for (songSnapshot in snapshot.children) {
                                 val displayName = songSnapshot.child("displayName").value.toString()
+                                val artist = songSnapshot.child("artist").value.toString()
                                 val duration = songSnapshot.child("duration").value.toString()
                                 val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
 
-                                val song = AudioFile("", downloadUrl, displayName, duration)
+                                val song = AudioFile("", downloadUrl, displayName, artist, duration)
                                 songs.add(song)
                             }
 
@@ -292,9 +309,127 @@ class AudioActivity : AppCompatActivity() {
 
     }
 
+    private fun retrieveSongsForDownload(playlistId: String?, userId: String?) {
+        //val userId = FirebaseAuth.getInstance().uid
+
+        // Create a reference to the Firebase Realtime Database node for the user's playlists
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users")
+
+        // Create a reference to the specific playlist by its ID
+        databaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (playListShot in snapshot.children) {
+                    val uID = playListShot.key!!
+                    showToast(playlistId.toString())
+                    val playlistRef = databaseRef.child(userId!!)
+
+                    // Create a reference to the songs within the playlist
+                    val songsRef = playlistRef.child("playlists").child(playlistId!!).child("songs")
+
+                    // Listen for changes in the songs data
+                    songsRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val songs = mutableListOf<AudioFile>()
+
+                            for (songSnapshot in snapshot.children) {
+                                val displayName = songSnapshot.child("displayName").value.toString()
+                                val artist = songSnapshot.child("artist").value.toString()
+                                val duration = songSnapshot.child("duration").value.toString()
+                                val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
+
+                                val song = AudioFile("", downloadUrl, displayName, artist, duration)
+                                songs.add(song)
+                            }
+
+                            // Now, 'songs' contains the list of songs for the specified playlist
+                            // You can use this list to play the songs or display them in your app
+                            audioListAdapter.setData(songs)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle any errors
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
+
+    }
+
+    fun downloadSong(downloadUrl: String, songName: String?) {
+        // Retrieve the max file size preference
+        //val maxFileSizeBytes = preferences.getLong("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE.toLong())
+
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Downloading...")
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+        progressDialog.isIndeterminate = false
+        progressDialog.max = 100
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        // Define the local directory where the songs will be saved
+        val downloadDirectory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "myloplay")
+
+        if (!downloadDirectory.exists()) {
+            // If the directory doesn't exist, create it
+            downloadDirectory.mkdirs()
+        }
+
+        // Define the local file where the song will be saved
+        val localFile = File(downloadDirectory, "$songName")
+
+        try {
+            val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(downloadUrl)
+
+            storageReference.metadata.addOnSuccessListener { metadata ->
+                if (metadata.sizeBytes > maxFileSizeBytes) {
+                    val snackbar = Snackbar.make(
+                        binding.root,
+                        "File size exceeds the limit (500 MB)",
+                        Snackbar.LENGTH_LONG
+                    )
+                    snackbar.setAction("Adjust Max File Size") {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                    }
+                    snackbar.show()
+                    progressDialog.dismiss()
+                } else {
+                    val downloadTask = storageReference.getFile(localFile)
+
+                    downloadTask.addOnSuccessListener {
+                        Toast.makeText(this, "Download completed", Toast.LENGTH_SHORT).show()
+                        progressDialog.dismiss()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Download failed: $it", Toast.LENGTH_SHORT).show()
+                    }.addOnProgressListener { taskSnapshot ->
+                        val progress =
+                            (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                        val limitedProgress = progress.coerceAtMost(100)
+                        progressDialog.progress = limitedProgress
+                    }
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error getting file metadata", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
     companion object {
         const val EXTRA_PLAYLIST_ID = "playlistId"
         const val EXTRA_USER_ID = "userID"
+        const val PERMISSION_REQUEST_CODE = 0
+        const val DEFAULT_MAX_FILE_SIZE =1 * 1024 * 1024
     }
 
 }

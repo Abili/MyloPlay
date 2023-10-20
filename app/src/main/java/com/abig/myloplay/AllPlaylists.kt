@@ -67,11 +67,7 @@ class AllPlaylists : AppCompatActivity() {
 
 
         binding.selectsong.setOnClickListener {
-            if (checkPermissions()) {
-                openAudioSelection()
-            } else {
-                requestPermissions()
-            }
+            openAudioSelection()
         }
         retrieveCurrentUserPlaylists()
         retrieveOtherUsersPlaylists()
@@ -229,7 +225,9 @@ class AllPlaylists : AppCompatActivity() {
         // Iterate through the selected songs and store them in the Firebase Realtime Database
         selectedSongs.forEach { audioFile ->
             val songDetails = mutableMapOf(
-                "displayName" to audioFile.title, "duration" to audioFile.duration
+                "displayName" to audioFile.title,
+                "artist" to audioFile.artist,
+                "duration" to audioFile.duration
             )
 
             // Create a unique ID for the song entry
@@ -260,7 +258,7 @@ class AllPlaylists : AppCompatActivity() {
             }
         }
 
-        showToast("Playlist '$playlistName' saved successfully.")
+        showToast("Playlist '$playlistName' created successfully.")
     }
 
 //    private fun retrieveSongsForPlaylist() {
@@ -354,8 +352,8 @@ class AllPlaylists : AppCompatActivity() {
                         val playlistsSnapshot = userSnapshot.child("playlists")
                         for (playlistShot in playlistsSnapshot.children) {
                             val playlistId = playlistShot.key
-                            val playListName = playlistShot.child("playlistName")
-                                .getValue(String::class.java)
+                            val playListName =
+                                playlistShot.child("playlistName").getValue(String::class.java)
                             val playlist =
                                 Playlist(playlistId!!, playListName!!, userId!!, null, "")
                             playlists.add(playlist)

@@ -12,6 +12,7 @@ drawable background_img
 drawable dark_bg
 drawable ic_audio
 drawable ic_baseline_add_24
+drawable ic_download
 drawable ic_edit
 drawable ic_email
 drawable ic_launcher_background
@@ -23,6 +24,7 @@ drawable ic_play
 drawable ic_play_circle
 drawable ic_playlist
 drawable ic_playlist_add
+drawable ic_recommend
 drawable ic_save
 drawable ic_user
 drawable music_note
@@ -54,10 +56,13 @@ id editTextTextEmailAddress
 id editTextTextPersonFirstName
 id editTextTextPersonLastName
 id empty_tv
+id fileSizeReference
+id fileSizeSeekBar
 id floatingActionButton
 id friendsTv
 id imageView
 id imageview_layout
+id lyrics_text_view
 id myseperationTv
 id next_btn
 id otherUsersPlaylistsRecycler
@@ -79,9 +84,12 @@ id progressBar
 id recyclerView
 id recyclerViewSongs
 id relativeLayout
+id root_layout
 id saveButton
+id seekbar
 id selectsong
 id seperationTv
+id signOutButton
 id snackbar_image
 id snackbar_text
 id songArtist
@@ -89,7 +97,10 @@ id songCard
 id songDuration
 id songTitle
 id song_artist
+id song_download
 id song_duration
+id song_menu
+id song_recommend
 id song_title
 id textArtist
 id textDuration
@@ -113,6 +124,7 @@ layout activity_my_account
 layout activity_mylo_player
 layout activity_playlist_details
 layout activity_playlists
+layout activity_settings
 layout activity_sign_up
 layout activity_user_profile
 layout custom_snackbar_layout
@@ -123,6 +135,7 @@ layout owner_pl_item
 layout owner_playlist_item
 layout playlist_item
 layout song_item
+menu song_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 mipmap myloplay_logo
