@@ -2,11 +2,11 @@ package com.abig.myloplay
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.OthersPlaylistItemBinding
-import com.abig.myloplay.databinding.OwnerPlaylistItemBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -14,103 +14,98 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class OthersAdapter : RecyclerView.Adapter<OthersViewHolder>() {
-
-
+class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
 
-
-    fun add(playlist: Playlist) {
-        playlists.add(playlist)
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
+        val binding = OthersPlaylistItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return PlaylistViewHolder(binding)
     }
 
-    fun clear() {
-        playlists.clear()
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OthersViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.others_playlist_item, parent, false)
-        return OthersViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: OthersViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val playlist = playlists[position]
         holder.bind(playlist)
     }
 
-    override fun getItemCount(): Int {
-        return playlists.size
+    override fun getItemCount(): Int = playlists.size
+
+    fun setPlaylists(playlists: List<Playlist>) {
+        this.playlists.clear()
+        this.playlists.addAll(playlists)
+        notifyDataSetChanged()
     }
-}
 
-class OthersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val binding: OthersPlaylistItemBinding = OthersPlaylistItemBinding.bind(itemView)
-    private lateinit var auth: FirebaseAuth
-    private val userProfile = FirebaseDatabase.getInstance().reference.child("users")
-    private val playlistId =
-        FirebaseDatabase.getInstance().reference.child("playlist").child("userId")
+    inner class PlaylistViewHolder(private val binding: OthersPlaylistItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(playlist: Playlist) {
-        val userProfileRef = FirebaseDatabase.getInstance().reference.child("users")
+        private val playlistName: TextView = binding.textViewPlaylistName
+        private val othersProfileImage: ImageView = binding.othersProfileImage
+        private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-        // Get the userId of the playlist
-        val playlistUserId = playlist.userId
-        var userName = ""
-        var profileUrl = ""
-        auth = FirebaseAuth.getInstance()
-        //val userId = auth.uid
-        val userId = auth.currentUser!!.uid
-        if (!playlistId.equals(auth.currentUser!!.uid)) {
-            userProfile.child(userId).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val profile = snapshot.getValue(User::class.java)
-                    if (profile != null) {
-                        userName = profile.username
-                        profileUrl = profile.imageUrl
+        init {
+            binding.root.setOnClickListener {
+                // Handle playlist item click here
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val selectedPlaylist = playlists[position]
+                    // Implement logic to display songs for the selected playlist
+                    val intent = Intent(binding.root.context, AudioActivity::class.java)
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_ID, selectedPlaylist.id)
+                    intent.putExtra(AudioActivity.EXTRA_USER_ID, selectedPlaylist.userId)
+                    binding.root.context.startActivity(intent)
+                }
+            }
+        }
 
-                        // Set the user name, playlist name, and number of songs
-                        if (profileUrl.isNotEmpty()) {
-                            Glide
-                                .with(binding.root)
-                                .load(profileUrl)
-                                .centerCrop()
-                                .into(binding.othersProfileImage);
+        fun bind(playlist: Playlist) {
+            retrieveCurrentUserPlaylists(playlist.id!!, playlist.userId!!)
+            playlistName.text = playlist.name
+            binding.textViewUserName.text = playlist.userName
+        }
+
+        private fun retrieveCurrentUserPlaylists(playlistId: String, uid: String) {
+            val database = FirebaseDatabase.getInstance().reference.child("users").child(uid)
+            database.child("playlists").child(playlistId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val playlistName =
+                            snapshot.child("playlistName").getValue(String::class.java)
+                        val songsSnapshot = snapshot.child("songs")
+                        val lastSongSnapshot = songsSnapshot.children.lastOrNull()
+                        val lastSongAlbumArtUrl =
+                            lastSongSnapshot?.child("albumArt")?.getValue(String::class.java)
+
+                        val songsCount = songsSnapshot.childrenCount
+                        if (songsCount.toInt() == 1) {
+                            binding.textViewNumSongs.text = buildString {
+                                append(songsCount)
+                                append(" song")
+                            }
                         } else {
-                            Glide
-                                .with(binding.root)
-                                .load(R.drawable.ic_user)
-                                .centerCrop()
-                                .into(binding.othersProfileImage);
+                            binding.textViewNumSongs.text = buildString {
+                                append(songsCount)
+                                append(" songs")
+                            }
                         }
-                        //binding.profileImage.setImageURI(auth.currentUser!!.photoUrl)
 
-                        binding.textViewUserName.text = userName
-                        binding.textViewPlaylistName.text = playlist.name
-                        binding.textViewNumSongs.text =
-                            itemView.context.getString(R.string.num_songs, playlist.songIds!!.size)
-
-
+                        // Load the album art into the ImageView using Glide
+                        if (lastSongAlbumArtUrl != null) {
+                            Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
+                                .into(binding.othersProfileImage)
+                        } else {
+                            // If no album art is found, you can set a placeholder or leave it empty
+                            Glide.with(binding.root).load(R.drawable.mylo_bg_logo).centerCrop()
+                                .into(binding.othersProfileImage)
+                        }
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle errors
+                    }
+                })
         }
 
-
-        // Set up click listener for the playlist
-        itemView.setOnClickListener {
-            // Open the playlist details screen
-            val intent = Intent(itemView.context, PlaylistDetailsActivity::class.java)
-            intent.putExtra(PlaylistDetailsActivity.EXTRA_PLAYLIST_ID, playlist.id)
-            itemView.context.startActivity(intent)
-        }
     }
 }
-

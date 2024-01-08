@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.OwnerPlaylistItemBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class OwnersAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-
     private val playlists = mutableListOf<Playlist>()
-
 
     fun add(playlist: Playlist) {
         playlists.add(playlist)
@@ -44,29 +46,12 @@ class OwnersAdapter : RecyclerView.Adapter<ViewHolder>() {
 class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private lateinit var auth: FirebaseAuth
     private val binding: OwnerPlaylistItemBinding = OwnerPlaylistItemBinding.bind(itemView)
+
     fun bind(playlist: Playlist) {
         auth = FirebaseAuth.getInstance()
-
-        //current user's profile pic
-        if (!auth.currentUser!!.photoUrl.toString().isEmpty()) {
-            Glide
-                .with(binding.root)
-                .load(auth.currentUser!!.photoUrl)
-                .centerCrop()
-                .into(binding.ownersProfileImage);
-        } else {
-            Glide
-                .with(binding.root)
-                .load(auth.currentUser!!.photoUrl)
-                .centerCrop()
-                .placeholder(R.drawable.myloplay_logo)
-                .into(binding.ownersProfileImage);
-        }
-
+        retrieveCurrentUserPlaylists(playlist.id!!, playlist.userId) // Pass the playlist ID
 
         // Set the user name, playlist name, and number of songs
-
-        //binding.textViewPlaylistName.text = playlist.userName
         binding.textViewPlaylistName.text = playlist.name
         binding.textViewNumSongs.text =
             itemView.context.getString(R.string.num_songs, playlist.songIds!!.size)
@@ -79,5 +64,38 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.context.startActivity(intent)
         }
     }
-}
 
+    private fun retrieveCurrentUserPlaylists(playlistId: String, uid: String?) {
+        val userId = auth.currentUser!!.uid
+        val database =
+            FirebaseDatabase.getInstance().reference.child("users")
+                .child(userId).child("playlists").child(playlistId)
+        if (userId == uid) {
+            database.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val playlistName = snapshot.child("playlistName").getValue(String::class.java)
+                    val songsSnapshot = snapshot.child("songs")
+                    val lastSongSnapshot = songsSnapshot.children.lastOrNull()
+                    val lastSongAlbumArtUrl =
+                        lastSongSnapshot?.child("albumArt")?.getValue(String::class.java)
+
+                    // Load the album art into the ImageView using Glide
+                    if (lastSongAlbumArtUrl != null) {
+                        Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
+                            .into(binding.ownersProfileImage)
+                    } else {
+                        Glide.with(binding.root).load(auth.currentUser!!.photoUrl).centerCrop()
+                            .placeholder(R.drawable.myloplay_logo).into(binding.ownersProfileImage)
+                    }
+                }
+
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+        }
+    }
+}

@@ -28,7 +28,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonEditPlaylist"
-        android:src="@drawable/ic_edit"
+        app:srcCompat="@drawable/ic_edit"
         android:backgroundTint="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,6 +36,7 @@
         android:text="@string/edit_playlist"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:contentDescription="addsong floatingb" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

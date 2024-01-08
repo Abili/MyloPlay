@@ -7,10 +7,11 @@ import androidx.databinding.DataBinderMapper;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import com.abig.myloplay.databinding.ActivityEditPlaylistBindingImpl;
-import com.abig.myloplay.databinding.ActivityUserProfileBindingImpl;
 import com.abig.myloplay.databinding.OthersPlaylistItemBindingImpl;
 import com.abig.myloplay.databinding.OwnerPlItemBindingImpl;
 import com.abig.myloplay.databinding.OwnerPlaylistItemBindingImpl;
+import com.abig.myloplay.databinding.OwnerPlaylistItemBindingLandImpl;
+import com.abig.myloplay.databinding.OwnerPlaylistItemBindingSw600dpImpl;
 import java.lang.IllegalArgumentException;
 import java.lang.Integer;
 import java.lang.Object;
@@ -24,19 +25,16 @@ import java.util.List;
 public class DataBinderMapperImpl extends DataBinderMapper {
   private static final int LAYOUT_ACTIVITYEDITPLAYLIST = 1;
 
-  private static final int LAYOUT_ACTIVITYUSERPROFILE = 2;
+  private static final int LAYOUT_OTHERSPLAYLISTITEM = 2;
 
-  private static final int LAYOUT_OTHERSPLAYLISTITEM = 3;
+  private static final int LAYOUT_OWNERPLITEM = 3;
 
-  private static final int LAYOUT_OWNERPLITEM = 4;
+  private static final int LAYOUT_OWNERPLAYLISTITEM = 4;
 
-  private static final int LAYOUT_OWNERPLAYLISTITEM = 5;
-
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(5);
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(4);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.activity_edit_playlist, LAYOUT_ACTIVITYEDITPLAYLIST);
-    INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.activity_user_profile, LAYOUT_ACTIVITYUSERPROFILE);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.others_playlist_item, LAYOUT_OTHERSPLAYLISTITEM);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.owner_pl_item, LAYOUT_OWNERPLITEM);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.abig.myloplay.R.layout.owner_playlist_item, LAYOUT_OWNERPLAYLISTITEM);
@@ -57,12 +55,6 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for activity_edit_playlist is invalid. Received: " + tag);
         }
-        case  LAYOUT_ACTIVITYUSERPROFILE: {
-          if ("layout/activity_user_profile_0".equals(tag)) {
-            return new ActivityUserProfileBindingImpl(component, view);
-          }
-          throw new IllegalArgumentException("The tag for activity_user_profile is invalid. Received: " + tag);
-        }
         case  LAYOUT_OTHERSPLAYLISTITEM: {
           if ("layout/others_playlist_item_0".equals(tag)) {
             return new OthersPlaylistItemBindingImpl(component, view);
@@ -76,6 +68,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           throw new IllegalArgumentException("The tag for owner_pl_item is invalid. Received: " + tag);
         }
         case  LAYOUT_OWNERPLAYLISTITEM: {
+          if ("layout-sw600dp/owner_playlist_item_0".equals(tag)) {
+            return new OwnerPlaylistItemBindingSw600dpImpl(component, view);
+          }
+          if ("layout-land/owner_playlist_item_0".equals(tag)) {
+            return new OwnerPlaylistItemBindingLandImpl(component, view);
+          }
           if ("layout/owner_playlist_item_0".equals(tag)) {
             return new OwnerPlaylistItemBindingImpl(component, view);
           }
@@ -126,22 +124,22 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerBrLookup {
-    static final SparseArray<String> sKeys = new SparseArray<String>(2);
+    static final SparseArray<String> sKeys = new SparseArray<String>(1);
 
     static {
       sKeys.put(0, "_all");
-      sKeys.put(1, "activity");
     }
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(5);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(6);
 
     static {
       sKeys.put("layout/activity_edit_playlist_0", com.abig.myloplay.R.layout.activity_edit_playlist);
-      sKeys.put("layout/activity_user_profile_0", com.abig.myloplay.R.layout.activity_user_profile);
       sKeys.put("layout/others_playlist_item_0", com.abig.myloplay.R.layout.others_playlist_item);
       sKeys.put("layout/owner_pl_item_0", com.abig.myloplay.R.layout.owner_pl_item);
+      sKeys.put("layout-sw600dp/owner_playlist_item_0", com.abig.myloplay.R.layout.owner_playlist_item);
+      sKeys.put("layout-land/owner_playlist_item_0", com.abig.myloplay.R.layout.owner_playlist_item);
       sKeys.put("layout/owner_playlist_item_0", com.abig.myloplay.R.layout.owner_playlist_item);
     }
   }

@@ -22,6 +22,8 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         fileSizeSeekBar = findViewById(R.id.fileSizeSeekBar)
         fileSizeReference = findViewById(R.id.fileSizeReference)
 
@@ -44,6 +46,7 @@ class SettingsActivity : AppCompatActivity() {
 
                 // Store the updated maxFileSizeBytes in SharedPreferences
                 preferences.edit().putInt("maxFileSizeBytes", maxFileSizeBytes).apply()
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}

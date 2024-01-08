@@ -8,25 +8,43 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/myloplay_logo"
+        android:icon="@drawable/mylogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/myloplay_logo"
+        android:roundIcon="@drawable/mylogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyloPlay"
         tools:targetApi="31">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".RecommendedSongsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".UserContacts"
+            android:exported="false"
+            android:label="@string/title_activity_user_contacts"
+            android:theme="@style/Theme.MyloPlay" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AllPlaylists" />
+        </activity>
         <activity
             android:name=".AudioActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".AllPlaylists"
+            android:exported="false"
+            android:theme="@style/Theme.MyloPlay"/>
+        <activity
+            android:name=".VerificationCodeActivity"
             android:exported="false" />
         <activity
             android:name=".MyAccount"
@@ -57,7 +75,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".MainActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -65,13 +83,6 @@
         </activity>
         <activity
             android:name=".SignUp"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".AllPlaylists"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

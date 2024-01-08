@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-68:/values-v16/values-v16.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/892c426862d8aab0ba2d32d7d47c1787/transformed/core-1.9.0/res/values-v16/values-v16.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/952570cc52c1d4a7c2d50afa8d990959/transformed/core-1.12.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/979b97c75c602d652d12d0c86a5425d5/transformed/appcompat-1.5.1/res/values-v16/values-v16.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/195f60c79fbdf145be2e70c4ee8a151a/transformed/appcompat-1.6.1/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

@@ -28,6 +28,9 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
   public final LinearLayout buttonLayout;
 
   @NonNull
+  public final TextView endsongDuration;
+
+  @NonNull
   public final TextView lyricsTextView;
 
   @NonNull
@@ -52,23 +55,24 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
   public final TextView songArtist;
 
   @NonNull
-  public final TextView songDuration;
+  public final TextView songTitle;
 
   @NonNull
-  public final TextView songTitle;
+  public final TextView startsongDuration;
 
   @NonNull
   public final LinearLayout titlesTv;
 
   private ActivityMyloPlayerBinding(@NonNull ConstraintLayout rootView,
-      @NonNull LinearLayout buttonLayout, @NonNull TextView lyricsTextView,
-      @NonNull CircleImageView nextBtn, @NonNull CircleImageView playBtn,
-      @NonNull ImageView playerBackground, @NonNull CircleImageView prevBtn,
-      @NonNull RelativeLayout relativeLayout, @NonNull SeekBar seekbar,
-      @NonNull TextView songArtist, @NonNull TextView songDuration, @NonNull TextView songTitle,
-      @NonNull LinearLayout titlesTv) {
+      @NonNull LinearLayout buttonLayout, @NonNull TextView endsongDuration,
+      @NonNull TextView lyricsTextView, @NonNull CircleImageView nextBtn,
+      @NonNull CircleImageView playBtn, @NonNull ImageView playerBackground,
+      @NonNull CircleImageView prevBtn, @NonNull RelativeLayout relativeLayout,
+      @NonNull SeekBar seekbar, @NonNull TextView songArtist, @NonNull TextView songTitle,
+      @NonNull TextView startsongDuration, @NonNull LinearLayout titlesTv) {
     this.rootView = rootView;
     this.buttonLayout = buttonLayout;
+    this.endsongDuration = endsongDuration;
     this.lyricsTextView = lyricsTextView;
     this.nextBtn = nextBtn;
     this.playBtn = playBtn;
@@ -77,8 +81,8 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
     this.relativeLayout = relativeLayout;
     this.seekbar = seekbar;
     this.songArtist = songArtist;
-    this.songDuration = songDuration;
     this.songTitle = songTitle;
+    this.startsongDuration = startsongDuration;
     this.titlesTv = titlesTv;
   }
 
@@ -112,6 +116,12 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
       id = R.id.buttonLayout;
       LinearLayout buttonLayout = ViewBindings.findChildViewById(rootView, id);
       if (buttonLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.endsongDuration;
+      TextView endsongDuration = ViewBindings.findChildViewById(rootView, id);
+      if (endsongDuration == null) {
         break missingId;
       }
 
@@ -163,15 +173,15 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.songDuration;
-      TextView songDuration = ViewBindings.findChildViewById(rootView, id);
-      if (songDuration == null) {
-        break missingId;
-      }
-
       id = R.id.songTitle;
       TextView songTitle = ViewBindings.findChildViewById(rootView, id);
       if (songTitle == null) {
+        break missingId;
+      }
+
+      id = R.id.startsongDuration;
+      TextView startsongDuration = ViewBindings.findChildViewById(rootView, id);
+      if (startsongDuration == null) {
         break missingId;
       }
 
@@ -182,8 +192,8 @@ public final class ActivityMyloPlayerBinding implements ViewBinding {
       }
 
       return new ActivityMyloPlayerBinding((ConstraintLayout) rootView, buttonLayout,
-          lyricsTextView, nextBtn, playBtn, playerBackground, prevBtn, relativeLayout, seekbar,
-          songArtist, songDuration, songTitle, titlesTv);
+          endsongDuration, lyricsTextView, nextBtn, playBtn, playerBackground, prevBtn,
+          relativeLayout, seekbar, songArtist, songTitle, startsongDuration, titlesTv);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

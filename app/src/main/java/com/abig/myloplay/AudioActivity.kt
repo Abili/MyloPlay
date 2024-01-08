@@ -6,11 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,15 +22,19 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abig.myloplay.databinding.ActivityAudioBinding
 import com.abig.myloplay.databinding.DialogAddPlaylistBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.util.UUID
+import kotlin.math.min
 import kotlin.properties.Delegates
 
 class AudioActivity : AppCompatActivity() {
@@ -36,11 +43,15 @@ class AudioActivity : AppCompatActivity() {
     private val requestCodePermission = 123
     private val requestCodeAudioSelection = 456
     private lateinit var binding: ActivityAudioBinding
+    private lateinit var playlistName: String
+    private lateinit var username: String
     private lateinit var playlistId: String
     private lateinit var userId: String
     private val selectedAudioFiles = mutableListOf<AudioFile>()
     private lateinit var preferences: SharedPreferences
     private var maxFileSizeBytes by Delegates.notNull<Long>()
+    private lateinit var playlistsRef: DatabaseReference
+    lateinit var userPl: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +62,25 @@ class AudioActivity : AppCompatActivity() {
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
 
 // Retrieve the maxFileSizeBytes or use a default value
-         maxFileSizeBytes = preferences.getInt("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE).toLong()
+        maxFileSizeBytes = preferences.getInt("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE).toLong()
+        playlistsRef = FirebaseDatabase.getInstance().getReference("playlists")
+        userPl = FirebaseDatabase.getInstance().reference.child("users")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid).child("playlists")
+
 
         binding.audioRecycler.layoutManager = LinearLayoutManager(this)
-        audioListAdapter = AudioListAdapter()
+        audioListAdapter = AudioListAdapter(onRemoveClickListener = { selectedSong ->
+            showRemoveConfirmationDialog(selectedSong)
+        }, onRecommendClickListener = { selectedSong ->
+            showRecommendationDialog(selectedSong)
+        })
         binding.audioRecycler.adapter = audioListAdapter
 
         playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID)!!
         userId = intent.getStringExtra(EXTRA_USER_ID)!!
+        //username = intent.getStringExtra(EXTRA_USER_NAME)!!
+        //playlistName = intent.getStringExtra(EXTRA_PLAYLIST_NAME)!!
+        retrieveCurrentUserPlaylists(playlistId, userId)
 
 //        if (checkPermissions()) {
 //            openAudioSelection()
@@ -66,10 +88,128 @@ class AudioActivity : AppCompatActivity() {
 //            requestPermissions()
 //        }
 //
-//        binding.selectsong.setOnClickListener {
-//            openAudioSelection()
-//        }
+        binding.addSong.setOnClickListener {
+            openAudioSelection()
+        }
         retrieveSongsForPlaylist(playlistId, userId)
+
+        if (userId != FirebaseAuth.getInstance().currentUser!!.uid) {
+            binding.editPl.visibility = View.GONE
+            binding.addSong.visibility = View.GONE
+        }
+
+        binding.editPl.setOnClickListener {
+            val editLayout = layoutInflater.inflate(R.layout.activity_edit_playlist, null, false)
+            val editTextPlaylistName = editLayout.findViewById<EditText>(R.id.editTextPlaylistName)
+
+            // Set the initial text in the EditText
+            editTextPlaylistName.setText(binding.playlistnames.text)
+
+            AlertDialog.Builder(this).setView(editLayout).setPositiveButton("save") { dialog, id ->
+                // Get the edited playlist name as a String
+                val playlistName = editTextPlaylistName.text.toString()
+
+                // Update the TextView
+                binding.playlistnames.text = playlistName
+
+                // Update the corresponding entry in Firebase Realtime Database
+                val playName = userPl.child(playlistId)
+                val playlistEdit = mapOf(
+                    "playlistName" to playlistName
+                )
+                playName.updateChildren(playlistEdit)
+
+                dialog.dismiss()
+            }.setNegativeButton("cancel") { dialog, id ->
+                dialog.dismiss()
+            }.show()
+        }
+
+    }
+
+    private fun showRecommendationDialog(song: AudioFile) {
+        val intent = Intent(this, UserContacts::class.java)
+        intent.putExtra("songUrl", song.downloadUrl)
+        intent.putExtra("songTitle", song.title)
+        intent.putExtra("artist", song.artist)
+        intent.putExtra("duration", song.duration)
+        intent.putExtra("userId", song.duration)
+        startActivity(intent)
+    }
+
+    private fun showRemoveConfirmationDialog(selectedSong: AudioFile) {
+        // User confirmed, remove the song from the playlist
+        removeSongFromPlaylist(selectedSong)
+
+    }
+
+    private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
+        val database =
+            FirebaseDatabase.getInstance().reference.child("users").child(userId).child("playlists")
+                .child(playlistId)
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val playlistName = snapshot.child("playlistName").getValue(String::class.java)
+                val songsSnapshot = snapshot.child("songs")
+                val lastSongSnapshot = songsSnapshot.children.lastOrNull()
+                val songsCount = songsSnapshot.childrenCount
+                if (songsCount.toInt() == 1) {
+                    binding.songCount.text = buildString {
+                        append(songsCount.toString())
+                        append(" Song")
+                    }
+                } else {
+                    binding.songCount.text = buildString {
+                        append(songsCount.toString())
+                        append(" Songs")
+                    }
+                }
+
+                binding.playlistnames.text = playlistName
+
+
+                val lastSongAlbumArtUrl =
+                    lastSongSnapshot?.child("albumArt")?.getValue(String::class.java)
+                if (lastSongAlbumArtUrl != null) {
+                    // Load the album art into the ImageView using Glide
+                    Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
+                        .into(binding.playlistImageView)
+                } else {
+                    Glide.with(binding.root).load(R.drawable.mylo_bg_logo).centerCrop()
+                        .into(binding.playlistImageView)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle errors
+            }
+        })
+    }
+
+    private fun removeSongFromPlaylist(selectedSong: AudioFile) {
+        // Remove the song from the list of songIds in the Firebase Realtime Database
+        val playlistRef = playlistsRef.child(playlistId)
+        userPl.child(playlistId).child("songs")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val songIds =
+                        snapshot.getValue<List<String>>()?.toMutableList() ?: mutableListOf()
+
+                    // Remove the selected songId
+                    songIds.remove(selectedSong.id)
+
+                    // Update the songIds in the Firebase Realtime Database for the current playlist
+//                playlistRef.child("songIds").setValue(songIds).addOnSuccessListener {
+//                    showToast("Song removed from the playlist.")
+//                }.addOnFailureListener {
+//                    showToast("Failed to remove the song from the playlist.")
+//                }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
     }
 
 
@@ -93,6 +233,7 @@ class AudioActivity : AppCompatActivity() {
         startActivityForResult(intent, requestCodeAudioSelection)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -145,17 +286,9 @@ class AudioActivity : AppCompatActivity() {
             if (cursor.moveToFirst()) {
                 val titleColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
                 val id = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DOCUMENT_ID)
-
-                // Check if the "artist" column exists before retrieving its value
-                val artistColumnIndex = it.getColumnIndex(MediaStore.Audio.Media.ALBUM_ARTIST)
-                val artist = if (artistColumnIndex != -1) {
-                    it.getString(artistColumnIndex)
-                } else {
-                    "Unknown"
-                }
-
                 val title = it.getString(titleColumn)
                 val duration = getDurationFromMediaStore(uri)
+                val artist = getArtistFromUri(uri)
 
                 return AudioFile(
                     id.toString(), uri.toString(), title, artist, Util.formatDuration(duration)
@@ -163,6 +296,15 @@ class AudioActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    private fun getArtistFromUri(uri: Uri): String {
+        val mediaMetadataRetriever = MediaMetadataRetriever()
+        mediaMetadataRetriever.setDataSource(this, uri)
+        val artist =
+            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+        mediaMetadataRetriever.release()
+        return artist ?: "Unknown"
     }
 
 
@@ -186,26 +328,19 @@ class AudioActivity : AppCompatActivity() {
 
     private fun showPlaylistNameDialog(selectedSongs: List<AudioFile>) {
         val dialogBinding = DialogAddPlaylistBinding.inflate(layoutInflater)
-        val dialog =
-            AlertDialog.Builder(this).setView(dialogBinding.root).setTitle("Enter Playlist Name")
-                .setPositiveButton("Save") { _, _ ->
-                    val playlistName = dialogBinding.editTextPlaylistName.text.toString()
+        val dialog = AlertDialog.Builder(this).setTitle("Are you sure?")
+            .setPositiveButton("confirm") { _, _ ->
+                savePlaylistToDatabase(selectedSongs)
+                selectedAudioFiles.clear()
 
-                    if (playlistName.isNotBlank()) {
-                        savePlaylistToDatabase(selectedSongs, playlistName)
-                        selectedAudioFiles.clear()
-
-                    } else {
-                        showToast("Playlist name cannot be empty.")
-                    }
-                }.setNegativeButton("Cancel") { _, _ ->
-                    // Dismiss the dialog
-                }.create()
+            }.setNegativeButton("Cancel") { _, _ ->
+                // Dismiss the dialog
+            }.create()
 
         dialog.show()
     }
 
-    private fun savePlaylistToDatabase(selectedSongs: List<AudioFile>, playlistName: String) {
+    private fun savePlaylistToDatabase(selectedSongs: List<AudioFile>) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         // Create a reference to the Firebase Realtime Database node for the user's playlists
@@ -214,10 +349,11 @@ class AudioActivity : AppCompatActivity() {
 
         // Create a new playlist entry in the Firebase Realtime Database
         val playlistRef = databaseRef.push()
-        playlistRef.child("playlistName").setValue(playlistName)
+        val key = playlistRef.key
+        //databaseRef.child(playlistId).child("playlistName").setValue(playlistName)
 
         // Clear the previous songs data for this playlist
-        val songsRef = playlistRef.child("songs")
+        val songsRef = databaseRef.child(playlistId).child("songs").child(key!!)
         songsRef.removeValue() // This removes all data under "songs" for the current playlist
 
         // Iterate through the selected songs and store them in the Firebase Realtime Database
@@ -227,7 +363,7 @@ class AudioActivity : AppCompatActivity() {
             )
 
             // Create a unique ID for the song entry
-            val songEntryRef = songsRef.push()
+            //val songEntryRef = songsRef.push()
 
             // Generate a unique filename for the song in Firebase Storage
             val fileName = UUID.randomUUID().toString() + ".mp3"
@@ -245,7 +381,7 @@ class AudioActivity : AppCompatActivity() {
                 songRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                     // Store the download URL and other song details in the Firebase Realtime Database
                     songDetails += ("downloadUrl" to downloadUrl.toString())
-                    songEntryRef.setValue(songDetails)
+                    songsRef.setValue(songDetails)
                 }.addOnFailureListener { _ ->
                     showToast("Failed to retrieve the download URL for the song.")
                 }
@@ -254,7 +390,7 @@ class AudioActivity : AppCompatActivity() {
             }
         }
 
-        showToast("Playlist '$playlistName' saved successfully.")
+        showToast("Song added successfully.")
     }
 
     private fun retrieveSongsForPlaylist(playlistId: String?, userId: String?) {
@@ -282,10 +418,12 @@ class AudioActivity : AppCompatActivity() {
                             for (songSnapshot in snapshot.children) {
                                 val displayName = songSnapshot.child("displayName").value.toString()
                                 val artist = songSnapshot.child("artist").value.toString()
+                                val artistName = extractArtistName(displayName)
                                 val duration = songSnapshot.child("duration").value.toString()
                                 val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
 
-                                val song = AudioFile("", downloadUrl, displayName, artist, duration)
+                                val song =
+                                    AudioFile("", downloadUrl, displayName, artistName, duration)
                                 songs.add(song)
                             }
 
@@ -307,6 +445,25 @@ class AudioActivity : AppCompatActivity() {
         })
 
 
+    }
+
+    fun extractArtistName(displayName: String): String {
+        val hyphenIndex = displayName.indexOf("-")
+        val underscoreIndex = displayName.indexOf("_")
+
+        val separatorIndex = when {
+            hyphenIndex != -1 && underscoreIndex != -1 -> min(hyphenIndex, underscoreIndex)
+            hyphenIndex != -1 -> hyphenIndex
+            underscoreIndex != -1 -> underscoreIndex
+            else -> -1
+        }
+
+        return if (separatorIndex != -1) {
+            displayName.substring(0, separatorIndex).trim()
+        } else {
+            // If no separator found, return the whole display name or handle it as you prefer
+            displayName.trim()
+        }
     }
 
     private fun retrieveSongsForDownload(playlistId: String?, userId: String?) {
@@ -363,7 +520,7 @@ class AudioActivity : AppCompatActivity() {
 
     fun downloadSong(downloadUrl: String, songName: String?) {
         // Retrieve the max file size preference
-        //val maxFileSizeBytes = preferences.getLong("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE.toLong())
+        // val maxFileSizeBytes = preferences.getLong("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE.toLong())
 
         val progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Downloading...")
@@ -374,7 +531,10 @@ class AudioActivity : AppCompatActivity() {
         progressDialog.show()
 
         // Define the local directory where the songs will be saved
-        val downloadDirectory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "myloplay")
+        val downloadDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "myloplay"
+        )
 
         if (!downloadDirectory.exists()) {
             // If the directory doesn't exist, create it
@@ -382,7 +542,8 @@ class AudioActivity : AppCompatActivity() {
         }
 
         // Define the local file where the song will be saved
-        val localFile = File(downloadDirectory, "$songName")
+        val defaultName = "UnknownSong.mp3" // Default name if title metadata is not available
+        val localFile = File(downloadDirectory, songName ?: defaultName)
 
         try {
             val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(downloadUrl)
@@ -390,16 +551,15 @@ class AudioActivity : AppCompatActivity() {
             storageReference.metadata.addOnSuccessListener { metadata ->
                 if (metadata.sizeBytes > maxFileSizeBytes) {
                     val snackbar = Snackbar.make(
-                        binding.root,
-                        "File size exceeds the limit (500 MB)",
-                        Snackbar.LENGTH_LONG
+                        binding.root, "File size exceeds the limit (500 MB)", Snackbar.LENGTH_LONG
                     )
                     snackbar.setAction("Adjust Max File Size") {
-                        startActivity(Intent(this, SettingsActivity::class.java))
+                        showMaxFileSizeDialog()
                     }
                     snackbar.show()
                     progressDialog.dismiss()
                 } else {
+                    // Download the audio file to the specified location
                     val downloadTask = storageReference.getFile(localFile)
 
                     downloadTask.addOnSuccessListener {
@@ -423,13 +583,38 @@ class AudioActivity : AppCompatActivity() {
         }
     }
 
+    private fun showMaxFileSizeDialog() {
+        val dialogBinding = DialogAddPlaylistBinding.inflate(layoutInflater)
+        val dialog =
+            AlertDialog.Builder(this).setView(dialogBinding.root).setTitle("Adjust Max File Size")
+                .setPositiveButton("OK") { _, _ ->
+                    val maxSizeText = dialogBinding.editTextPlaylistName.text.toString()
+                    dialogBinding.editTextPlaylistName.hint = "Adjust file size..eg.. 500"
+                    if (maxSizeText.isNotBlank()) {
+                        val maxSizeBytes = maxSizeText.toLong() * 1024 * 1024
+                        updateMaxFileSize(maxSizeBytes)
+                    } else {
+                        showToast("Please enter a valid size.")
+                    }
+                }.setNegativeButton("Cancel") { _, _ -> }.create()
 
+        dialog.show()
+    }
+
+    private fun updateMaxFileSize(maxFileSizeBytes: Long) {
+        preferences.edit().putLong("maxFileSizeBytes", maxFileSizeBytes).apply()
+        this.maxFileSizeBytes =
+            preferences.getLong("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE.toLong())
+    }
 
     companion object {
+        const val EXTRA_USER_NAME = "userName"
+        const val EXTRA_PLAYLIST_NAME = "playlistName"
+        const val EXTRA_ALBUMART = "allbumArt"
         const val EXTRA_PLAYLIST_ID = "playlistId"
         const val EXTRA_USER_ID = "userID"
         const val PERMISSION_REQUEST_CODE = 0
-        const val DEFAULT_MAX_FILE_SIZE =1 * 1024 * 1024
+        const val DEFAULT_MAX_FILE_SIZE = 1 * 1024 * 1024
     }
 
 }

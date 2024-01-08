@@ -1,16 +1,16 @@
 package com.abig.myloplay
 
+import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
-
 
 data class AudioFile(
     val id: String? = "",
     val downloadUrl: String? = "",
     val title: String? = "",
     val artist: String? = "",
-    val duration: String? = ""
-
+    val duration: String? = "",
+    val albumArt: Bitmap? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -18,6 +18,7 @@ data class AudioFile(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readParcelable(Bitmap::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -26,7 +27,7 @@ data class AudioFile(
         parcel.writeString(title)
         parcel.writeString(artist)
         parcel.writeString(duration)
-
+        parcel.writeParcelable(albumArt, flags)
     }
 
     override fun describeContents(): Int {
@@ -43,4 +44,3 @@ data class AudioFile(
         }
     }
 }
-

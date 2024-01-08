@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-68:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
             "map": [
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/bf2c4eeccbfce5814449343c290e55c1/transformed/material-1.7.0/res/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/14432f44573758f255bee4eb8a2b1666/transformed/material-1.11.0/res/values-w600dp-land-v13/values-w600dp-land-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

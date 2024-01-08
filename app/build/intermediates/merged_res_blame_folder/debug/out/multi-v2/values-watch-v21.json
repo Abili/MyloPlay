@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-68:/values-watch-v21/values-watch-v21.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-watch-v21/values-watch-v21.xml",
             "map": [
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/979b97c75c602d652d12d0c86a5425d5/transformed/appcompat-1.5.1/res/values-watch-v21/values-watch-v21.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/195f60c79fbdf145be2e70c4ee8a151a/transformed/appcompat-1.6.1/res/values-watch-v21/values-watch-v21.xml",
                     "from": {
                         "startLines": "2,6,10",
                         "startColumns": "4,4,4",

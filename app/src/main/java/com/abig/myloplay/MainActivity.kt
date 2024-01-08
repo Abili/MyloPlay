@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, "signInWithEmail:success")
                         val user = auth.currentUser
                         updateUI(user)
-                        startActivity(Intent(this, HomeActivity::class.java))
+                        startActivity(Intent(this, AllPlaylists::class.java))
                     } else {
                         // Log in failed
                         Log.w(TAG, "signInWithEmail:failure", task.exception)

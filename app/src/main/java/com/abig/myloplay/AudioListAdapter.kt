@@ -4,10 +4,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.ItemSongBinding
 
-class AudioListAdapter :
+class AudioListAdapter(
+    private val onRemoveClickListener: (AudioFile) -> Unit,
+    private val onRecommendClickListener: (AudioFile) -> Unit
+) :
     RecyclerView.Adapter<AudioListAdapter.ViewHolder>() {
     private val songs = mutableListOf<AudioFile>()
 
@@ -86,7 +90,22 @@ class AudioListAdapter :
                         }
 
                         R.id.song_recommend -> {
+                            val position = adapterPosition
+                            if (position != RecyclerView.NO_POSITION) {
+                                val selectedSong = songs[position]
+                                // Call the recommend click listener
+                                onRecommendClickListener.invoke(selectedSong)
+                            }
+                            true
+                        }
+
+                        R.id.deleteSong -> {
                             // Handle the recommend action
+                            val position = adapterPosition
+                            if (position != RecyclerView.NO_POSITION) {
+                                val selectedSong = songs[position]
+                                showRemoveConfirmationDialog(selectedSong)
+                            }
                             true
                         }
 
@@ -102,6 +121,23 @@ class AudioListAdapter :
             binding.textDuration.text = song.duration.toString()
             binding.textArtist.text = song.artist.toString()
             binding.textTitle.isSelected = true
+
+        }
+
+
+        private fun showRemoveConfirmationDialog(song: AudioFile) {
+            val context = binding.root.context
+            AlertDialog.Builder(context)
+                .setTitle("Remove Song")
+                .setMessage("Are you sure you want to remove this song from the playlist?")
+                .setPositiveButton("Remove") { _, _ ->
+                    // User confirmed, invoke the remove click listener
+                    onRemoveClickListener.invoke(song)
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
     }
+
+
 }

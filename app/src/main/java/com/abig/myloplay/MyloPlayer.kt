@@ -25,6 +25,7 @@ class MyloPlayer : AppCompatActivity() {
     private lateinit var songDuration: String
     private lateinit var lyricsTextView: TextView
     private lateinit var lyricsApiClient: LyricsApiClient
+    var lastPlaybackPosition: Int = 0
 
     // ...
 
@@ -62,22 +63,13 @@ class MyloPlayer : AppCompatActivity() {
         artists = intent.getStringArrayListExtra(ARTIST)!!
         songDuration = intent.getStringExtra(SONG_DURATION)!!
 
+        playCurrentSong()
         updateUIForCurrentSong()
 
-        var lastPlaybackPosition: Int = 0
+
 
         playButton.setOnClickListener {
-            if (isPlaying) {
-                lastPlaybackPosition = mediaPlayer.currentPosition
-                mediaPlayer.pause()
-                playButton.setImageResource(R.drawable.play)
-            } else {
-                mediaPlayer.seekTo(lastPlaybackPosition)
-                mediaPlayer.start()
-                playButton.setImageResource(R.drawable.pause)
-                updateSeekBar()
-            }
-            isPlaying = !isPlaying
+            playSong()
         }
 
 
@@ -109,13 +101,45 @@ class MyloPlayer : AppCompatActivity() {
         })
     }
 
+    private fun playSong() {
+        if (isPlaying) {
+            this@MyloPlayer.lastPlaybackPosition = mediaPlayer.currentPosition
+            mediaPlayer.pause()
+            playButton.setImageResource(R.drawable.play)
+        } else {
+            mediaPlayer.seekTo(this.lastPlaybackPosition)
+            mediaPlayer.start()
+            playButton.setImageResource(R.drawable.pause)
+            updateSeekBar()
+        }
+        isPlaying = !isPlaying
+    }
+
+
     private fun updateSeekBar() {
         if (mediaPlayer.isPlaying) {
-            seekBar.max = mediaPlayer.duration
-            seekBar.progress = mediaPlayer.currentPosition
+            val totalDuration = mediaPlayer.duration
+            val currentPosition = mediaPlayer.currentPosition
+
+            // Update the endSongDuration with the total duration
+            binding.endsongDuration.text = formatDuration(totalDuration)
+
+            // Update the startSongDuration with the current position
+            binding.startsongDuration.text = formatDuration(currentPosition)
+
+            seekBar.max = totalDuration
+            seekBar.progress = currentPosition
             handler.postDelayed({ updateSeekBar() }, 1000)
         }
     }
+
+    // Function to format the duration in MM:SS format
+    private fun formatDuration(duration: Int): String {
+        val minutes = duration / 1000 / 60
+        val seconds = duration / 1000 % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
 
 // ...
 
@@ -146,7 +170,6 @@ class MyloPlayer : AppCompatActivity() {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(playlist!![currentPosition])
 
-            mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener { mp ->
                 mp.start()
                 playButton.setImageResource(R.drawable.pause)
@@ -154,8 +177,15 @@ class MyloPlayer : AppCompatActivity() {
                 updateSeekBar()
                 updateUIForCurrentSong()
             }
+
+            mediaPlayer.setOnCompletionListener {
+                // Handle completion if needed
+            }
+
+            mediaPlayer.prepareAsync()
         }
     }
+
 
 
     private fun updateUIForCurrentSong() {
@@ -166,7 +196,7 @@ class MyloPlayer : AppCompatActivity() {
 
             binding.songTitle.text = title
             binding.songArtist.text = artist
-            binding.songDuration.text = duration
+            //binding.startsongDuration.text = duration
             Toast.makeText(this, title, Toast.LENGTH_SHORT).show()
             lyricsApiClient.fetchLyrics(title, artist)
         }

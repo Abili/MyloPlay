@@ -4,18 +4,12 @@ package com.abig.myloplay.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.databinding.Bindable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import androidx.recyclerview.widget.RecyclerView;
-import com.abig.myloplay.EditPlaylistActivity;
 import com.abig.myloplay.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.Deprecated;
 import java.lang.Object;
 
@@ -23,37 +17,10 @@ public abstract class ActivityEditPlaylistBinding extends ViewDataBinding {
   @NonNull
   public final EditText editTextPlaylistName;
 
-  @NonNull
-  public final FloatingActionButton floatingActionButton;
-
-  @NonNull
-  public final RecyclerView recyclerView;
-
-  @NonNull
-  public final Button saveButton;
-
-  @NonNull
-  public final Toolbar toolbar;
-
-  @Bindable
-  protected EditPlaylistActivity mActivity;
-
   protected ActivityEditPlaylistBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      EditText editTextPlaylistName, FloatingActionButton floatingActionButton,
-      RecyclerView recyclerView, Button saveButton, Toolbar toolbar) {
+      EditText editTextPlaylistName) {
     super(_bindingComponent, _root, _localFieldCount);
     this.editTextPlaylistName = editTextPlaylistName;
-    this.floatingActionButton = floatingActionButton;
-    this.recyclerView = recyclerView;
-    this.saveButton = saveButton;
-    this.toolbar = toolbar;
-  }
-
-  public abstract void setActivity(@Nullable EditPlaylistActivity activity);
-
-  @Nullable
-  public EditPlaylistActivity getActivity() {
-    return mActivity;
   }
 
   @NonNull

@@ -22,18 +22,6 @@ class PlaylistDetailsViewModel(
     val playlist: LiveData<Playlist>
         get() = _playlist
 
-    private val _songList = MutableLiveData<List<Song>>()
-    val songList: LiveData<List<Song>>
-        get() = _songList
-
-    fun loadPlaylist(playlistId: String) {
-        viewModelScope.launch {
-            val playlist = playlistRepository.getPlaylist(playlistId)
-            if (playlist != null) {
-                _playlist.value = playlist
-                _songList.value = playlistRepository.getSongs(playlist.songIds!!)
-            }
-        }
-    }
 }
+
 

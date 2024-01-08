@@ -8,7 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abig.myloplay.databinding.ActivityPlaylistDetailsBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 
 class PlaylistDetailsActivity : AppCompatActivity() {
 
@@ -18,6 +20,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
     private lateinit var repository: PlaylistRepository
     private lateinit var playlistsRef: DatabaseReference
     private lateinit var viewModel: PlaylistDetailsViewModel
+    private lateinit var auth:FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +28,8 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding = ActivityPlaylistDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val database = AppDatabase.getInstance(this)
-        repository = PlaylistRepository(database.playlistDao())
+        repository = PlaylistRepository()
+        auth = FirebaseAuth.getInstance()
 
         val viewModelFactory = PlaylistDetailsViewModel.Factory(repository)
         viewModel =
@@ -55,6 +58,9 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding.recyclerViewSongs.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
         )
+        binding.buttonEditPlaylist.setOnClickListener{
+            editPlaylist()
+        }
 
 
         playlistRef.child("songIds").addValueEventListener(object : ValueEventListener {
@@ -74,16 +80,34 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         })
 
 
-        binding.buttonEditPlaylist.setOnClickListener {
-            val intent = Intent(this, EditPlaylistActivity::class.java).apply {
-                intent.putExtra(EditPlaylistActivity.EXTRA_PLAYLIST, playlist)
-            }
-            startActivityForResult(intent, REQUEST_EDIT_PLAYLIST)
-        }
 
         // Other code for setting up the activity
     }
 
+    private fun editPlaylist() {
+        val userID = auth.currentUser!!.uid
+        val editPlaylistRef = FirebaseDatabase.getInstance().reference.child("users")
+            .child(userID).child("playlists")
+        editPlaylistRef.addListenerForSingleValueEvent(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (plSnapshot in snapshot.children) {
+                    val playlistName = plSnapshot.child("playlistName").getValue(String::class.java)
+
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
+    }
+
+    // Inside PlaylistDetailsActivity, where you handle the action to add a song
+
+
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EDIT_PLAYLIST && resultCode == RESULT_OK) {

@@ -12,4 +12,9 @@
         app:showAsAction="ifRoom"
         android:id="@+id/song_recommend"
         android:title="Recommend" />
+    <item
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"
+        android:id="@+id/deleteSong"
+        android:title="Delete" />
 </menu>

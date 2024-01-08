@@ -1,72 +1,116 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:anddroid="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/myseperationTv"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D3CFCF"
-            android:padding="10dp"
-            android:text="My Playlists"
-            android:textColor="@color/black"
-            android:textSize="16dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/currentUserPlaylistsRecycler"
+            android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/recommendationsLayout"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/seperationTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#D3CFCF"
-            android:padding="10dp"
-            android:text="Fiend's Playlists"
-            android:textColor="@color/black"
-            android:textSize="16dp" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/otherUsersPlaylistsRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:padding="10dp" />
+            android:orientation="vertical">
 
             <TextView
-                android:visibility="gone"
-                android:id="@+id/empty_tv"
-                android:layout_centerInParent="true"
-                android:text="No Playlists yet !!"
-                android:textSize="20dp"
-                android:textColor="#ED0404"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
+                android:id="@+id/recommendations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#D3CFCF"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/recommendations"
+                android:textColor="@color/black"
+                android:textSize="26sp" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:contentDescription="@string/recommendationslist"
+                android:id="@+id/recommendations_recy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp" />
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/myseperationTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#D3CFCF"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/my_playlists"
+                android:textColor="@color/black"
+                android:textSize="26sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:contentDescription="@string/my_playlists"
+                android:id="@+id/currentUserPlaylistsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp" />
+
+            <TextView
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:id="@+id/seperationTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#D3CFCF"
+                android:padding="10dp"
+                android:text="@string/friend_s_playlists"
+                android:textColor="@color/black"
+                android:textSize="26sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/otherUsersPlaylistsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:contentDescription="@string/my_friends_playslists"
+                    android:id="@+id/empty_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/no_playlists_yet"
+                    android:textColor="#ED0404"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/selectsong"
+        android:scaleType="centerCrop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        app:backgroundTint="@color/black"
         android:layout_alignParentBottom="true"
         android:layout_gravity="end"
         android:layout_margin="10dp"
         android:backgroundTint="@color/white"
-        anddroid:src="@drawable/ic_playlist_add" />
+        android:src="@drawable/playlist_add_check"
+        android:contentDescription="@string/addplaylistfloatinbutton" />
 </RelativeLayout>
+
 

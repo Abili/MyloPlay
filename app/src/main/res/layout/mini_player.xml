@@ -1,0 +1,39 @@
+<!-- mini_player_layout.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/draggableLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:elevation="8dp">
+
+    <!-- Circular seek bar around the play button -->
+    <com.abig.myloplay.CircularSeekBar
+        android:id="@+id/miniCircularSeekBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+    <!-- Play button (ImageView) -->
+    <ImageView
+        android:id="@+id/miniPlayButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/play"
+        android:layout_gravity="center"
+        android:visibility="visible"/>
+
+    <!-- Song title (TextView) -->
+    <TextView
+        android:id="@+id/miniSongTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Song Title"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

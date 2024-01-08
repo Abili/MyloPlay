@@ -42,6 +42,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.PlaylistViewHolder>() {
     class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding: SongItemBinding = SongItemBinding.bind(itemView)
         private var currentIndex = -1 //initialize with -1 to indicate no song is currently playing
+
         fun bind(song: Song) {
             binding.songTitle.text = song.name
             binding.songArtist.text = song.artist

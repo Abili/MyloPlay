@@ -5,10 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,12 +30,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.util.UUID
 
 class AllPlaylists : AppCompatActivity() {
 
-    private lateinit var othersPlayListAdapter: AllPlaylistAdapter
+    private lateinit var othersPlayListAdapter: OthersAdapter
+    private lateinit var recommendationsAdapter: RecommendationsAdapter
     private lateinit var currentPlayListAdapter: AllPlaylistAdapter
     private val requestCodePermission = 123
     private val requestCodeAudioSelection = 456
@@ -47,16 +56,27 @@ class AllPlaylists : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
+
         binding.currentUserPlaylistsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         currentPlayListAdapter = AllPlaylistAdapter()
 
 //        binding.otherUsersPlaylistsRecycler.layoutManager =
 //            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        othersPlayListAdapter = AllPlaylistAdapter()
+        othersPlayListAdapter = OthersAdapter()
+
+        retrieveRecommendedSongs()
+
+        recommendationsAdapter = RecommendationsAdapter {
+            removeRecommendedSong(it)
+        }
 
         binding.currentUserPlaylistsRecycler.adapter = currentPlayListAdapter
         binding.otherUsersPlaylistsRecycler.adapter = othersPlayListAdapter
+        binding.recommendationsRecy.adapter = recommendationsAdapter
+
+        binding.recommendationsRecy.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         val displayMetrics = Resources.getSystem().displayMetrics
         val columnWidth = resources.getDimension(R.dimen.column_width).toInt()
@@ -64,6 +84,12 @@ class AllPlaylists : AppCompatActivity() {
 
         val gridLayoutManager = GridLayoutManager(this, numberOfColumns)
         binding.otherUsersPlaylistsRecycler.layoutManager = gridLayoutManager
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_spacing)
+        binding.otherUsersPlaylistsRecycler.addItemDecoration(
+            GridSpacingItemDecoration(
+                numberOfColumns, spacingInPixels, false
+            )
+        )
 
 
         binding.selectsong.setOnClickListener {
@@ -95,6 +121,7 @@ class AllPlaylists : AppCompatActivity() {
         startActivityForResult(intent, requestCodeAudioSelection)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -158,11 +185,34 @@ class AllPlaylists : AppCompatActivity() {
 
                 val title = it.getString(titleColumn)
                 val duration = getDurationFromMediaStore(uri)
+                val albumArt = getAlbumArtFromMediaStore(uri)
 
                 return AudioFile(
-                    id.toString(), uri.toString(), title, artist, Util.formatDuration(duration)
+                    id.toString(),
+                    uri.toString(),
+                    title,
+                    artist,
+                    Util.formatDuration(duration),
+                    albumArt
                 )
             }
+        }
+        return null
+    }
+
+    private fun getAlbumArtFromMediaStore(uri: Uri): Bitmap? {
+        val retriever = MediaMetadataRetriever()
+        try {
+            retriever.setDataSource(this, uri)
+            val albumArtByteArray = retriever.embeddedPicture
+            if (albumArtByteArray != null) {
+                // Convert the byte array to a Bitmap
+                return BitmapFactory.decodeByteArray(albumArtByteArray, 0, albumArtByteArray.size)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            retriever.release()
         }
         return null
     }
@@ -236,23 +286,54 @@ class AllPlaylists : AppCompatActivity() {
             // Generate a unique filename for the song in Firebase Storage
             val fileName = UUID.randomUUID().toString() + ".mp3"
 
-            // Create a reference to the Firebase Storage location for the song file
-            val storageRef = FirebaseStorage.getInstance().reference
-            val songRef = storageRef.child("songs").child(audioFile.title!!)
-
             // Upload the song file to Firebase Storage
             val fileUri = Uri.parse(audioFile.downloadUrl)
-            val uploadTask = songRef.putFile(fileUri)
+            val uploadTask = FirebaseStorage.getInstance().reference.child("songs").child(fileName)
+                .putFile(fileUri)
 
             uploadTask.addOnSuccessListener { _ ->
                 // Get the download URL of the uploaded song
-                songRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                    // Store the download URL and other song details in the Firebase Realtime Database
-                    songDetails += ("downloadUrl" to downloadUrl.toString())
-                    songEntryRef.setValue(songDetails)
-                }.addOnFailureListener { _ ->
-                    showToast("Failed to retrieve the download URL for the song.")
-                }
+                FirebaseStorage.getInstance().reference.child("songs")
+                    .child(fileName).downloadUrl.addOnSuccessListener { songDownloadUrl ->
+
+                        // Store the download URL in the Firebase Realtime Database
+                        songDetails += ("downloadUrl" to songDownloadUrl.toString())
+
+                        // Now, upload the album art to Firebase Storage
+                        val albumArtBitmap = audioFile.albumArt
+                        if (albumArtBitmap != null) {
+                            val albumArtFileName = UUID.randomUUID().toString() + ".jpg"
+                            val albumArtRef =
+                                FirebaseStorage.getInstance().reference.child("album_arts")
+                                    .child(albumArtFileName)
+
+                            val albumArtStream = ByteArrayOutputStream()
+                            albumArtBitmap.compress(Bitmap.CompressFormat.JPEG, 100, albumArtStream)
+                            val albumArtData = albumArtStream.toByteArray()
+
+                            val albumArtUploadTask = albumArtRef.putBytes(albumArtData)
+
+                            albumArtUploadTask.addOnSuccessListener { _ ->
+                                // Get the download URL of the uploaded album art
+                                albumArtRef.downloadUrl.addOnSuccessListener { albumArtDownloadUrl ->
+                                    // Add the album art URL to the song details
+                                    songDetails += ("albumArt" to albumArtDownloadUrl.toString())
+
+                                    // Save the song details to the Firebase Realtime Database
+                                    songEntryRef.setValue(songDetails)
+                                }.addOnFailureListener { _ ->
+                                    showToast("Failed to retrieve the download URL for the album art.")
+                                }
+                            }.addOnFailureListener { _ ->
+                                showToast("Failed to upload the album art to Firebase Storage.")
+                            }
+                        } else {
+                            // No album art, save the song details without it
+                            songEntryRef.setValue(songDetails)
+                        }
+                    }.addOnFailureListener { _ ->
+                        showToast("Failed to retrieve the download URL for the song.")
+                    }
             }.addOnFailureListener { _ ->
                 showToast("Failed to upload the song to Firebase Storage.")
             }
@@ -261,80 +342,37 @@ class AllPlaylists : AppCompatActivity() {
         showToast("Playlist '$playlistName' created successfully.")
     }
 
-//    private fun retrieveSongsForPlaylist() {
-//        val userId = FirebaseAuth.getInstance().currentUser?.uid
-//
-//        // Create a reference to the Firebase Realtime Database node for the user's playlists
-//        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
-//            .child("playlists")
-//
-//        // Create a reference to the specific playlist by its ID
-//        databaseRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (playListShot in snapshot.children) {
-//                    val playlistId = playListShot.key!!
-//
-//                    val playlistRef = databaseRef.child(playlistId)
-//
-//                    // Create a reference to the songs within the playlist
-//                    val songsRef = playlistRef.child("songs")
-//
-//                    // Listen for changes in the songs data
-//                    songsRef.addValueEventListener(object : ValueEventListener {
-//                        override fun onDataChange(snapshot: DataSnapshot) {
-//                            val songs = mutableListOf<AudioFile>()
-//
-//                            for (songSnapshot in snapshot.children) {
-//                                val displayName = songSnapshot.child("displayName").value.toString()
-//                                val duration = songSnapshot.child("duration").value.toString()
-//                                val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
-//
-//                                val song = AudioFile("", downloadUrl, displayName, duration)
-//                                songs.add(song)
-//                            }
-//
-//                            // Now, 'songs' contains the list of songs for the specified playlist
-//                            // You can use this list to play the songs or display them in your app
-//                            audioListAdapter.setData(songs)
-//                        }
-//
-//                        override fun onCancelled(error: DatabaseError) {
-//                            // Handle any errors
-//                        }
-//                    })
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-//
-//
-//    }
 
     private fun retrieveCurrentUserPlaylists() {
         // Retrieve playlists for the current user
         // ...
         val userId = auth.currentUser!!.uid
-        database.child("users").child(userId).child("playlists")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+        database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (usersnap in snapshot.children) {
+
                     val playlists = mutableListOf<Playlist>()
-                    for (playlistShot in snapshot.children) {
+                    val username = usersnap.child("username").getValue(String::class.java)
+                    val plsnapshot = snapshot.child(userId).child("playlists")
+
+                    for (playlistShot in plsnapshot.children) {
                         val playlistId = playlistShot.key
                         val playlistname =
                             playlistShot.child("playlistName").getValue(String::class.java)
-                        val playlist = Playlist(playlistId!!, playlistname!!, userId, null, "")
+                        val playlist =
+                            Playlist(playlistId!!, playlistname!!, userId, null, username)
                         playlists.add(playlist)
                         currentPlayListAdapter.setPlaylists(playlists)
+
                     }
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+                //error
+            }
+        })
+
 
     }
 
@@ -346,6 +384,7 @@ class AllPlaylists : AppCompatActivity() {
                 val playlists = mutableListOf<Playlist>()
                 for (userSnapshot in snapshot.children) {
                     val userId = userSnapshot.key
+                    val username = userSnapshot.child("username").getValue(String::class.java)
 
                     // Make sure you skip the current user's data
                     if (userId != auth.uid) {
@@ -355,7 +394,7 @@ class AllPlaylists : AppCompatActivity() {
                             val playListName =
                                 playlistShot.child("playlistName").getValue(String::class.java)
                             val playlist =
-                                Playlist(playlistId!!, playListName!!, userId!!, null, "")
+                                Playlist(playlistId!!, playListName!!, userId!!, null, username)
                             playlists.add(playlist)
                         }
                     }
@@ -367,6 +406,85 @@ class AllPlaylists : AppCompatActivity() {
                 // Handle errors
             }
         })
+    }
+
+    private fun retrieveRecommendedSongs() {
+        // Retrieve playlists for other users
+        // ...
+        database.child("users").child(auth.currentUser!!.uid).child("recommendations")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        binding.recommendationsLayout.visibility = View.VISIBLE
+                        val playlists = mutableListOf<Recommendation>()
+                        for (recSnapshot in snapshot.children) {
+                            //val userId = recSnapshot.key
+                            val songId = recSnapshot.child("songId").getValue(String::class.java)
+                            val songTitle =
+                                recSnapshot.child("songTitle").getValue(String::class.java)
+                            val artist = recSnapshot.child("artist").getValue(String::class.java)
+                            val songUrl = recSnapshot.child("songUrl").getValue(String::class.java)
+                            val duration =
+                                recSnapshot.child("duration").getValue(String::class.java)
+                            val recommendedBy =
+                                recSnapshot.child("recommendedBy").getValue(String::class.java)
+                            val recommendation =
+                                Recommendation(
+                                    songId,
+                                    songUrl!!,
+                                    songTitle!!,
+                                    artist!!,
+                                    duration!!,
+                                    recommendedBy!!
+                                )
+                            playlists.add(recommendation)
+
+
+                        }
+                        recommendationsAdapter.setRecommendedSong(playlists)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle errors
+                }
+            })
+    }
+
+    private fun removeRecommendedSong(selectedSong: Recommendation) {
+        // Remove the song from the list of songIds in the Firebase Realtime Database
+        val playlistRef = FirebaseDatabase.getInstance().reference.child("users")
+            .child(auth.currentUser!!.uid).child("recommendations").child(selectedSong.songId!!)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val songIds =
+                        snapshot.getValue<List<String>>()?.toMutableList() ?: mutableListOf()
+                    // Remove the selected songId
+                    songIds.remove(selectedSong.songId)
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.settings, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

@@ -14,32 +14,24 @@ public class ActivityEditPlaylistBindingImpl extends ActivityEditPlaylistBinding
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.toolbar, 1);
-        sViewsWithIds.put(R.id.editTextPlaylistName, 2);
-        sViewsWithIds.put(R.id.recyclerView, 3);
-        sViewsWithIds.put(R.id.floatingActionButton, 4);
-        sViewsWithIds.put(R.id.saveButton, 5);
+        sViewsWithIds.put(R.id.editTextPlaylistName, 1);
     }
     // views
     @NonNull
-    private final androidx.constraintlayout.widget.ConstraintLayout mboundView0;
+    private final android.widget.LinearLayout mboundView0;
     // variables
     // values
     // listeners
     // Inverse Binding Event Handlers
 
     public ActivityEditPlaylistBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 6, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 2, sIncludes, sViewsWithIds));
     }
     private ActivityEditPlaylistBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (android.widget.EditText) bindings[2]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[4]
-            , (androidx.recyclerview.widget.RecyclerView) bindings[3]
-            , (android.widget.Button) bindings[5]
-            , (androidx.appcompat.widget.Toolbar) bindings[1]
+            , (android.widget.EditText) bindings[1]
             );
-        this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
+        this.mboundView0 = (android.widget.LinearLayout) bindings[0];
         this.mboundView0.setTag(null);
         setRootTag(root);
         // listeners
@@ -49,7 +41,7 @@ public class ActivityEditPlaylistBindingImpl extends ActivityEditPlaylistBinding
     @Override
     public void invalidateAll() {
         synchronized(this) {
-                mDirtyFlags = 0x2L;
+                mDirtyFlags = 0x1L;
         }
         requestRebind();
     }
@@ -67,17 +59,7 @@ public class ActivityEditPlaylistBindingImpl extends ActivityEditPlaylistBinding
     @Override
     public boolean setVariable(int variableId, @Nullable Object variable)  {
         boolean variableSet = true;
-        if (BR.activity == variableId) {
-            setActivity((com.abig.myloplay.EditPlaylistActivity) variable);
-        }
-        else {
-            variableSet = false;
-        }
             return variableSet;
-    }
-
-    public void setActivity(@Nullable com.abig.myloplay.EditPlaylistActivity Activity) {
-        this.mActivity = Activity;
     }
 
     @Override
@@ -101,8 +83,7 @@ public class ActivityEditPlaylistBindingImpl extends ActivityEditPlaylistBinding
     // dirty flag
     private  long mDirtyFlags = 0xffffffffffffffffL;
     /* flag mapping
-        flag 0 (0x1L): activity
-        flag 1 (0x2L): null
+        flag 0 (0x1L): null
     flag mapping end*/
     //end
 }
