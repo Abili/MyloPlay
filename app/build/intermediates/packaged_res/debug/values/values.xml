@@ -93,7 +93,7 @@
     <string name="title_activity_user_contacts">UserContacts</string>
     <string name="title_activity_user_profile">User Profile</string>
     <string name="username">UserName</string>
-    <style name="Base.Theme.MyloPlay" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MyloPlay" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         
         
     </style>

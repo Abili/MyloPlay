@@ -110,8 +110,14 @@ class UserProfile : AppCompatActivity() {
     private fun handlePhoneSignUp() {
         val phoneNumber = binding.editTextPhone.text.toString().trim()
         phone = intent.getStringExtra("phone").toString()
-        binding.editTextPhone.setText(phoneNumber)
-        //binding.verifEmail!!.visibility = View.VISIBLE
+        if (phone.startsWith("+256")) {
+            val newPhone = phone.replace("+256", "")
+            binding.editTextPhone.setText(newPhone)
+            //binding.verifEmail!!.visibility = View.VISIBLE
+        } else {
+            binding.editTextPhone.setText(phone)
+        }
+
     }
 
 

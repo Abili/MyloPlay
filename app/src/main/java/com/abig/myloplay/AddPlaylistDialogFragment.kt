@@ -86,7 +86,8 @@ class AddPlaylistDialogFragment(private var songs: List<Song>) : DialogFragment(
             playlistName,
             FirebaseAuth.getInstance().currentUser!!.uid,
             downloadUrl,
-            null
+            null,
+
         )
 
         // Add the playlist to the Firebase database

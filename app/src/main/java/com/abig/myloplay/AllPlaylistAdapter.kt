@@ -47,11 +47,12 @@ class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewH
                     val selectedPlaylist = playlists[position]
                     // Implement logic to display songs for the selected playlist
                     val intent = Intent(binding.root.context, AudioActivity::class.java)
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_TYPE, "single")
                     intent.putExtra(AudioActivity.EXTRA_PLAYLIST_ID, selectedPlaylist.id)
                     intent.putExtra(AudioActivity.EXTRA_USER_ID, selectedPlaylist.userId)
                     //intent.putExtra(AudioActivity.EXTRA_ALBUMART, lastSongAlbumArtUrl)
                     intent.putExtra(AudioActivity.EXTRA_USER_NAME, selectedPlaylist.userName)
-                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_NAME, selectedPlaylist.userName)
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_NAME, selectedPlaylist.name)
                     binding.root.context.startActivity(intent)
                 }
             }
@@ -64,7 +65,7 @@ class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewH
 
         private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
             val database = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                .child("playlists").child(playlistId)
+                .child("playlists").child("single").child(playlistId)
             database.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val playlistName = snapshot.child("playlistName").getValue(String::class.java)

@@ -4,25 +4,74 @@ package com.abig.myloplay.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
+import androidx.viewbinding.ViewBindings;
 import com.abig.myloplay.R;
+import com.google.android.material.textfield.TextInputLayout;
+import com.hbb20.CountryCodePicker;
 import java.lang.NullPointerException;
 import java.lang.Override;
+import java.lang.String;
 
 public final class ActivitySignUpBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final ScrollView rootView;
 
-  private ActivitySignUpBinding(@NonNull ConstraintLayout rootView) {
+  @NonNull
+  public final Button buttonSignOut;
+
+  @NonNull
+  public final CountryCodePicker ccp;
+
+  @NonNull
+  public final EditText editTextPhone;
+
+  @NonNull
+  public final Button phoneAuth;
+
+  @NonNull
+  public final LinearLayout phoneauthLayout;
+
+  @NonNull
+  public final ProgressBar signInProgress;
+
+  @NonNull
+  public final TextInputLayout textInputLayoutPhone;
+
+  @NonNull
+  public final TextView textViewStatus;
+
+  @NonNull
+  public final Button verifyCode;
+
+  private ActivitySignUpBinding(@NonNull ScrollView rootView, @NonNull Button buttonSignOut,
+      @NonNull CountryCodePicker ccp, @NonNull EditText editTextPhone, @NonNull Button phoneAuth,
+      @NonNull LinearLayout phoneauthLayout, @NonNull ProgressBar signInProgress,
+      @NonNull TextInputLayout textInputLayoutPhone, @NonNull TextView textViewStatus,
+      @NonNull Button verifyCode) {
     this.rootView = rootView;
+    this.buttonSignOut = buttonSignOut;
+    this.ccp = ccp;
+    this.editTextPhone = editTextPhone;
+    this.phoneAuth = phoneAuth;
+    this.phoneauthLayout = phoneauthLayout;
+    this.signInProgress = signInProgress;
+    this.textInputLayoutPhone = textInputLayoutPhone;
+    this.textViewStatus = textViewStatus;
+    this.verifyCode = verifyCode;
   }
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public ScrollView getRoot() {
     return rootView;
   }
 
@@ -43,10 +92,69 @@ public final class ActivitySignUpBinding implements ViewBinding {
 
   @NonNull
   public static ActivitySignUpBinding bind(@NonNull View rootView) {
-    if (rootView == null) {
-      throw new NullPointerException("rootView");
-    }
+    // The body of this method is generated in a way you would not otherwise write.
+    // This is done to optimize the compiled bytecode for size and performance.
+    int id;
+    missingId: {
+      id = R.id.buttonSignOut;
+      Button buttonSignOut = ViewBindings.findChildViewById(rootView, id);
+      if (buttonSignOut == null) {
+        break missingId;
+      }
 
-    return new ActivitySignUpBinding((ConstraintLayout) rootView);
+      id = R.id.ccp;
+      CountryCodePicker ccp = ViewBindings.findChildViewById(rootView, id);
+      if (ccp == null) {
+        break missingId;
+      }
+
+      id = R.id.editTextPhone;
+      EditText editTextPhone = ViewBindings.findChildViewById(rootView, id);
+      if (editTextPhone == null) {
+        break missingId;
+      }
+
+      id = R.id.phoneAuth;
+      Button phoneAuth = ViewBindings.findChildViewById(rootView, id);
+      if (phoneAuth == null) {
+        break missingId;
+      }
+
+      id = R.id.phoneauthLayout;
+      LinearLayout phoneauthLayout = ViewBindings.findChildViewById(rootView, id);
+      if (phoneauthLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.signInProgress;
+      ProgressBar signInProgress = ViewBindings.findChildViewById(rootView, id);
+      if (signInProgress == null) {
+        break missingId;
+      }
+
+      id = R.id.textInputLayoutPhone;
+      TextInputLayout textInputLayoutPhone = ViewBindings.findChildViewById(rootView, id);
+      if (textInputLayoutPhone == null) {
+        break missingId;
+      }
+
+      id = R.id.textViewStatus;
+      TextView textViewStatus = ViewBindings.findChildViewById(rootView, id);
+      if (textViewStatus == null) {
+        break missingId;
+      }
+
+      id = R.id.verifyCode;
+      Button verifyCode = ViewBindings.findChildViewById(rootView, id);
+      if (verifyCode == null) {
+        break missingId;
+      }
+
+      return new ActivitySignUpBinding((ScrollView) rootView, buttonSignOut, ccp, editTextPhone,
+          phoneAuth, phoneauthLayout, signInProgress, textInputLayoutPhone, textViewStatus,
+          verifyCode);
+    }
+    String missingId = rootView.getResources().getResourceName(id);
+    throw new NullPointerException("Missing required view with ID: ".concat(missingId));
   }
 }

@@ -15,9 +15,12 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,6 +43,7 @@ class AllPlaylists : AppCompatActivity() {
     private lateinit var othersPlayListAdapter: OthersAdapter
     private lateinit var recommendationsAdapter: RecommendationsAdapter
     private lateinit var currentPlayListAdapter: AllPlaylistAdapter
+    private lateinit var groupsAdapter: GroupsAdapter
     private val requestCodePermission = 123
     private val requestCodeAudioSelection = 456
     private lateinit var binding: ActivityAllPlaylistsBinding
@@ -47,23 +51,32 @@ class AllPlaylists : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
+    private lateinit var contactsRetriever: ContactsRetriever
+    private val requestCodePermissionContacts = 124
+    private val requestCodePermissionAudio = 457
+    private lateinit var popupWindow: PopupWindow
+    private var isOptionsVisible = false
+    private var allPlaylists: MutableList<Playlist> = mutableListOf()
+    private lateinit var filteredPlaylists: MutableList<Playlist>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAllPlaylistsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        contactsRetriever = ContactsRetriever(this)
+        // Check and request permissions
         database = FirebaseDatabase.getInstance().reference
-        auth = FirebaseAuth.getInstance()
+        checkAndRequestContactsPermission()
 
+        auth = FirebaseAuth.getInstance()
 
         binding.currentUserPlaylistsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         currentPlayListAdapter = AllPlaylistAdapter()
-
-//        binding.otherUsersPlaylistsRecycler.layoutManager =
-//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         othersPlayListAdapter = OthersAdapter()
+        groupsAdapter = GroupsAdapter()
 
         retrieveRecommendedSongs()
 
@@ -74,6 +87,7 @@ class AllPlaylists : AppCompatActivity() {
         binding.currentUserPlaylistsRecycler.adapter = currentPlayListAdapter
         binding.otherUsersPlaylistsRecycler.adapter = othersPlayListAdapter
         binding.recommendationsRecy.adapter = recommendationsAdapter
+        binding.groupPlaylistsRecycler.adapter = groupsAdapter
 
         binding.recommendationsRecy.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -83,34 +97,131 @@ class AllPlaylists : AppCompatActivity() {
         val numberOfColumns = displayMetrics.widthPixels / columnWidth
 
         val gridLayoutManager = GridLayoutManager(this, numberOfColumns)
-        binding.otherUsersPlaylistsRecycler.layoutManager = gridLayoutManager
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_spacing)
-        binding.otherUsersPlaylistsRecycler.addItemDecoration(
-            GridSpacingItemDecoration(
-                numberOfColumns, spacingInPixels, false
-            )
-        )
 
+        binding.otherUsersPlaylistsRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        binding.otherUsersPlaylistsRecycler.addItemDecoration(
+//            GridSpacingItemDecoration(
+//                numberOfColumns, spacingInPixels, false
+//            )
+//        )
 
-        binding.selectsong.setOnClickListener {
-            openAudioSelection()
+        val groupGridLayoutManager = GridLayoutManager(this, numberOfColumns)
+        binding.groupPlaylistsRecycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//        binding.groupPlaylistsRecycler.addItemDecoration(
+//            GridSpacingItemDecoration(
+//                numberOfColumns, spacingInPixels, false
+//            )
+//        )
+
+        binding.createPlaylist.setOnClickListener {
+            toggleOptionsVisibility()
         }
+        binding.singlePlaylist.setOnClickListener {
+            openAudioSelection()
+            AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        }
+
+        binding.groupPlaylist.setOnClickListener {
+            openAudioSelection()
+            AnimationUtils.loadAnimation(this, R.anim.slide_down)
+            startActivity(Intent(this, GroupPlaylistContacts::class.java))
+        }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterPlaylists(newText)
+                return true
+            }
+        })
+
+
         retrieveCurrentUserPlaylists()
-        retrieveOtherUsersPlaylists()
+        //retrieveOtherUsersPlaylists()
+    }
+
+    private fun filterPlaylists(query: String?) {
+        query?.let {
+            filteredPlaylists = allPlaylists.filter { playlist ->
+                val matchesQuery = playlist.name?.contains(
+                    it, ignoreCase = true
+                ) == true || // Search by playlist name
+                        playlist.userName?.contains(
+                            it, ignoreCase = true
+                        ) == true // Search by user name
+
+                // Filter songs within the playlist based on song names
+                val filteredSongs = playlist.songs?.filter { song ->
+                    song.title?.contains(it, ignoreCase = true) == true
+                }
+
+                matchesQuery || !filteredSongs.isNullOrEmpty()
+            }.toMutableList()
+
+            // Update your adapters with the filtered playlists
+            currentPlayListAdapter.setPlaylists(filteredPlaylists)
+            othersPlayListAdapter.setPlaylists(filteredPlaylists)
+            groupsAdapter.setPlaylists(filteredPlaylists)
+        }
     }
 
 
-    private fun checkPermissions(): Boolean {
-        val readPermission = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        return readPermission == PackageManager.PERMISSION_GRANTED
+    private fun toggleOptionsVisibility() {
+        isOptionsVisible = !isOptionsVisible
+
+        val animation = if (isOptionsVisible) {
+            AnimationUtils.loadAnimation(this, R.anim.slide_up)
+        } else {
+            AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        }
+
+        binding.groupPlaylist.startAnimation(animation)
+        binding.singlePlaylist.startAnimation(animation)
+
+        binding.groupPlaylist.visibility = if (isOptionsVisible) View.VISIBLE else View.INVISIBLE
+        binding.singlePlaylist.visibility = if (isOptionsVisible) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCodePermission
-        )
+    private fun checkAndRequestContactsPermission() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_CONTACTS
+            ) -> {
+                // Permission already granted, retrieve contacts
+                retrieveOtherUsersPlaylists()
+                retrieveGroupPlaylists()
+            }
+
+            else -> {
+                // Permission not granted, request it
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CONTACTS_PERMISSION
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_CONTACTS_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, retrieve contacts
+                retrieveOtherUsersPlaylists()
+                retrieveGroupPlaylists()
+            } else {
+                // Permission denied, handle accordingly
+                finish()
+            }
+        }
     }
 
 
@@ -227,14 +338,6 @@ class AllPlaylists : AppCompatActivity() {
         return duration
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == requestCodePermission && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openAudioSelection()
-        }
-    }
 
     private fun showPlaylistNameDialog(selectedSongs: List<AudioFile>) {
         val dialogBinding = DialogAddPlaylistBinding.inflate(layoutInflater)
@@ -262,7 +365,7 @@ class AllPlaylists : AppCompatActivity() {
 
         // Create a reference to the Firebase Realtime Database node for the user's playlists
         val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
-            .child("playlists")
+            .child("playlists").child("single")
 
         // Create a new playlist entry in the Firebase Realtime Database
         val playlistRef = databaseRef.push()
@@ -349,22 +452,34 @@ class AllPlaylists : AppCompatActivity() {
         val userId = auth.currentUser!!.uid
         database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (usersnap in snapshot.children) {
+                if (snapshot.exists()) {
+                    for (usersnap in snapshot.children) {
 
-                    val playlists = mutableListOf<Playlist>()
-                    val username = usersnap.child("username").getValue(String::class.java)
-                    val plsnapshot = snapshot.child(userId).child("playlists")
+                        val playlists = mutableListOf<Playlist>()
+                        val username = usersnap.child("username").getValue(String::class.java)
+                        val plsnapshot = snapshot.child(userId).child("playlists").child("single")
 
-                    for (playlistShot in plsnapshot.children) {
-                        val playlistId = playlistShot.key
-                        val playlistname =
-                            playlistShot.child("playlistName").getValue(String::class.java)
-                        val playlist =
-                            Playlist(playlistId!!, playlistname!!, userId, null, username)
-                        playlists.add(playlist)
-                        currentPlayListAdapter.setPlaylists(playlists)
+                        for (playlistShot in plsnapshot.children) {
+                            val playlistId = playlistShot.key
+                            val playlistname =
+                                playlistShot.child("playlistName").getValue(String::class.java)
+                            val playlist = Playlist(
+                                playlistId!!,
+                                playlistname!!,
+                                userId,
+                                null,
+                                username,
+                                System.currentTimeMillis(),
+                                null
+                            )
+                            playlists.add(playlist)
+                            //allPlaylists.add(playlist)
+                            currentPlayListAdapter.setPlaylists(playlists)
 
+                        }
                     }
+                } else {
+                    binding.myseperationTv.visibility = View.GONE
                 }
             }
 
@@ -377,27 +492,59 @@ class AllPlaylists : AppCompatActivity() {
     }
 
     private fun retrieveOtherUsersPlaylists() {
+        val currentUserContacts = mutableListOf<String>()
+
+        // Fetch the current user's contacts from the phone
+        val contacts = contactsRetriever.retrieveContacts()
+
+        // Extract phone numbers from the retrieved contacts and format them
+        currentUserContacts.addAll(contacts.map { formatPhoneNumber(it.phone) })
+
         // Retrieve playlists for other users
-        // ...
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
         database.child("users").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val playlists = mutableListOf<Playlist>()
-                for (userSnapshot in snapshot.children) {
-                    val userId = userSnapshot.key
-                    val username = userSnapshot.child("username").getValue(String::class.java)
+                if (snapshot.exists()) {
+                    for (userSnapshot in snapshot.children) {
+                        val userId = userSnapshot.key
+                        val username = userSnapshot.child("username").getValue(String::class.java)
+                        val phone = userSnapshot.child("phone").getValue(String::class.java)
 
-                    // Make sure you skip the current user's data
-                    if (userId != auth.uid) {
-                        val playlistsSnapshot = userSnapshot.child("playlists")
-                        for (playlistShot in playlistsSnapshot.children) {
-                            val playlistId = playlistShot.key
-                            val playListName =
-                                playlistShot.child("playlistName").getValue(String::class.java)
-                            val playlist =
-                                Playlist(playlistId!!, playListName!!, userId!!, null, username)
-                            playlists.add(playlist)
+                        if (userId != currentUserId) {
+                            val isCurrentUserRestrictedByUser =
+                                userSnapshot.child("restricted").child(currentUserId)
+                                    .getValue(Boolean::class.java) ?: false
+
+                            val isCurrentUserInContactList =
+                                currentUserContacts.contains(formatPhoneNumber(phone!!))
+
+                            if (!isCurrentUserRestrictedByUser && isCurrentUserInContactList) {
+                                val playlistsSnapshot =
+                                    userSnapshot.child("playlists").child("single")
+                                for (playlistShot in playlistsSnapshot.children) {
+                                    val playlistId = playlistShot.key
+                                    val playListName = playlistShot.child("playlistName")
+                                        .getValue(String::class.java)
+
+                                    val playlist = Playlist(
+                                        playlistId!!,
+                                        playListName!!,
+                                        userId!!,
+                                        null,
+                                        username,
+                                        System.currentTimeMillis(),
+                                        null
+                                    )
+                                    playlists.add(playlist)
+                                   // allPlaylists.add(playlist)
+                                }
+                            }
                         }
                     }
+                } else {
+                    binding.seperationTv.visibility = View.GONE
                 }
                 othersPlayListAdapter.setPlaylists(playlists)
             }
@@ -406,6 +553,68 @@ class AllPlaylists : AppCompatActivity() {
                 // Handle errors
             }
         })
+    }
+
+    private fun retrieveGroupPlaylists() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        database.child("users").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val playlists = mutableListOf<Playlist>()
+
+                for (userSnapshot in snapshot.children) {
+                    val userId = userSnapshot.key
+                    val username = userSnapshot.child("username").getValue(String::class.java)
+
+                    val playlistsSnapshot = userSnapshot.child("playlists").child("group")
+
+                    for (playlistShot in playlistsSnapshot.children) {
+                        val playlistId = playlistShot.key
+                        val playlistName =
+                            playlistShot.child("playlistName").getValue(String::class.java)
+
+                        // Check if the current user's ID is either the creator or in the "userIds" array
+                        val userIdsSnapshot = playlistShot.child("userIds")
+                        if (playlistShot.child("userId").value == currentUserId || userIdsSnapshot.children.any { it.value == currentUserId }) {
+                            // Log playlist information for debugging
+                            Toast.makeText(
+                                this@AllPlaylists, "PlaylistDebug $playlistName", Toast.LENGTH_SHORT
+                            ).show()
+
+                            val playlist = Playlist(
+                                playlistId!!,
+                                playlistName!!,
+                                userId!!,
+                                null,
+                                username,
+                                System.currentTimeMillis(),
+                                null
+                            )
+                            playlists.add(playlist)
+                            //allPlaylists.add(playlist)
+                        }
+                    }
+                }
+
+                groupsAdapter.setPlaylists(playlists)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle errors
+            }
+        })
+    }
+
+
+    // Function to format the phone number
+    private fun formatPhoneNumber(phone: String): String {
+        return if (phone.startsWith("0")) {
+            // Convert phone number starting with zero to +256 format
+            "+256${phone.substring(1).replace(" ", "")}"
+        } else {
+            // Keep the existing format if it already starts with +256
+            phone.replace(" ", "")
+        }
     }
 
     private fun retrieveRecommendedSongs() {
@@ -428,15 +637,14 @@ class AllPlaylists : AppCompatActivity() {
                                 recSnapshot.child("duration").getValue(String::class.java)
                             val recommendedBy =
                                 recSnapshot.child("recommendedBy").getValue(String::class.java)
-                            val recommendation =
-                                Recommendation(
-                                    songId,
-                                    songUrl!!,
-                                    songTitle!!,
-                                    artist!!,
-                                    duration!!,
-                                    recommendedBy!!
-                                )
+                            val recommendation = Recommendation(
+                                songId,
+                                songUrl!!,
+                                songTitle!!,
+                                artist!!,
+                                duration!!,
+                                recommendedBy!!
+                            )
                             playlists.add(recommendation)
 
 
@@ -453,23 +661,58 @@ class AllPlaylists : AppCompatActivity() {
 
     private fun removeRecommendedSong(selectedSong: Recommendation) {
         // Remove the song from the list of songIds in the Firebase Realtime Database
-        val playlistRef = FirebaseDatabase.getInstance().reference.child("users")
-            .child(auth.currentUser!!.uid).child("recommendations").child(selectedSong.songId!!)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val songIds =
-                        snapshot.getValue<List<String>>()?.toMutableList() ?: mutableListOf()
-                    // Remove the selected songId
-                    songIds.remove(selectedSong.songId)
+        val playlistRef =
+            FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser!!.uid)
+                .child("recommendations").child(selectedSong.songId!!)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val songIds =
+                            snapshot.getValue<List<String>>()?.toMutableList() ?: mutableListOf()
+                        // Remove the selected songId
+                        songIds.remove(selectedSong.songId)
 
-                }
+                    }
 
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle error
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle error
+                    }
+                })
     }
 
+
+//    private fun retrieveAndStoreContacts() {
+//        // Retrieve contacts
+//        val contacts = contactsRetriever.retrieveContacts()
+//        showToast("Number of contacts: ${contacts.size}")
+//        // Store the contacts in Firebase
+//        storeContactsInFirebase(contacts)
+//    }
+
+    // Other existing methods...
+
+    private fun storeContactsInFirebase(contacts: List<User>) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val contactsRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
+            .child("contacts")
+
+        // Clear the previous contacts data for this user
+        contactsRef.removeValue()
+
+        // Iterate through the retrieved contacts and store them in the Firebase Realtime Database
+        contacts.forEach { contact ->
+            val contactDetails = mapOf(
+                "phone" to contact.phone,
+                "username" to contact.username,
+                // Add other contact details as needed
+            )
+
+            // Create a unique ID for the contact entry
+            val contactEntryRef = contactsRef.push()
+
+            // Save the contact details to the Firebase Realtime Database
+            contactEntryRef.setValue(contactDetails)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.settings, menu)
@@ -487,5 +730,7 @@ class AllPlaylists : AppCompatActivity() {
         }
     }
 
-
+    companion object {
+        private const val REQUEST_CONTACTS_PERMISSION = 1
+    }
 }

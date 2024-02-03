@@ -47,6 +47,8 @@ anim nav_default_enter_anim
 anim nav_default_exit_anim
 anim nav_default_pop_enter_anim
 anim nav_default_pop_exit_anim
+anim slide_down
+anim slide_up
 animator design_appbar_state_list_animator
 animator design_fab_hide_motion_spec
 animator design_fab_show_motion_spec
@@ -3487,6 +3489,9 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable ic_check
+drawable ic_check_mark
+drawable ic_clear
 drawable ic_clear_black_24
 drawable ic_clear_black_24dp
 drawable ic_clock_black_24dp
@@ -3494,6 +3499,7 @@ drawable ic_delete
 drawable ic_download
 drawable ic_edit
 drawable ic_email
+drawable ic_group
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
@@ -3515,6 +3521,7 @@ drawable ic_recommend
 drawable ic_save
 drawable ic_search_black_24
 drawable ic_shuffle
+drawable ic_upward
 drawable ic_user
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
@@ -3750,6 +3757,8 @@ id actions
 id activity_chooser_view_content
 id add
 id addSong
+id add_user
+id adduser_btns
 id adjust_height
 id adjust_width
 id alertTitle
@@ -3787,6 +3796,7 @@ id browser_actions_menu_item_icon
 id browser_actions_menu_item_text
 id browser_actions_menu_items
 id browser_actions_menu_view
+id btnUpdatePrivacy
 id buttonEditPlaylist
 id buttonLayout
 id buttonLogIn
@@ -3798,6 +3808,7 @@ id button_first
 id button_second
 id cache_measures
 id callMeasure
+id cancel
 id cancelRecommend
 id cancel_button
 id cardViewRoot
@@ -3813,6 +3824,7 @@ id chain2
 id chains
 id checkbox
 id checked
+id checkmarkImageView
 id chronometer
 id circle_center
 id clear_text
@@ -3824,10 +3836,12 @@ id collapseActionView
 id collapsingToolbar
 id compose_view_saveable_id_tag
 id compress
+id confirm
 id confirm_button
 id constraint
 id consume_window_insets_tag
 id contactImageView
+id contact_layout
 id contactsRecyclerView
 id container
 id content
@@ -3839,6 +3853,7 @@ id cos
 id counterclockwise
 id countryCodeHolder
 id cradle
+id create_playlist
 id currentState
 id currentUserPlaylistsRecycler
 id current_user_playlists
@@ -3877,7 +3892,6 @@ id dragLeft
 id dragRight
 id dragStart
 id dragUp
-id draggableLayout
 id dropdown_menu
 id easeIn
 id easeInOut
@@ -3907,6 +3921,8 @@ id enterAlwaysCollapsed
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
+id fabOption1
+id fabOption2
 id fade
 id fastscroll
 id fileSizeReference
@@ -3927,6 +3943,7 @@ id floatingActionButton
 id forever
 id fragment_container_view_tag
 id friendsTv
+id friendsnames
 id frost
 id fullscreen_header
 id ghost_view
@@ -3936,6 +3953,9 @@ id gone
 id graph
 id graph_wrap
 id group_divider
+id group_playlist
+id group_playlists_recycler
+id group_tag
 id grouping
 id groups
 id header_title
@@ -4017,9 +4037,7 @@ id matrix
 id message
 id middle
 id mini
-id miniCircularSeekBar
-id miniPlayButton
-id miniSongTitle
+id miniplayer_layout
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -4123,6 +4141,7 @@ id playlistImageView
 id playlist_name
 id playlist_num_songs
 id playlist_play_btn
+id playlist_privacy
 id playlistmore
 id playlistnames
 id playlistsUserView
@@ -4136,11 +4155,16 @@ id preferences_header
 id preferences_sliding_pane_layout
 id pressed
 id prev_btn
+id privacy
 id profile_create_button
 id progressBar
 id progress_circular
 id progress_horizontal
 id radio
+id radioGroupPrivacy
+id radioMyContacts
+id radioMyContactsExcept
+id radioOnlyShareWith
 id ratio
 id recommendBtns
 id recommendations
@@ -4187,13 +4211,13 @@ id search_go_btn
 id search_mag_icon
 id search_plate
 id search_src_text
+id search_view
 id search_voice_btn
 id seekbar
 id seekbar_value
 id select_dialog_listview
 id selected
 id selection_type
-id selectsong
 id seperationTv
 id settings
 id sharedValueSet
@@ -4202,10 +4226,11 @@ id shortcut
 id showCustom
 id showHome
 id showTitle
+id show_lyrics
 id shuffleSong
 id signInProgress
-id signOutButton
 id sin
+id single_playlist
 id skipCollapsed
 id skipped
 id slide
@@ -4473,6 +4498,7 @@ layout abc_tooltip
 layout activity_all_playlists
 layout activity_audio
 layout activity_edit_playlist
+layout activity_group_playlist_contacts
 layout activity_home
 layout activity_main
 layout activity_my_account
@@ -4484,6 +4510,7 @@ layout activity_recommended_songs
 layout activity_settings
 layout activity_sign_up
 layout activity_user_contacts
+layout activity_user_privacy_contacts
 layout activity_user_profile
 layout activity_verification_code
 layout browser_actions_context_menu_page
@@ -4506,6 +4533,7 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout dialog_add_playlist
+layout dialog_privacy_settings
 layout expand_button
 layout fastscroll__default_bubble
 layout fragment_first
@@ -4514,8 +4542,10 @@ layout image_frame
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_contact
+layout item_privacy_contact
 layout item_song
 layout layout_code_picker
+layout layout_expanded_player
 layout layout_full_width_code_picker
 layout layout_picker_dialog
 layout layout_recycler_country_tile
@@ -4581,6 +4611,7 @@ layout others_playlist_item
 layout owner_pl_item
 layout owner_playlist_item
 layout playlist_item
+layout popup_layout
 layout preference
 layout preference_category
 layout preference_category_material

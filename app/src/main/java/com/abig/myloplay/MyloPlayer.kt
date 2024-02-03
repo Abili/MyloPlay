@@ -26,6 +26,7 @@ class MyloPlayer : AppCompatActivity() {
     private lateinit var lyricsTextView: TextView
     private lateinit var lyricsApiClient: LyricsApiClient
     var lastPlaybackPosition: Int = 0
+    lateinit var audioListAdapter: AudioListAdapter
 
     // ...
 
@@ -34,71 +35,76 @@ class MyloPlayer : AppCompatActivity() {
         binding = ActivityMyloPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        playButton = binding.playBtn
-        seekBar = binding.seekbar
-        lyricsApiClient = LyricsApiClient(binding.lyricsTextView)
+        if (intent.hasExtra(SONG_ID)) {
+            val selectedSongId = intent.getStringExtra(SONG_ID)
 
-        // Initialize the MediaPlayer with audio attributes
-        val audioAttributes =
-            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_MEDIA).build()
+            playButton = binding.playBtn
+            seekBar = binding.seekbar
+            lyricsApiClient = LyricsApiClient(binding.lyricsTextView)
 
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioAttributes(audioAttributes)
+            // Initialize the MediaPlayer with audio attributes
+            val audioAttributes =
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA).build()
 
-        mediaPlayer.setOnPreparedListener {
-            // Media player is prepared, you can set the data source here.
-            updateSeekBar()
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.setAudioAttributes(audioAttributes)
+
+            mediaPlayer.setOnPreparedListener {
+                // Media player is prepared, you can set the data source here.
+                updateSeekBar()
+                playCurrentSong()
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                skipToNextSong()
+            }
+
+            playlist = intent.getStringArrayListExtra(PLAYLIST)
+            currentPosition = intent.getIntExtra(CURRENT_POSITION, 0)
+
+            songTitles = intent.getStringArrayListExtra(SONG_TITLE)!!
+            artists = intent.getStringArrayListExtra(ARTIST)!!
+            songDuration = intent.getStringExtra(SONG_DURATION)!!
+
             playCurrentSong()
-        }
-
-        mediaPlayer.setOnCompletionListener {
-            skipToNextSong()
-        }
-
-        playlist = intent.getStringArrayListExtra(PLAYLIST)
-        currentPosition = intent.getIntExtra(CURRENT_POSITION, 0)
-
-        songTitles = intent.getStringArrayListExtra(SONG_TITLE)!!
-        artists = intent.getStringArrayListExtra(ARTIST)!!
-        songDuration = intent.getStringExtra(SONG_DURATION)!!
-
-        playCurrentSong()
-        updateUIForCurrentSong()
+            updateUIForCurrentSong()
 
 
 
-        playButton.setOnClickListener {
-            playSong()
-        }
+            playButton.setOnClickListener {
+                playSong()
+            }
 
 
-        binding.nextBtn.setOnClickListener {
-            skipToNextSong()
-        }
+            binding.nextBtn.setOnClickListener {
+                skipToNextSong()
+            }
 
-        binding.prevBtn.setOnClickListener {
-            skipToPreviousSong()
-        }
+            binding.prevBtn.setOnClickListener {
+                skipToPreviousSong()
+            }
 
-        // SeekBar listener to handle seeking to a specific position
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?, progress: Int, fromUser: Boolean
-            ) {
-                if (fromUser) {
-                    mediaPlayer.seekTo(progress)
+            // SeekBar listener to handle seeking to a specific position
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
+                ) {
+                    if (fromUser) {
+                        mediaPlayer.seekTo(progress)
+                    }
                 }
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Not needed
-            }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                    // Not needed
+                }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Not needed
-            }
-        })
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    // Not needed
+                }
+            })
+        }
+        audioListAdapter
     }
 
     private fun playSong() {
@@ -187,7 +193,6 @@ class MyloPlayer : AppCompatActivity() {
     }
 
 
-
     private fun updateUIForCurrentSong() {
         if (playlist != null && currentPosition >= 0 && currentPosition < playlist!!.size) {
             val title = songTitles[currentPosition] ?: "Unknown Title"
@@ -200,6 +205,14 @@ class MyloPlayer : AppCompatActivity() {
             Toast.makeText(this, title, Toast.LENGTH_SHORT).show()
             lyricsApiClient.fetchLyrics(title, artist)
         }
+    }
+
+
+     fun playShuffledSongs(shuffledPlaylist: List<String>, startPosition: Int) {
+        playlist = shuffledPlaylist
+        currentPosition = startPosition
+        playCurrentSong()
+        updateUIForCurrentSong()
     }
 
 

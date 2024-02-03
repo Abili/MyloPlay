@@ -54,12 +54,18 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        binding.signOutButton.setOnClickListener {
+        binding.buttonSignOut.setOnClickListener {
             // Handle sign out and navigate to the MainActivity
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        binding.playlistPrivacy.setOnClickListener {
+            // Handle sign out and navigate to the MainActivity
+            val intent = Intent(this, UserPrivacyContacts::class.java)
+            startActivity(intent)
         }
     }
 

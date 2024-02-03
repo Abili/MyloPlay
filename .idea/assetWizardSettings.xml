@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/delete_forever/baseline_delete_forever_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/diversity_3/baseline_diversity_3_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_delete" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_group" />
                           </map>
                         </option>
                       </PersistentState>

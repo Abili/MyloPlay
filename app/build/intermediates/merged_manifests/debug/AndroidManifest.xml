@@ -41,7 +41,13 @@
         android:testOnly="true"
         android:theme="@style/Theme.MyloPlay" >
         <activity
+            android:name="com.abig.myloplay.GroupPlaylistContacts"
+            android:exported="false" />
+        <activity
             android:name="com.abig.myloplay.RecommendedSongsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.abig.myloplay.MiniPlayerActivity"
             android:exported="false" />
         <activity
             android:name="com.abig.myloplay.UserContacts"
@@ -57,7 +63,18 @@
         </activity>
         <activity
             android:name="com.abig.myloplay.AudioActivity"
-            android:exported="false" />
+            android:exported="false" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AllPlaylists" />
+        </activity>
+        <activity
+            android:name="com.abig.myloplay.UserPrivacyContacts"
+            android:exported="false" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivity" />
+        </activity>
         <activity
             android:name="com.abig.myloplay.AllPlaylists"
             android:exported="false"

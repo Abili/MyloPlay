@@ -1,6 +1,10 @@
 package com.abig.myloplay
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlin.random.Random
 
 class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
@@ -52,22 +57,24 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
                     val selectedPlaylist = playlists[position]
                     // Implement logic to display songs for the selected playlist
                     val intent = Intent(binding.root.context, AudioActivity::class.java)
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_TYPE, "single")
                     intent.putExtra(AudioActivity.EXTRA_PLAYLIST_ID, selectedPlaylist.id)
                     intent.putExtra(AudioActivity.EXTRA_USER_ID, selectedPlaylist.userId)
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_NAME, selectedPlaylist.name)
                     binding.root.context.startActivity(intent)
                 }
             }
         }
 
         fun bind(playlist: Playlist) {
-            retrieveCurrentUserPlaylists(playlist.id!!, playlist.userId!!)
+            retrieveOtherUserPlaylists(playlist.id!!, playlist.userId!!)
             playlistName.text = playlist.name
             binding.textViewUserName.text = playlist.userName
         }
 
-        private fun retrieveCurrentUserPlaylists(playlistId: String, uid: String) {
+        private fun retrieveOtherUserPlaylists(playlistId: String, uid: String) {
             val database = FirebaseDatabase.getInstance().reference.child("users").child(uid)
-            database.child("playlists").child(playlistId)
+            database.child("playlists").child("single").child(playlistId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val playlistName =
@@ -92,11 +99,17 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
 
                         // Load the album art into the ImageView using Glide
                         if (lastSongAlbumArtUrl != null) {
-                            Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
+                            Glide.with(binding.root)
+                                .load(lastSongAlbumArtUrl)
+                                .centerCrop()
                                 .into(binding.othersProfileImage)
                         } else {
-                            // If no album art is found, you can set a placeholder or leave it empty
-                            Glide.with(binding.root).load(R.drawable.mylo_bg_logo).centerCrop()
+                            // If no album art is found, set a random background color
+                            val randomColor = getRandomColor()
+                            val colorDrawable = getColorDrawable(randomColor)
+                            Glide.with(binding.root)
+                                .load(colorDrawable)
+                                .centerCrop()
                                 .into(binding.othersProfileImage)
                         }
                     }
@@ -105,6 +118,22 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
                         // Handle errors
                     }
                 })
+        }
+
+        private fun getRandomColor(): Int {
+            val colors = listOf("#2196F3", "#F44336", "#3F51B5", "#ED0404", "#E29C27B0", "#568651")
+            val randomColor = Color.parseColor(colors[Random.nextInt(colors.size)])
+
+            val alpha = (255 * 0.5).toInt()
+            return Color.argb(alpha, Color.red(randomColor), Color.green(randomColor), Color.blue(randomColor))
+
+        }
+
+        private fun getColorDrawable(color: Int): BitmapDrawable {
+            val bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(color)
+            return BitmapDrawable(binding.root.resources, bitmap)
         }
 
     }

@@ -1,9 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp">
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/mylogo" />
+
+        <ProgressBar
+            android:id="@+id/signInProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Add CountryCodePicker -->
+        <LinearLayout
+            android:id="@+id/phoneauthLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:visibility="gone">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                app:ccp_defaultNameCode="UG"
+                app:ccp_showFlag="true"
+                app:ccp_showNameCode="false" />
+
+            <!-- Update the Phone EditText to include the CountryCodePicker -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutPhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/editTextPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="7....."
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="user phone number"
+                    android:hint="Phone Number eg. 780000000"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/phoneAuth"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:backgroundTint="@color/black"
+                android:drawableStart="@drawable/ic_phone"
+                android:text="@string/sign_in_with_phonenumber"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/verifyCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:backgroundTint="@color/black"
+                android:drawableStart="@drawable/ic_phone"
+                android:text="Verify PhoneNumber"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/buttonSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/sign_out"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

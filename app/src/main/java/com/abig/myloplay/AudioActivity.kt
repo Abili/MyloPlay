@@ -52,12 +52,14 @@ class AudioActivity : AppCompatActivity() {
     private var maxFileSizeBytes by Delegates.notNull<Long>()
     private lateinit var playlistsRef: DatabaseReference
     lateinit var userPl: DatabaseReference
+    lateinit var myloPlayer: MyloPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Initialize SharedPreferences
+        myloPlayer = MyloPlayer()
 
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
 
@@ -78,9 +80,17 @@ class AudioActivity : AppCompatActivity() {
 
         playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID)!!
         userId = intent.getStringExtra(EXTRA_USER_ID)!!
+        val plalistType = intent.getStringExtra(EXTRA_PLAYLIST_TYPE)!!
         //username = intent.getStringExtra(EXTRA_USER_NAME)!!
-        //playlistName = intent.getStringExtra(EXTRA_PLAYLIST_NAME)!!
-        retrieveCurrentUserPlaylists(playlistId, userId)
+        playlistName = intent.getStringExtra(EXTRA_PLAYLIST_NAME)!!
+        binding.playlistnames.text = playlistName
+
+        if (plalistType == "group") {
+            retrieveCurrentUserPlaylists(playlistId, userId)
+        } else {
+            retrieveGroupPlaylists(playlistId, userId)
+        }
+
 
 //        if (checkPermissions()) {
 //            openAudioSelection()
@@ -91,7 +101,12 @@ class AudioActivity : AppCompatActivity() {
         binding.addSong.setOnClickListener {
             openAudioSelection()
         }
-        retrieveSongsForPlaylist(playlistId, userId)
+        if (plalistType == "group") {
+            retrieveSongsForGroupPlaylist(playlistId, userId)
+        } else {
+            retrieveSongsForPlaylist(playlistId, userId)
+            binding.friendsnames.visibility = View.GONE
+        }
 
         if (userId != FirebaseAuth.getInstance().currentUser!!.uid) {
             binding.editPl.visibility = View.GONE
@@ -125,7 +140,16 @@ class AudioActivity : AppCompatActivity() {
             }.show()
         }
 
+        binding.shuffleSong.setOnClickListener {
+            // Shuffle the playlist when the shuffle button is clicked
+            //startActivity(Intent(this, MyloPlayer::class.java))
+            // myloPlayer.playShuffledSongs(PL)
+            audioListAdapter.getShuffledSongs()
+        }
+
+
     }
+
 
     private fun showRecommendationDialog(song: AudioFile) {
         val intent = Intent(this, UserContacts::class.java)
@@ -143,10 +167,12 @@ class AudioActivity : AppCompatActivity() {
 
     }
 
-    private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
+
+    private fun retrieveGroupPlaylists(playlistId: String, userId: String) {
         val database =
             FirebaseDatabase.getInstance().reference.child("users").child(userId).child("playlists")
-                .child(playlistId)
+                .child("group").child(playlistId)
+
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val playlistName = snapshot.child("playlistName").getValue(String::class.java)
@@ -165,7 +191,51 @@ class AudioActivity : AppCompatActivity() {
                     }
                 }
 
-                binding.playlistnames.text = playlistName
+                //binding.playlistnames.text = playlistName
+
+
+                val lastSongAlbumArtUrl =
+                    lastSongSnapshot?.child("albumArt")?.getValue(String::class.java)
+                if (lastSongAlbumArtUrl != null) {
+                    // Load the album art into the ImageView using Glide
+                    Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
+                        .into(binding.playlistImageView)
+                } else {
+                    Glide.with(binding.root).load(R.drawable.mylo_bg_logo).centerCrop()
+                        .into(binding.playlistImageView)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle errors
+            }
+        })
+    }
+
+    private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
+        val database =
+            FirebaseDatabase.getInstance().reference.child("users").child(userId).child("playlists")
+                .child("single").child(playlistId)
+
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val playlistName = snapshot.child("playlistName").getValue(String::class.java)
+                val songsSnapshot = snapshot.child("songs")
+                val lastSongSnapshot = songsSnapshot.children.lastOrNull()
+                val songsCount = songsSnapshot.childrenCount
+                if (songsCount.toInt() == 1) {
+                    binding.songCount.text = buildString {
+                        append(songsCount.toString())
+                        append(" Song")
+                    }
+                } else {
+                    binding.songCount.text = buildString {
+                        append(songsCount.toString())
+                        append(" Songs")
+                    }
+                }
+
+                //binding.playlistnames.text = playlistName
 
 
                 val lastSongAlbumArtUrl =
@@ -255,8 +325,8 @@ class AudioActivity : AppCompatActivity() {
                             showToast("Song '${audioFile?.title}' already exists.")
                         }
                     }
-
                     showPlaylistNameDialog(selectedAudioFiles) // Show the dialog
+
                 } else if (singleUri != null) {
                     val audioFile = getAudioFileFromUri(singleUri)
 
@@ -275,8 +345,8 @@ class AudioActivity : AppCompatActivity() {
         }
     }
 
-    private fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, message, duration).show()
+    private fun Context.showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 
@@ -328,10 +398,16 @@ class AudioActivity : AppCompatActivity() {
 
     private fun showPlaylistNameDialog(selectedSongs: List<AudioFile>) {
         val dialogBinding = DialogAddPlaylistBinding.inflate(layoutInflater)
+        val plalistType = intent.getStringExtra(EXTRA_PLAYLIST_TYPE)!!
         val dialog = AlertDialog.Builder(this).setTitle("Are you sure?")
             .setPositiveButton("confirm") { _, _ ->
-                savePlaylistToDatabase(selectedSongs)
-                selectedAudioFiles.clear()
+                if (plalistType == "group") {
+                    saveGroupPlaylistToDatabase(selectedSongs)
+                    selectedAudioFiles.clear()
+                } else {
+                    savePlaylistToDatabase(selectedSongs)
+                }
+
 
             }.setNegativeButton("Cancel") { _, _ ->
                 // Dismiss the dialog
@@ -340,12 +416,70 @@ class AudioActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun savePlaylistToDatabase(selectedSongs: List<AudioFile>) {
+    private fun saveGroupPlaylistToDatabase(selectedSongs: List<AudioFile>) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         // Create a reference to the Firebase Realtime Database node for the user's playlists
         val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
+            .child("playlists").child("group")
+
+
+        // Create a new playlist entry in the Firebase Realtime Database
+        val playlistRef = databaseRef.push()
+        val key = playlistRef.key
+        //databaseRef.child(playlistId).child("playlistName").setValue(playlistName)
+
+        // Clear the previous songs data for this playlist
+        val songsRef = databaseRef.child(playlistId).child("songs").child(key!!)
+        songsRef.removeValue() // This removes all data under "songs" for the current playlist
+
+        // Iterate through the selected songs and store them in the Firebase Realtime Database
+        selectedSongs.forEach { audioFile ->
+            val songDetails = mutableMapOf(
+                "displayName" to audioFile.title, "duration" to audioFile.duration
+            )
+
+            // Create a unique ID for the song entry
+            //val songEntryRef = songsRef.push()
+
+            // Generate a unique filename for the song in Firebase Storage
+            val fileName = UUID.randomUUID().toString() + ".mp3"
+
+            // Create a reference to the Firebase Storage location for the song file
+            val storageRef = FirebaseStorage.getInstance().reference
+            val songRef = storageRef.child("songs").child(audioFile.title!!)
+
+            // Upload the song file to Firebase Storage
+            val fileUri = Uri.parse(audioFile.downloadUrl)
+            val uploadTask = songRef.putFile(fileUri)
+
+            uploadTask.addOnSuccessListener { _ ->
+                // Get the download URL of the uploaded song
+                songRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                    // Store the download URL and other song details in the Firebase Realtime Database
+                    songDetails += ("downloadUrl" to downloadUrl.toString())
+                    songsRef.setValue(songDetails)
+                }.addOnFailureListener { _ ->
+                    showToast("Failed to retrieve the download URL for the song.")
+                }
+            }.addOnFailureListener { _ ->
+                showToast("Failed to upload the song to Firebase Storage.")
+            }
+        }
+
+        showToast("Song added successfully.")
+    }
+
+
+    private fun savePlaylistToDatabase(selectedSongs: List<AudioFile>) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        // Create a reference to the Firebase Realtime Database node for the user's playlists
+        val plypeRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
             .child("playlists")
+
+        val databaseRef = plypeRef.child("single")
+
 
         // Create a new playlist entry in the Firebase Realtime Database
         val playlistRef = databaseRef.push()
@@ -394,57 +528,106 @@ class AudioActivity : AppCompatActivity() {
     }
 
     private fun retrieveSongsForPlaylist(playlistId: String?, userId: String?) {
-        //val userId = FirebaseAuth.getInstance().uid
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
+        val songsRef =
+            databaseRef.child("playlists").child("single").child(playlistId!!).child("songs")
 
-        // Create a reference to the Firebase Realtime Database node for the user's playlists
+        songsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val songs = mutableListOf<AudioFile>()
+
+                for (songSnapshot in snapshot.children) {
+                    val displayName = songSnapshot.child("displayName").value.toString()
+                    val artist = songSnapshot.child("artist").value.toString()
+                    val artistName = extractArtistName(displayName)
+                    val duration = songSnapshot.child("duration").value.toString()
+                    val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
+
+                    val song = AudioFile("", downloadUrl, displayName, artistName, duration)
+                    songs.add(song)
+                }
+
+                audioListAdapter.setData(songs)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors
+            }
+        })
+    }
+
+    private fun retrieveSongsForGroupPlaylist(playlistId: String?, userId: String?) {
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users")
+        val groupPlaylistRef =
+            databaseRef.child(userId!!).child("playlists").child("group").child(playlistId!!)
+        val songsRef = groupPlaylistRef.child("songs")
+        val userIdsRef = groupPlaylistRef.child("userIds")
+
+        songsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val songs = mutableListOf<AudioFile>()
+
+                for (songSnapshot in snapshot.children) {
+                    val displayName = songSnapshot.child("displayName").value.toString()
+                    val artist = songSnapshot.child("artist").value.toString()
+                    val artistName = extractArtistName(displayName)
+                    val duration = songSnapshot.child("duration").value.toString()
+                    val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
+
+                    val song = AudioFile("", downloadUrl, displayName, artistName, duration)
+                    songs.add(song)
+                }
+
+                audioListAdapter.setData(songs)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors
+            }
+        })
+
+        // Retrieve user names for the group playlist
+        userIdsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userIds = snapshot.children.map { it.key.toString() }
+
+                // Create a StringBuilder to concatenate usernames
+                val usernamesBuilder = StringBuilder()
+
+                // Loop through userIds and retrieve user names
+                for (uid in userIds) {
+                    retrieveUserName(uid, usernamesBuilder)
+                }
+
+                // Update the UI with concatenated usernames
+                binding.friendsnames.text = usernamesBuilder.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors
+            }
+        })
+    }
+
+    private fun retrieveUserName(uid: String, usernamesBuilder: StringBuilder) {
         val databaseRef = FirebaseDatabase.getInstance().reference.child("users")
 
-        // Create a reference to the specific playlist by its ID
-        databaseRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (playListShot in snapshot.children) {
-                    val uID = playListShot.key!!
-                    showToast(playlistId.toString())
-                    val playlistRef = databaseRef.child(userId!!)
+        databaseRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(usersnap: DataSnapshot) {
+                for (snap in usersnap.children) {
+                    val username = snap.child("username").getValue(String::class.java)
 
-                    // Create a reference to the songs within the playlist
-                    val songsRef = playlistRef.child("playlists").child(playlistId!!).child("songs")
-
-                    // Listen for changes in the songs data
-                    songsRef.addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val songs = mutableListOf<AudioFile>()
-
-                            for (songSnapshot in snapshot.children) {
-                                val displayName = songSnapshot.child("displayName").value.toString()
-                                val artist = songSnapshot.child("artist").value.toString()
-                                val artistName = extractArtistName(displayName)
-                                val duration = songSnapshot.child("duration").value.toString()
-                                val downloadUrl = songSnapshot.child("downloadUrl").value.toString()
-
-                                val song =
-                                    AudioFile("", downloadUrl, displayName, artistName, duration)
-                                songs.add(song)
-                            }
-
-                            // Now, 'songs' contains the list of songs for the specified playlist
-                            // You can use this list to play the songs or display them in your app
-                            audioListAdapter.setData(songs)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle any errors
-                        }
-                    })
+                    // Use the username as needed
+                    // For example, add it to a list, display it, etc.
+                    usernamesBuilder.append("$username\n")
+                    showToast("$username")
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                // Handle any errors
             }
         })
-
-
     }
 
     fun extractArtistName(displayName: String): String {
@@ -612,6 +795,7 @@ class AudioActivity : AppCompatActivity() {
         const val EXTRA_PLAYLIST_NAME = "playlistName"
         const val EXTRA_ALBUMART = "allbumArt"
         const val EXTRA_PLAYLIST_ID = "playlistId"
+        const val EXTRA_PLAYLIST_TYPE = "group"
         const val EXTRA_USER_ID = "userID"
         const val PERMISSION_REQUEST_CODE = 0
         const val DEFAULT_MAX_FILE_SIZE = 1 * 1024 * 1024

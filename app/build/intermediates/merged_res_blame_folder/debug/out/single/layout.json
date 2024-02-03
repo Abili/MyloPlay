@@ -8,24 +8,28 @@
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_edit_playlist.xml"
     },
     {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/layout_expanded_player.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/layout_expanded_player.xml"
+    },
+    {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/fragment_second.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/fragment_second.xml"
-    },
-    {
-        "merged": "com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_user_profile.xml",
-        "source": "com.abig.myloplay.app-main-88:/layout/activity_user_profile.xml"
-    },
-    {
-        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_home.xml",
-        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_home.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/owner_pl_item.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/owner_pl_item.xml"
     },
     {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_home.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_home.xml"
+    },
+    {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/dialog_add_playlist.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/dialog_add_playlist.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_user_privacy_contacts.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_user_privacy_contacts.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/mini_player.xml",
@@ -64,12 +68,20 @@
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_audio.xml"
     },
     {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/popup_layout.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/popup_layout.xml"
+    },
+    {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/others_playlist_item.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/others_playlist_item.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/owner_playlist_item.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/owner_playlist_item.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_group_playlist_contacts.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_group_playlist_contacts.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_recommended_songs.xml",
@@ -84,10 +96,6 @@
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/item_contact.xml"
     },
     {
-        "merged": "com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_sign_up.xml",
-        "source": "com.abig.myloplay.app-main-88:/layout/activity_sign_up.xml"
-    },
-    {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/playlist_item.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/playlist_item.xml"
     },
@@ -100,12 +108,24 @@
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_main.xml"
     },
     {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/dialog_privacy_settings.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/dialog_privacy_settings.xml"
+    },
+    {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_verification_code.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_verification_code.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_playlist_details.xml",
         "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/activity_playlist_details.xml"
+    },
+    {
+        "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/item_privacy_contact.xml",
+        "source": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-main-88:/layout/item_privacy_contact.xml"
+    },
+    {
+        "merged": "com.abig.myloplay.app-mergeDebugResources-85:/layout/activity_audio.xml",
+        "source": "com.abig.myloplay.app-main-88:/layout/activity_audio.xml"
     },
     {
         "merged": "/Users/user/.gradle/daemon/8.2/com.abig.myloplay.app-mergeDebugResources-85:/layout/song_item.xml",

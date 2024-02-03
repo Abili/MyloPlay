@@ -1,0 +1,49 @@
+<!-- dialog_privacy_settings.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Privacy Setting"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioMyContacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Contacts"/>
+
+        <RadioButton
+            android:id="@+id/radioMyContactsExcept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Contacts Except"/>
+
+        <RadioButton
+            android:id="@+id/radioOnlyShareWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Only Share With"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnUpdatePrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Privacy"/>
+
+</LinearLayout>

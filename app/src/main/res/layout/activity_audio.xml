@@ -40,8 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginBottom="100dp"
                 android:background="@color/white"
                 android:text="20 songs"
                 android:textColor="@color/black"
@@ -50,13 +49,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/white">
 
                 <TextView
                     android:id="@+id/playlistnames"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
@@ -86,9 +85,17 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_shuffle"
                     app:layout_collapseMode="parallax" />
-
-
             </LinearLayout>
+
+            <TextView
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="bottom"
+                android:id="@+id/friendsnames"
+                android:layout_width="wrap_content"
+                android:text="users"
+                android:layout_height="wrap_content" />
 
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

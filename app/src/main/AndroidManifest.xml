@@ -21,9 +21,14 @@
         android:theme="@style/Theme.MyloPlay"
         tools:targetApi="31">
         <activity
+            android:name=".GroupPlaylistContacts"
+            android:exported="false" />
+        <activity
             android:name=".RecommendedSongsActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".MiniPlayerActivity"
+            android:exported="false" />
         <activity
             android:name=".UserContacts"
             android:exported="false"
@@ -38,11 +43,22 @@
         </activity>
         <activity
             android:name=".AudioActivity"
-            android:exported="false" />
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AllPlaylists" />
+        </activity>
+        <activity
+            android:name=".UserPrivacyContacts"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivity" />
+        </activity>
         <activity
             android:name=".AllPlaylists"
             android:exported="false"
-            android:theme="@style/Theme.MyloPlay"/>
+            android:theme="@style/Theme.MyloPlay" />
         <activity
             android:name=".VerificationCodeActivity"
             android:exported="false" />
