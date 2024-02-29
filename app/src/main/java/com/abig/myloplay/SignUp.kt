@@ -43,36 +43,9 @@ class SignUp : AppCompatActivity() {
         setContentView(binding.root)
 
         // Initialize Firebase
-        FirebaseApp.initializeApp(this)
-        Firebase.database.setPersistenceEnabled(true)
+        //FirebaseApp.initializeApp(this)
+//        Firebase.database.setPersistenceEnabled(true)
 
-
-        // Initialize FirebaseAuth
-        auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val currentUserUID = currentUser.uid
-            // do something with currentUserUID
-            val userRef = FirebaseDatabase
-                .getInstance()
-                .reference
-                .child("users")
-                .child(currentUserUID)
-            userRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        startActivity(Intent(this@SignUp, AllPlaylists::class.java))
-                        finish()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Snackbar.make(binding.root, error.message, Snackbar.LENGTH_SHORT).show()
-                }
-
-            })
-
-        }
 
         // Set up click listener for phone authentication
         binding.phoneAuth.setOnClickListener {

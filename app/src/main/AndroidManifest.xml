@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".MyloApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -56,7 +57,7 @@
                 android:value=".SettingsActivity" />
         </activity>
         <activity
-            android:name=".AllPlaylists"
+            android:name=".SignUp"
             android:exported="false"
             android:theme="@style/Theme.MyloPlay" />
         <activity
@@ -98,7 +99,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SignUp"
+            android:name=".AllPlaylists"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -2253,6 +2253,7 @@ color mtrl_textinput_disabled_color
 color mtrl_textinput_filled_box_default_background_color
 color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
+color myloblue
 color notification_action_color_filter
 color notification_icon_bg_color
 color preference_fallback_accent_color
@@ -3480,6 +3481,7 @@ drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable ic_arrow_back_black_24
 drawable ic_arrow_down_24dp
+drawable ic_arrow_drop_up
 drawable ic_audio
 drawable ic_backspace_black_24dp
 drawable ic_baseline_add_24
@@ -3503,6 +3505,7 @@ drawable ic_group
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_like
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
@@ -3520,9 +3523,12 @@ drawable ic_playlist_add
 drawable ic_recommend
 drawable ic_save
 drawable ic_search_black_24
+drawable ic_see
+drawable ic_send
 drawable ic_shuffle
 drawable ic_upward
 drawable ic_user
+drawable ic_visibility
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
 drawable m3_bottom_sheet_drag_handle
@@ -3834,6 +3840,10 @@ id clockwise
 id closest
 id collapseActionView
 id collapsingToolbar
+id commenEdt
+id commentEdtlayout
+id commentLayout
+id commentTv
 id compose_view_saveable_id_tag
 id compress
 id confirm
@@ -3853,7 +3863,9 @@ id cos
 id counterclockwise
 id countryCodeHolder
 id cradle
+id creatGroupplaylistBtn
 id create_playlist
+id creatmyplaylistBtn
 id currentState
 id currentUserPlaylistsRecycler
 id current_user_playlists
@@ -3942,6 +3954,7 @@ id floating
 id floatingActionButton
 id forever
 id fragment_container_view_tag
+id friendsPlTv
 id friendsTv
 id friendsnames
 id frost
@@ -3952,6 +3965,7 @@ id glide_custom_view_target_tag
 id gone
 id graph
 id graph_wrap
+id groupPlTv
 id group_divider
 id group_playlist
 id group_playlists_recycler
@@ -3986,6 +4000,7 @@ id indeterminate
 id info
 id inspection_slot_table_set
 id invisible
+id inviteFriends
 id inward
 id is_pooling_container_tag
 id italic
@@ -3998,6 +4013,8 @@ id left
 id leftToRight
 id legacy
 id light
+id liked_users
+id likes
 id line1
 id line3
 id linear
@@ -4069,6 +4086,7 @@ id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id mtrl_view_tag_bottom_padding
 id multiply
+id myplTv
 id myseperationTv
 id nav_controller_view_tag
 id nav_graph
@@ -4215,9 +4233,11 @@ id search_view
 id search_voice_btn
 id seekbar
 id seekbar_value
+id seen_users
 id select_dialog_listview
 id selected
 id selection_type
+id sendBtn
 id seperationTv
 id settings
 id sharedValueSet
@@ -4364,6 +4384,7 @@ id view_tree_lifecycle_owner
 id view_tree_on_back_pressed_dispatcher_owner
 id view_tree_saved_state_registry_owner
 id view_tree_view_model_store_owner
+id views
 id visible
 id visible_removing_fragment_view_tag
 id west

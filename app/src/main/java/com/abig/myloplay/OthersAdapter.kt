@@ -58,6 +58,7 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
                     // Implement logic to display songs for the selected playlist
                     val intent = Intent(binding.root.context, AudioActivity::class.java)
                     intent.putExtra(AudioActivity.EXTRA_PLAYLIST_TYPE, "single")
+                    intent.putExtra(AudioActivity.EXTRA_PLAYLIST_SEEN, "seen")
                     intent.putExtra(AudioActivity.EXTRA_PLAYLIST_ID, selectedPlaylist.id)
                     intent.putExtra(AudioActivity.EXTRA_USER_ID, selectedPlaylist.userId)
                     intent.putExtra(AudioActivity.EXTRA_PLAYLIST_NAME, selectedPlaylist.name)
@@ -74,7 +75,7 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
 
         private fun retrieveOtherUserPlaylists(playlistId: String, uid: String) {
             val database = FirebaseDatabase.getInstance().reference.child("users").child(uid)
-            database.child("playlists").child("single").child(playlistId)
+            database.child("playlists").child("single").child("playlists").child(playlistId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val playlistName =

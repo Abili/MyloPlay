@@ -4,7 +4,7 @@
             "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/195f60c79fbdf145be2e70c4ee8a151a/transformed/appcompat-1.6.1/res/values-v23/values-v23.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/99ffbd8000e9fd9717f6046a1571a0b9/transformed/appcompat-1.6.1/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,20,34,35,36,39,43,44,45,46",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -15,7 +15,26 @@
                     }
                 },
                 {
-                    "source": "/Users/user/.gradle/caches/transforms-3/8fe3e9516e8b3acab819c2d3f3be92af/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",
+                    "source": "/Users/user/.gradle/caches/transforms-3/fef2b82bbc47818b8d2e45e6604123a7/transformed/material-1.11.0/res/values-v23/values-v23.xml",
+                    "from": {
+                        "startLines": "2,5,9,13,16,19,22,25,28,32",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,271,413,574,784,991,1198,1401,1603,1868",
+                        "endLines": "4,8,12,15,18,21,24,27,31,35",
+                        "endColumns": "10,10,10,10,10,10,10,10,10,10",
+                        "endOffsets": "266,408,569,779,986,1193,1396,1598,1863,2136"
+                    },
+                    "to": {
+                        "startLines": "59,62,66,70,73,76,79,82,85,89",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "3703,3919,4061,4222,4432,4639,4846,5049,5251,5516",
+                        "endLines": "61,65,69,72,75,78,81,84,88,92",
+                        "endColumns": "10,10,10,10,10,10,10,10,10,10",
+                        "endOffsets": "3914,4056,4217,4427,4634,4841,5044,5246,5511,5784"
+                    }
+                },
+                {
+                    "source": "/Users/user/.gradle/caches/transforms-3/449b324109e6d3668c5720eec4b235a5/transformed/cardview-1.0.0/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -50,25 +69,6 @@
                         "endLines": "58",
                         "endColumns": "12",
                         "endOffsets": "3698"
-                    }
-                },
-                {
-                    "source": "/Users/user/.gradle/caches/transforms-3/14432f44573758f255bee4eb8a2b1666/transformed/material-1.11.0/res/values-v23/values-v23.xml",
-                    "from": {
-                        "startLines": "2,5,9,13,16,19,22,25,28,32",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,271,413,574,784,991,1198,1401,1603,1868",
-                        "endLines": "4,8,12,15,18,21,24,27,31,35",
-                        "endColumns": "10,10,10,10,10,10,10,10,10,10",
-                        "endOffsets": "266,408,569,779,986,1193,1396,1598,1863,2136"
-                    },
-                    "to": {
-                        "startLines": "59,62,66,70,73,76,79,82,85,89",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "3703,3919,4061,4222,4432,4639,4846,5049,5251,5516",
-                        "endLines": "61,65,69,72,75,78,81,84,88,92",
-                        "endColumns": "10,10,10,10,10,10,10,10,10,10",
-                        "endOffsets": "3914,4056,4217,4427,4634,4841,5044,5246,5511,5784"
                     }
                 }
             ]

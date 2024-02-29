@@ -69,7 +69,7 @@ class GroupsAdapter : RecyclerView.Adapter<GroupsAdapter.PlaylistViewHolder>() {
 
         private fun retrieveGroupPlaylists(playlistId: String, uid: String) {
             val database = FirebaseDatabase.getInstance().reference.child("users").child(uid)
-            database.child("playlists").child("group").child(playlistId)
+            database.child("playlists").child("group").child("playlists").child(playlistId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val playlistName =

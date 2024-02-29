@@ -65,7 +65,7 @@ class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewH
 
         private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
             val database = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                .child("playlists").child("single").child(playlistId)
+                .child("playlists").child("single").child("playlists").child(playlistId)
             database.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val playlistName = snapshot.child("playlistName").getValue(String::class.java)

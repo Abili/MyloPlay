@@ -50,7 +50,6 @@ class AllPlaylists : AppCompatActivity() {
     private val selectedAudioFiles = mutableListOf<AudioFile>()
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-
     private lateinit var contactsRetriever: ContactsRetriever
     private val requestCodePermissionContacts = 124
     private val requestCodePermissionAudio = 457
@@ -71,6 +70,16 @@ class AllPlaylists : AppCompatActivity() {
         checkAndRequestContactsPermission()
 
         auth = FirebaseAuth.getInstance()
+
+        // Initialize FirebaseAuth
+        //auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            startActivity(Intent(this@AllPlaylists, SignUp::class.java))
+            finish()
+        }
+
+
 
         binding.currentUserPlaylistsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -119,6 +128,10 @@ class AllPlaylists : AppCompatActivity() {
         binding.createPlaylist.setOnClickListener {
             toggleOptionsVisibility()
         }
+        binding.creatGroupplaylistBtn.setOnClickListener {
+            startActivity(Intent(this, GroupPlaylistContacts::class.java))
+        }
+
         binding.singlePlaylist.setOnClickListener {
             openAudioSelection()
             AnimationUtils.loadAnimation(this, R.anim.slide_down)
@@ -365,7 +378,7 @@ class AllPlaylists : AppCompatActivity() {
 
         // Create a reference to the Firebase Realtime Database node for the user's playlists
         val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
-            .child("playlists").child("single")
+            .child("playlists").child("single").child("playlists")
 
         // Create a new playlist entry in the Firebase Realtime Database
         val playlistRef = databaseRef.push()
@@ -452,13 +465,14 @@ class AllPlaylists : AppCompatActivity() {
         val userId = auth.currentUser!!.uid
         database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (usersnap in snapshot.children) {
 
-                        val playlists = mutableListOf<Playlist>()
-                        val username = usersnap.child("username").getValue(String::class.java)
-                        val plsnapshot = snapshot.child(userId).child("playlists").child("single")
+                for (usersnap in snapshot.children) {
 
+                    val playlists = mutableListOf<Playlist>()
+                    val username = usersnap.child("username").getValue(String::class.java)
+                    val plsnapshot =
+                        snapshot.child(userId).child("playlists").child("single").child("playlists")
+                    if (snapshot.exists()) {
                         for (playlistShot in plsnapshot.children) {
                             val playlistId = playlistShot.key
                             val playlistname =
@@ -477,9 +491,11 @@ class AllPlaylists : AppCompatActivity() {
                             currentPlayListAdapter.setPlaylists(playlists)
 
                         }
+                    } else {
+                        binding.myplTv.visibility = View.VISIBLE
+                        binding.creatmyplaylistBtn.visibility = View.VISIBLE
+                        binding.currentUserPlaylistsRecycler.visibility = View.GONE
                     }
-                } else {
-                    binding.myseperationTv.visibility = View.GONE
                 }
             }
 
@@ -506,23 +522,24 @@ class AllPlaylists : AppCompatActivity() {
         database.child("users").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val playlists = mutableListOf<Playlist>()
-                if (snapshot.exists()) {
-                    for (userSnapshot in snapshot.children) {
-                        val userId = userSnapshot.key
-                        val username = userSnapshot.child("username").getValue(String::class.java)
-                        val phone = userSnapshot.child("phone").getValue(String::class.java)
 
-                        if (userId != currentUserId) {
-                            val isCurrentUserRestrictedByUser =
-                                userSnapshot.child("restricted").child(currentUserId)
-                                    .getValue(Boolean::class.java) ?: false
+                for (userSnapshot in snapshot.children) {
+                    val userId = userSnapshot.key
+                    val username = userSnapshot.child("username").getValue(String::class.java)
+                    val phone = userSnapshot.child("phone").getValue(String::class.java)
 
-                            val isCurrentUserInContactList =
-                                currentUserContacts.contains(formatPhoneNumber(phone!!))
+                    if (userId != currentUserId) {
+                        val isCurrentUserRestrictedByUser =
+                            userSnapshot.child("restricted").child(currentUserId)
+                                .getValue(Boolean::class.java) ?: false
 
-                            if (!isCurrentUserRestrictedByUser && isCurrentUserInContactList) {
-                                val playlistsSnapshot =
-                                    userSnapshot.child("playlists").child("single")
+                        val isCurrentUserInContactList =
+                            currentUserContacts.contains(formatPhoneNumber(phone!!))
+
+                        if (!isCurrentUserRestrictedByUser && isCurrentUserInContactList) {
+                            val playlistsSnapshot =
+                                userSnapshot.child("playlists").child("single").child("playlists")
+                            if (playlistsSnapshot.exists()) {
                                 for (playlistShot in playlistsSnapshot.children) {
                                     val playlistId = playlistShot.key
                                     val playListName = playlistShot.child("playlistName")
@@ -538,13 +555,13 @@ class AllPlaylists : AppCompatActivity() {
                                         null
                                     )
                                     playlists.add(playlist)
-                                   // allPlaylists.add(playlist)
+                                    // allPlaylists.add(playlist)
                                 }
+                            } else {
+
                             }
                         }
                     }
-                } else {
-                    binding.seperationTv.visibility = View.GONE
                 }
                 othersPlayListAdapter.setPlaylists(playlists)
             }
@@ -566,34 +583,43 @@ class AllPlaylists : AppCompatActivity() {
                     val userId = userSnapshot.key
                     val username = userSnapshot.child("username").getValue(String::class.java)
 
-                    val playlistsSnapshot = userSnapshot.child("playlists").child("group")
+                    val playlistsSnapshot =
+                        userSnapshot.child("playlists").child("group").child("playlists")
+                    if (playlistsSnapshot.exists()) {
+                        for (playlistShot in playlistsSnapshot.children) {
+                            val playlistId = playlistShot.key
+                            val playlistName =
+                                playlistShot.child("playlistName").getValue(String::class.java)
 
-                    for (playlistShot in playlistsSnapshot.children) {
-                        val playlistId = playlistShot.key
-                        val playlistName =
-                            playlistShot.child("playlistName").getValue(String::class.java)
+                            // Check if the current user's ID is either the creator or in the "userIds" array
+                            val userIdsSnapshot = playlistShot.child("userIds")
+                            if (playlistShot.child("userId").value == currentUserId || userIdsSnapshot.children.any { it.value == currentUserId }) {
+                                // Log playlist information for debugging
+                                Toast.makeText(
+                                    this@AllPlaylists,
+                                    "PlaylistDebug $playlistName",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
-                        // Check if the current user's ID is either the creator or in the "userIds" array
-                        val userIdsSnapshot = playlistShot.child("userIds")
-                        if (playlistShot.child("userId").value == currentUserId || userIdsSnapshot.children.any { it.value == currentUserId }) {
-                            // Log playlist information for debugging
-                            Toast.makeText(
-                                this@AllPlaylists, "PlaylistDebug $playlistName", Toast.LENGTH_SHORT
-                            ).show()
-
-                            val playlist = Playlist(
-                                playlistId!!,
-                                playlistName!!,
-                                userId!!,
-                                null,
-                                username,
-                                System.currentTimeMillis(),
-                                null
-                            )
-                            playlists.add(playlist)
-                            //allPlaylists.add(playlist)
+                                val playlist = Playlist(
+                                    playlistId!!,
+                                    playlistName!!,
+                                    userId!!,
+                                    null,
+                                    username,
+                                    System.currentTimeMillis(),
+                                    null
+                                )
+                                playlists.add(playlist)
+                                //allPlaylists.add(playlist)
+                            }
                         }
+                    } else {
+                        binding.creatGroupplaylistBtn.visibility = View.VISIBLE
+                        binding.groupPlTv.visibility = View.VISIBLE
+                        binding.groupPlaylistsRecycler.visibility = View.GONE
                     }
+
                 }
 
                 groupsAdapter.setPlaylists(playlists)
