@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
@@ -152,7 +153,7 @@ class UserProfile : AppCompatActivity() {
                 val handler = Handler()
                 handler.postDelayed({
                     binding.progressBar.visibility = View.VISIBLE
-                    startActivity(Intent(this@UserProfile, AllPlaylists::class.java))
+                    startActivity(Intent(this@UserProfile, AllPlaylistsFragment::class.java))
                     finish()
                 }, 0)
             }
@@ -167,6 +168,18 @@ class UserProfile : AppCompatActivity() {
     private fun noImage() {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         //val imageUrl = downloadUri?.toString() // Keep image URL as nullable
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                // Save the token to Firebase Realtime Database or SharedPreferences
+                // For example:
+                saveTokenToDatabase(token)
+            } else {
+                // Handle token retrieval failure
+            }
+        }
+
         val user = User(
             userId, null, username, phone, email
         )
@@ -184,7 +197,7 @@ class UserProfile : AppCompatActivity() {
                 val handler = Handler()
                 handler.postDelayed({
                     binding.progressBar.visibility = View.VISIBLE
-                    startActivity(Intent(this@UserProfile, AllPlaylists::class.java))
+                    startActivity(Intent(this@UserProfile, AllPlaylistsFragment::class.java))
                     finish()
                 }, 0)
             }
@@ -195,6 +208,17 @@ class UserProfile : AppCompatActivity() {
             ).show()
         }
     }
+
+    private fun saveTokenToDatabase(token: String?) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null && token != null) {
+            val userRef = FirebaseDatabase.getInstance().reference
+                .child("users")
+                .child(userId)
+            userRef.child("fcmToken").setValue(token)
+        }
+    }
+
 
     private fun isValidEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()
 

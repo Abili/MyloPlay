@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-kn/values-kn.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-85:/values-kn/values-kn.xml",
             "map": [
                 {
                     "source": "/Users/user/.gradle/caches/transforms-3/7bc39ebc1bef1b3afbecc8054225dfd3/transformed/play-services-basement-18.1.0/res/values-kn/values.xml",

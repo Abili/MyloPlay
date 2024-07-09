@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- settings_preferences.xml -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <Preference
+            android:title="Theme"
+            android:key="theme_preference"
+            android:summary="Tap to choose app theme"
+            android:icon="@drawable/theme_icon"
+            /> <!-- Set your theme icon here -->
+
+        <Preference
+            android:title="Playlist Privacy"
+            android:key="privacy_preference"
+            android:summary="Choose who you don't want to see your playlist"
+            android:icon="@drawable/privacy" /> <!-- Set your privacy icon here -->
+
+        <Preference
+            android:title="Logout"
+            android:key="sign_out_preference"
+            android:summary="Sign out from the app"
+            android:icon="@drawable/ic_sign_out_icon" /> <!-- Set your sign out icon here -->
+
+
+</PreferenceScreen>

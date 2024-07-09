@@ -14,11 +14,12 @@ public class OthersPlaylistItemBindingImpl extends OthersPlaylistItemBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.others_profile_image, 1);
-        sViewsWithIds.put(R.id.textViewsContainer2, 2);
-        sViewsWithIds.put(R.id.textViewNumSongs, 3);
-        sViewsWithIds.put(R.id.textViewUserName, 4);
+        sViewsWithIds.put(R.id.options, 1);
+        sViewsWithIds.put(R.id.others_profile_image, 2);
+        sViewsWithIds.put(R.id.textViewsContainer2, 3);
+        sViewsWithIds.put(R.id.textViewNumSongs, 4);
         sViewsWithIds.put(R.id.textViewPlaylistName, 5);
+        sViewsWithIds.put(R.id.textViewUserName, 6);
     }
     // views
     @NonNull
@@ -29,15 +30,16 @@ public class OthersPlaylistItemBindingImpl extends OthersPlaylistItemBinding  {
     // Inverse Binding Event Handlers
 
     public OthersPlaylistItemBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 6, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 7, sIncludes, sViewsWithIds));
     }
     private OthersPlaylistItemBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (android.widget.ImageView) bindings[1]
-            , (android.widget.TextView) bindings[3]
-            , (android.widget.TextView) bindings[5]
+            , (android.widget.ImageView) bindings[2]
             , (android.widget.TextView) bindings[4]
-            , (android.widget.LinearLayout) bindings[2]
+            , (android.widget.TextView) bindings[5]
+            , (android.widget.TextView) bindings[6]
+            , (android.widget.LinearLayout) bindings[3]
             );
         this.mboundView0 = (android.widget.LinearLayout) bindings[0];
         this.mboundView0.setTag(null);

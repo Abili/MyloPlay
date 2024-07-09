@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.abig.myloplay.app-mergeDebugResources-84:/values-pt-rPT/values-pt-rPT.xml",
+            "outputFile": "com.abig.myloplay.app-mergeDebugResources-85:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
                     "source": "/Users/user/.gradle/caches/transforms-3/fef2b82bbc47818b8d2e45e6604123a7/transformed/material-1.11.0/res/values-pt-rPT/values-pt-rPT.xml",

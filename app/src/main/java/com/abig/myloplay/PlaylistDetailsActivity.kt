@@ -28,7 +28,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding = ActivityPlaylistDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        repository = PlaylistRepository()
+        repository = PlaylistRepository(this)
         auth = FirebaseAuth.getInstance()
 
         val viewModelFactory = PlaylistDetailsViewModel.Factory(repository)

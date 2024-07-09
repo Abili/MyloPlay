@@ -13,7 +13,10 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Song>()
 
 
-
+    fun addAll(song: List<Song>) {
+        playlists.addAll(song)
+        notifyDataSetChanged()
+    }
     fun add(song: Song) {
         playlists.add(song)
         notifyDataSetChanged()
@@ -65,7 +68,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.PlaylistViewHolder>() {
 //                itemView.context.startActivity(intent)
 
                 val intent = Intent(itemView.context, MyloPlayer::class.java)
-                intent.putExtra(MyloPlayer.SONG_ID,song.uri)
+                intent.putExtra(MyloPlayer.SONG_ID, song.uri)
                 itemView.context.startActivity(intent)
                 currentIndex = adapterPosition
             }

@@ -35,6 +35,10 @@ class MyloPlayer : AppCompatActivity() {
         binding = ActivityMyloPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        audioListAdapter = AudioListAdapter(null,null, null)
+
+
         if (intent.hasExtra(SONG_ID)) {
             val selectedSongId = intent.getStringExtra(SONG_ID)
 
@@ -104,7 +108,7 @@ class MyloPlayer : AppCompatActivity() {
                 }
             })
         }
-        audioListAdapter
+
     }
 
     private fun playSong() {
@@ -198,7 +202,6 @@ class MyloPlayer : AppCompatActivity() {
             val title = songTitles[currentPosition] ?: "Unknown Title"
             val artist = artists[currentPosition]
             val duration = songDuration // You can set the actual duration here
-
             binding.songTitle.text = title
             binding.songArtist.text = artist
             //binding.startsongDuration.text = duration

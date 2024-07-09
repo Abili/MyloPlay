@@ -5,24 +5,26 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.view.View
 import android.widget.EditText
+import android.widget.SeekBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.ActivityAudioBinding
 import com.abig.myloplay.databinding.DialogAddPlaylistBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,10 +36,8 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.util.UUID
 import kotlin.math.min
-import kotlin.properties.Delegates
 
 class AudioActivity : AppCompatActivity() {
-
     private lateinit var audioListAdapter: AudioListAdapter
     private val requestCodePermission = 123
     private val requestCodeAudioSelection = 456
@@ -50,17 +50,73 @@ class AudioActivity : AppCompatActivity() {
     private lateinit var userId: String
     private val selectedAudioFiles = mutableListOf<AudioFile>()
     private lateinit var preferences: SharedPreferences
+
     //private var maxFileSizeBytes by Delegates.notNull<Long>()
     private lateinit var playlistsRef: DatabaseReference
     lateinit var userPl: DatabaseReference
     lateinit var myloPlayer: MyloPlayer
+    private lateinit var mediaPlayer: MediaPlayer
+    private var isOptionsVisible = false
+    private var isPlaying = false
+
+    private var playlist: List<String>? = null
+    private lateinit var songTitles: List<String>
+    private lateinit var artists: List<String>
+    private lateinit var songDuration: List<String>
+    private var currentPosition: Int = 0
+    private val handler = Handler()
+    private lateinit var shuffledPlaylist: MutableList<AudioFile>
+    private var currentPlaylistId: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        // Set up the toolbar collapsing/expanding listener
+//        binding.appBarlAyout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+//            // Calculate the total scroll range of the AppBarLayout
+//            val totalScrollRange = appBarLayout.totalScrollRange
+//
+//            // Calculate the absolute value of the vertical offset
+//            val absoluteVerticalOffset = Math.abs(verticalOffset)
+//
+//            // Calculate the percentage of collapse progress
+//            val collapseProgress = absoluteVerticalOffset.toFloat() / totalScrollRange.toFloat()
+//
+//            // If the toolbar is fully collapsed (collapseProgress == 1), hide the playlist name
+//            // Otherwise, show the playlist name
+//            if (collapseProgress == 1f) {
+//                binding.toolbarPlaylistName.visibility = View.GONE
+//            } else {
+//                binding.toolbarPlaylistName.visibility = View.VISIBLE
+//            }
+//        }
+
+
         // Initialize SharedPreferences
         myloPlayer = MyloPlayer()
+        //playlist = List<AudioFile>()
+
+        // Initialize the MediaPlayer with audio attributes
+        val audioAttributes =
+            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA).build()
+
+        mediaPlayer = MediaPlayer()
+        mediaPlayer.setAudioAttributes(audioAttributes)
+
+        mediaPlayer.setOnPreparedListener {
+            // Media player is prepared, you can set the data source here.
+            updateSeekBar()
+            //playCurrentSong(it, currentPosition)
+        }
+
+        mediaPlayer.setOnCompletionListener {
+            skipToNextSong(currentPosition, playlist!!)
+        }
+
 
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
 
@@ -71,13 +127,6 @@ class AudioActivity : AppCompatActivity() {
             .child(FirebaseAuth.getInstance().currentUser!!.uid).child("playlists")
 
 
-        binding.audioRecycler.layoutManager = LinearLayoutManager(this)
-        audioListAdapter = AudioListAdapter(onRemoveClickListener = { selectedSong ->
-            showRemoveConfirmationDialog(selectedSong)
-        }, onRecommendClickListener = { selectedSong ->
-            showRecommendationDialog(selectedSong)
-        })
-        binding.audioRecycler.adapter = audioListAdapter
 
         playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID)!!
         userId = intent.getStringExtra(EXTRA_USER_ID)!!
@@ -92,16 +141,77 @@ class AudioActivity : AppCompatActivity() {
             retrieveGroupPlaylists(playlistId, userId)
         }
 
+        binding.audioRecycler.layoutManager = LinearLayoutManager(this)
+        audioListAdapter = AudioListAdapter(onRemoveClickListener = { selectedSong ->
+            showRemoveConfirmationDialog(selectedSong)
+        }, onRecommendClickListener = { selectedSong ->
+            showRecommendationDialog(selectedSong)
+        }) { playlists, position ->
 
-//        if (checkPermissions()) {
-//            openAudioSelection()
-//        } else {
-//            requestPermissions()
-//        }
+//            binding.apply {
+//                currentPosition = position
 //
+//                // SeekBar listener to handle seeking to a specific position
+//                smallPlayer.seekbar.setOnSeekBarChangeListener(object :
+//                    SeekBar.OnSeekBarChangeListener {
+//                    override fun onProgressChanged(
+//                        seekBar: SeekBar?, progress: Int, fromUser: Boolean
+//                    ) {
+//                        if (fromUser) {
+//                            mediaPlayer.seekTo(progress)
+//                        }
+//                    }
+//
+//                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//                        // Not needed
+//                    }
+//
+//                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//                        // Not needed
+//                    }
+//                })
+//
+//
+//                for (song in playlists) {
+//                    playlist = listOf(song.downloadUrl!!)
+//
+//                    songTitles = listOf(song.title.toString())
+//                    songDuration = listOf(song.duration.toString())
+//                    artists = listOf(song.artist.toString())
+//                    smallPlayer.root.visibility = View.VISIBLE
+//
+//                    //smallPlayer.songTitle.text = songTitles.toString()
+//                    smallPlayer.songArtist.text = song.artist.toString()
+//
+//                    playCurrentSong(playlist!!, position)
+//                    switchPlaylist(playlistId, position)
+//
+//                    smallPlayer.playBtn.setOnClickListener {
+//                        togglePlayPause()
+//                    }
+//
+//                    smallPlayer.nextBtn.setOnClickListener {
+//                        skipToNextSong(position, playlist!!)
+//                    }
+//                    smallPlayer.prevBtn.setOnClickListener {
+//                        skipToPreviousSong(position)
+//                    }
+//
+//                }
+//            }
+        }
+        binding.audioRecycler.adapter = audioListAdapter
+
+
+//        binding.chat.setOnClickListener {
+//            startChat(userId, playlistId, playlistName, playlistType)
+//        }
+
+//add song
         binding.addSong.setOnClickListener {
             openAudioSelection()
         }
+
         if (playlistType == "group") {
             retrieveSongsForGroupPlaylist(playlistId, userId)
         } else {
@@ -112,6 +222,7 @@ class AudioActivity : AppCompatActivity() {
         if (userId != FirebaseAuth.getInstance().currentUser!!.uid) {
             binding.editPl.visibility = View.GONE
             binding.addSong.visibility = View.GONE
+
         }
 
         binding.editPl.setOnClickListener {
@@ -128,50 +239,179 @@ class AudioActivity : AppCompatActivity() {
                 // Update the TextView
                 binding.playlistnames.text = playlistName
 
-                // Update the corresponding entry in Firebase Realtime Database
-                val playName = userPl.child(playlistId)
-                val playlistEdit = mapOf(
-                    "playlistName" to playlistName
-                )
-                playName.updateChildren(playlistEdit)
+                if (playlistType == "group") {
+                    // Update the corresponding entry in Firebase Realtime Database
+                    val playName = userPl
+                        .child("group")
+                        .child("playlists")
+                        .child(playlistId)
+                    val playlistEdit = mapOf(
+                        "playlistName" to playlistName
+                    )
+                    playName.updateChildren(playlistEdit)
 
-                dialog.dismiss()
+                    dialog.dismiss()
+                } else {
+                    // Update the corresponding entry in Firebase Realtime Database
+                    val playName = userPl
+                        .child("single")
+                        .child("playlists")
+                        .child(playlistId)
+                    val playlistEdit = mapOf(
+                        "playlistName" to playlistName
+                    )
+                    playName.updateChildren(playlistEdit)
+
+                    dialog.dismiss()
+                }
             }.setNegativeButton("cancel") { dialog, id ->
                 dialog.dismiss()
             }.show()
         }
 
-        binding.shuffleSong.setOnClickListener {
-            // Shuffle the playlist when the shuffle button is clicked
-            //startActivity(Intent(this, MyloPlayer::class.java))
-            // myloPlayer.playShuffledSongs(PL)
-            audioListAdapter.getShuffledSongs()
-        }
         if (userId == FirebaseAuth.getInstance().currentUser!!.uid) {
             binding.commentLayout.visibility = View.GONE
         }
 
-        binding.commentTv.setOnClickListener {
-            binding.apply {
-                commenEdt.visibility = View.VISIBLE
-                binding.addSong.visibility = View.GONE
-                binding.commentEdtlayout.visibility = View.VISIBLE
-            }
-        }
+//        binding.commentTv.setOnClickListener {
+//            binding.apply {
+//                commenEdt.visibility = View.VISIBLE
+//                binding.commentLayout.visibility = View.VISIBLE
+//            }
+//        }
 
-        binding.sendBtn.setOnClickListener {
-            val comment = binding.commenEdt.text.toString().trim()
-            commentOnPlaylist(comment, userId, playlistId, playlistType)
-        }
+//        binding.sendBtn.setOnClickListener {
+//            val comment = binding.commenEdt.text.toString().trim()
+//            commentOnPlaylist(comment, userId, playlistId, playlistType)
+//        }
 
         binding.likes.setOnClickListener {
             increasePlaylistLikes(playlistId, userId, playlistType)
         }
-        retrieveLikes(playlistId, playlistType, userId)
-        retrieveViews(playlistId, playlistType, userId)
+        retrieveLikes(playlistId, playlistType, userId) { likes ->
+            binding.likedUsers.text = likes.toString()
+        }
+        retrieveViews(playlistId, playlistType, userId) { views ->
+            binding.seenUsers.text = views.toString()
+        }
         increasePlaylistViews(playlistId, userId, playlistType)
 
+        binding.playlistImageView.setOnClickListener {
+            onViewButtonClicked()
+        }
 
+    }
+
+    private fun stopMediaPlayer() {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+            mediaPlayer.reset()
+        }
+    }
+
+    private fun switchPlaylist(playlistId: String, position: Int) {
+        // Check if a song is currently playing from a different playlist
+        if (currentPlaylistId != null && currentPlaylistId != playlistId) {
+            // Stop the media player if a different playlist is playing
+            stopMediaPlayer()
+        }
+
+        // Update the current playlist ID and position
+        currentPlaylistId = playlistId
+        currentPosition = position
+
+        // Play the selected song from the new playlist
+        // Your existing code to play the song...
+    }
+
+    private fun playCurrentSong(playlist: List<String>, currentPosition: Int) {
+        if (currentPosition >= 0 && currentPosition < playlist.size) {
+            mediaPlayer.reset()
+            mediaPlayer.setDataSource(playlist[currentPosition].toString())
+
+            mediaPlayer.setOnPreparedListener { mp ->
+                mp.start()
+                //binding.smallPlayer.playBtn.setImageResource(R.drawable.pause)
+                //binding.miniPlayBtn.setImageResource(R.drawable.pause)
+                isPlaying = true
+                updateSeekBar()
+                //updateUIForCurrentSong(currentPosition, playlist)
+            }
+
+            mediaPlayer.prepareAsync()
+        }
+    }
+
+//    private fun updateUIForCurrentSong(currentPosition: Int, playlist: List<String>) {
+//        if (currentPosition >= 0 && currentPosition < playlist.size) {
+//            val title = songTitles[currentPosition]
+//            val artist = artists[currentPosition]
+//
+//            binding.smallPlayer.songTitle.text = title
+//            binding.smallPlayer.songArtist.text = artist
+//
+////            binding.miniSongTitle.text = title
+////            binding.miniSongArtist.text = artist
+//        }
+//    }
+
+//    private fun togglePlayPause() {
+//        if (isPlaying) {
+//            mediaPlayer.pause()
+//            binding.smallPlayer.playBtn.setImageResource(R.drawable.play)
+//            //binding.miniPlayBtn.setImageResource(R.drawable.play)
+//        } else {
+//            mediaPlayer.start()
+//            binding.smallPlayer.playBtn.setImageResource(R.drawable.pause)
+//            //binding.miniPlayBtn.setImageResource(R.drawable.pause)
+//            updateSeekBar()
+//        }
+//        isPlaying = !isPlaying
+//    }
+
+    private fun updateSeekBar() {
+        if (mediaPlayer.isPlaying) {
+            val totalDuration = mediaPlayer.duration
+            val currentPosition = mediaPlayer.currentPosition
+
+//            binding.smallPlayer.seekbar.max = totalDuration
+//            //binding.miniseekbar.max = totalDuration
+//            binding.smallPlayer.seekbar.progress = currentPosition
+//            //binding.miniseekbar.progress = currentPosition
+//
+//            // Update the endSongDuration with the total duration
+//            binding.smallPlayer.endsongDuration.text = formatDuration(totalDuration)
+//
+//            // Update the startSongDuration with the current position
+//            binding.smallPlayer.startsongDuration.text = formatDuration(currentPosition)
+//
+//            // Update the startSongDuration with the current position
+//            //binding.miniDuration.text = formatDuration(currentPosition)
+
+            handler.postDelayed({ updateSeekBar() }, 1000)
+        }
+    }
+
+    private fun formatDuration(duration: Int): String {
+        val minutes = duration / 1000 / 60
+        val seconds = duration / 1000 % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun skipToNextSong(currentPosition: Int, playlist: List<String>) {
+        this.currentPosition = (this.currentPosition + 1) % playlist.size
+        playCurrentSong(playlist, currentPosition)
+    }
+
+    private fun skipToPreviousSong(currentPosition: Int) {
+        if (playlist != null) {
+            this@AudioActivity.currentPosition = if (currentPosition == 0) {
+                playlist!!.size - 1
+            } else {
+                currentPosition - 1
+            }
+            playCurrentSong(playlist!!, currentPosition)
+        }
     }
 
     private fun hasUserLikedPlaylist(
@@ -214,203 +454,139 @@ class AudioActivity : AppCompatActivity() {
         }
     }
 
-
     private fun increasePlaylistLikes(playlistId: String, userId: String, playlistType: String) {
-        if (playlistType == "single") {
-            hasUserLikedPlaylist(playlistId, userId) { hasLiked ->
-                if (!hasLiked) {
-                    val databaseRef =
-                        FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    val playlistRef =
-                        databaseRef.child("playlists").child("single").child("playlists")
-                            .child(playlistId)
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+        val playlistRef = when (playlistType) {
+            "single" -> databaseRef.child("playlists").child("single").child("playlists")
+                .child(playlistId)
 
-                    playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        @RequiresApi(Build.VERSION_CODES.M)
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            // Retrieve the current view count
-                            var likes = snapshot.child("likes").getValue(Int::class.java) ?: 0
+            "group" -> databaseRef.child("playlists").child("group").child("playlists")
+                .child(playlistId)
 
-                            // Increment the view count
-                            while (likes < 1) {
-                                likes++
-                            }
+            else -> null // Handle invalid playlistType if needed
+        }
 
-                            // Update the view count in the database
-                            playlistRef.child("likes").setValue(likes)
+        playlistRef?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val hasLiked = snapshot.child("likedBy").hasChild(userId)
+                if (hasLiked) {
+                    // Remove like
+                    playlistRef.child("likes").setValue((snapshot.child("likes").value as Long) - 1)
+                    playlistRef.child("likedBy").child(userId).removeValue()
+                } else {
+                    // Add like
+                    playlistRef.child("likes").setValue((snapshot.child("likes").value as Long) + 1)
+                    playlistRef.child("likedBy").child(userId).setValue(true)
 
-                            // Mark the playlist as viewed by the user
-                            markPlaylistAsLiked(playlistId, userId)
-                            binding.likedUsers.text = likes.toString()
-                            binding.likes.setBackgroundColor(getColor(R.color.myloblue))
-                            binding.likedUsers.setBackgroundColor(getColor(R.color.myloblue))
-
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle any errors
-                        }
-                    })
                 }
             }
-        } else {
-            hasUserLikedPlaylist(playlistId, userId) { hasLiked ->
-                if (!hasLiked) {
-                    val databaseRef =
-                        FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    val playlistRef =
-                        databaseRef.child("playlists").child("group").child("playlists")
-                            .child(playlistId)
 
-                    playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        @RequiresApi(Build.VERSION_CODES.M)
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            // Retrieve the current view count
-                            var likes = snapshot.child("likes").getValue(Int::class.java) ?: 0
-
-                            // Increment the view count
-
-                            while (likes < 1) {
-                                likes++
-                            }
-
-                            // Update the view count in the database
-                            playlistRef.child("likes").setValue(likes)
-
-                            // Mark the playlist as viewed by the user
-                            markPlaylistAsLiked(playlistId, userId)
-                            binding.likedUsers.text = likes.toString()
-                            binding.likes.setBackgroundColor(getColor(R.color.myloblue))
-                            binding.likedUsers.setBackgroundColor(getColor(R.color.myloblue))
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle any errors
-                        }
-                    })
-                }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle errors
             }
-        }
+        })
     }
 
-    private fun markPlaylistAsLiked(playlistId: String, userId: String) {
-        if (playlistType == "group") {
-            val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("group").child("playlists").child(playlistId)
-            val viewedPlaylistsRef = playlistRef.child("likedPlaylists")
+    private fun retrieveViewedUsers(
+        playlistId: String,
+        playlistType: String,
+        currentUserId: String,
+        callback: (List<String>) -> Unit
+    ) {
+        val databaseRef =
+            FirebaseDatabase.getInstance().reference.child("playlists").child(playlistType)
+                .child("playlists").child(playlistId)
 
-            // Set the playlist ID as true to mark it as viewed
-            viewedPlaylistsRef.child(playlistId).setValue(true)
+        databaseRef.child("viewedPlaylists")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val viewedUsers = mutableListOf<String>()
+                    for (userSnapshot in snapshot.children) {
+                        val userId = userSnapshot.key
+                        if (userId != currentUserId) {
+                            // Exclude the current user's name
+                            val userName = userSnapshot.child("username").value.toString()
+                            viewedUsers.add(userName)
+                        }
+                    }
+                    callback(viewedUsers)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle errors
+                    callback(emptyList())
+                }
+            })
+    }
+
+
+    private fun markPlaylistAsLiked(playlistId: String, userId: String, playlistType: String) {
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+        val playlistRef = when (playlistType) {
+            "single" -> databaseRef.child("playlists").child("single").child("playlists")
+                .child(playlistId)
+
+            "group" -> databaseRef.child("playlists").child("group").child("playlists")
+                .child(playlistId)
+
+            else -> null // Handle invalid playlistType if needed
+        }
+
+        playlistRef?.child("likedBy")!!.child(userId).setValue(true)
+    }
+
+    private fun retrieveLikes(
+        playlistId: String, playlistType: String, userId: String, callback: (Int) -> Unit
+    ) {
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+        val playlistRef = when (playlistType) {
+            "single" -> databaseRef.child("playlists").child("single").child("playlists")
+                .child(playlistId)
+
+            "group" -> databaseRef.child("playlists").child("group").child("playlists")
+                .child(playlistId)
+
+            else -> null // Handle invalid playlistType if needed
+        }
+
+        playlistRef?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val likes = snapshot.child("likes").getValue(Int::class.java) ?: 0
+                callback(likes)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle errors
+                callback(0) // Return 0 likes in case of error
+            }
+        })
+    }
+
+
+    private fun retrieveViews(
+        playlistId: String, playlistType: String, userId: String, callback: (Int) -> Unit
+    ) {
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+        val playlistRef = if (playlistType == "single") {
+            databaseRef.child("playlists").child("single").child("playlists").child(playlistId)
         } else {
-            val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("single").child("playlists").child(playlistId)
-            val viewedPlaylistsRef = playlistRef.child("likedPlaylists")
-
-            // Set the playlist ID as true to mark it as viewed
-            viewedPlaylistsRef.child(playlistId).setValue(true)
-        }
-    }
-
-    private fun retrieveLikes(playlistId: String, playlistType: String, userId: String) {
-        if (playlistType == "single") {
-
-            val databaseRef =
-                FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("single").child("playlists")
-                    .child(playlistId)
-
-            playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                @RequiresApi(Build.VERSION_CODES.M)
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Retrieve the current view count
-                    val likes = snapshot.child("likes").getValue(Int::class.java) ?: 0
-                    binding.likedUsers.text = likes.toString()
-                    //showToast(likes.toString())
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle any errors
-                }
-            })
-
-        } else {
-            val databaseRef =
-                FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("group").child("playlists")
-                    .child(playlistId)
-
-            playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                @RequiresApi(Build.VERSION_CODES.M)
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Retrieve the current view count
-                    val likes = snapshot.child("likes").getValue(Int::class.java)?:0
-                    binding.likedUsers.text = likes.toString()
-                    //showToast(likes.toString())
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle any errors
-                }
-            })
-
+            databaseRef.child("playlists").child("group").child("playlists").child(playlistId)
         }
 
+        playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Retrieve the current view count
+                val views = snapshot.child("views").getValue(Int::class.java) ?: 0
+                callback(views)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors
+                callback(0) // Provide default value in case of error
+            }
+        })
     }
 
-
-    private fun retrieveViews(playlistId: String, playlistType: String, userId: String) {
-        if (playlistType == "single") {
-
-            val databaseRef =
-                FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("single").child("playlists")
-                    .child(playlistId)
-
-            playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                @RequiresApi(Build.VERSION_CODES.M)
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Retrieve the current view count
-                    val views = snapshot.child("views").getValue(Int::class.java)
-                    binding.seenUsers.text = views.toString()
-                    //showToast(views.toString())
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle any errors
-                }
-            })
-
-        } else {
-            val databaseRef =
-                FirebaseDatabase.getInstance().reference.child("users").child(userId)
-            val playlistRef =
-                databaseRef.child("playlists").child("group").child("playlists")
-                    .child(playlistId)
-
-            playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                @RequiresApi(Build.VERSION_CODES.M)
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Retrieve the current view count
-                    val views = snapshot.child("views").getValue(Int::class.java) ?: 0
-                    binding.seenUsers.text = views.toString()
-                    //showToast(views.toString())
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle any errors
-                }
-            })
-
-        }
-
-    }
 
     private fun hasUserViewedPlaylist(
         playlistId: String, userId: String, callback: (Boolean) -> Unit
@@ -435,75 +611,42 @@ class AudioActivity : AppCompatActivity() {
 
 
     private fun increasePlaylistViews(playlistId: String, userId: String, playlistType: String) {
-        if (playlistType == "single") {
-            hasUserViewedPlaylist(playlistId, userId) { hasViewed ->
-                if (!hasViewed) {
-                    val databaseRef =
-                        FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    val playlistRef =
-                        databaseRef.child("playlists").child("single").child("playlists")
-                            .child(playlistId)
+        hasUserViewedPlaylist(playlistId, userId) { hasViewed ->
+            if (!hasViewed) {
+                val databaseRef =
+                    FirebaseDatabase.getInstance().reference.child("users").child(userId)
+                val playlistRef = when (playlistType) {
+                    "single" -> databaseRef.child("playlists").child("single").child("playlists")
+                        .child(playlistId)
 
-                    playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        @RequiresApi(Build.VERSION_CODES.M)
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            // Retrieve the current view count
-                            var views = snapshot.child("views").getValue(Int::class.java) ?: 0
+                    "group" -> databaseRef.child("playlists").child("group").child("playlists")
+                        .child(playlistId)
 
-                            // Increment the view count
-                            views++
+                    else -> null // Handle invalid playlistType if needed
+                }
 
+                playlistRef?.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        // Check if the playlist is not viewed by the current user again
+                        val views = snapshot.child("views").getValue(Int::class.java) ?: 0
+                        if (views == 0) {
+                            // Increment the view count only if it's not the current user's view
+                            var newViews = views + 1
                             // Update the view count in the database
-                            playlistRef.child("views").setValue(views)
-
+                            playlistRef.child("views").setValue(newViews)
                             // Mark the playlist as viewed by the user
                             markPlaylistAsViewed(playlistId, userId)
-                            binding.seenUsers.text = views.toString()
-                            binding.views.setBackgroundColor(getColor(R.color.myloblue))
                         }
+                    }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle any errors
-                        }
-                    })
-                }
-            }
-        } else {
-            hasUserViewedPlaylist(playlistId, userId) { hasViewed ->
-                if (!hasViewed) {
-                    val databaseRef =
-                        FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    val playlistRef =
-                        databaseRef.child("playlists").child("group").child("playlists")
-                            .child(playlistId)
-
-                    playlistRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        @RequiresApi(Build.VERSION_CODES.M)
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            // Retrieve the current view count
-                            var views = snapshot.child("views").getValue(Int::class.java) ?: 0
-
-                            // Increment the view count
-                            views++
-
-                            // Update the view count in the database
-                            playlistRef.child("views").setValue(views)
-
-                            // Mark the playlist as viewed by the user
-                            markPlaylistAsViewed(playlistId, userId)
-                            binding.seenUsers.text = views.toString()
-                            binding.views.setBackgroundColor(getColor(R.color.myloblue))
-                            binding.seenUsers.setBackgroundColor(getColor(R.color.myloblue))
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle any errors
-                        }
-                    })
-                }
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle any errors
+                    }
+                })
             }
         }
     }
+
 
     private fun markPlaylistAsViewed(playlistId: String, userId: String) {
         val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
@@ -516,36 +659,57 @@ class AudioActivity : AppCompatActivity() {
     }
 
 
-    private fun commentOnPlaylist(
-        comment: String, userId: String, playlistId: String, playlistType: String
-    ) {
-        val commentRef =
-            FirebaseDatabase.getInstance().reference.child("users").child(userId).child("playlists")
+//    private fun commentOnPlaylist(
+//        comment: String, userId: String, playlistId: String, playlistType: String
+//    ) {
+//        val commentRef =
+//            FirebaseDatabase.getInstance().reference.child("users").child(userId).child("playlists")
+//
+//        if (playlistType == "single") {
+//            // Generate a unique key for the new comment
+//            val commentId = commentRef.child("single").child("playlists").push().key
+//
+//            // Create a map representing the comment data
+//            val commentData = mapOf(
+//                "commentId" to commentId,
+//                "comment" to comment,
+//                "userId" to userId,
+//                "playlistId" to playlistId
+//            )
+//
+//            // Set the comment data under the generated key
+//            commentRef.child("single").child("playlists").child(playlistId).child("comments")
+//                .child(commentId!!).setValue(commentData).addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        showToast("Comment sent")
+//                        binding.commenEdt.setText("")
+//                        binding.commentEdtlayout.visibility = View.GONE
+//                    } else {
+//                        // Handle the case where setting the value fails
+//                        showToast("Failed to send comment")
+//                    }
+//                }
+//        }
+//    }
 
-        if (playlistType == "single") {
-            // Generate a unique key for the new comment
-            val commentId = commentRef.child("single").child("playlists").push().key
+    private fun showBottomSheet(users: List<String>) {
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_users, null)
+        val recyclerViewUsers = bottomSheetView.findViewById<RecyclerView>(R.id.recyclerViewUsers)
+        recyclerViewUsers.layoutManager = LinearLayoutManager(this)
+        recyclerViewUsers.adapter = UserViewsAdapter(users)
 
-            // Create a map representing the comment data
-            val commentData = mapOf(
-                "commentId" to commentId,
-                "comment" to comment,
-                "userId" to userId,
-                "playlistId" to playlistId
-            )
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+    }
 
-            // Set the comment data under the generated key
-            commentRef.child("single").child("playlists").child(playlistId).child("comments")
-                .child(commentId!!).setValue(commentData).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        showToast("Comment sent")
-                        binding.commenEdt.setText("")
-                        binding.commentEdtlayout.visibility = View.GONE
-                    } else {
-                        // Handle the case where setting the value fails
-                        showToast("Failed to send comment")
-                    }
-                }
+    // Call this method when the view button is clicked
+    private fun onViewButtonClicked() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        // Retrieve the list of users who have viewed the playlist
+        retrieveViewedUsers(playlistId, playlistType, currentUserId) { users ->
+            // Show bottom sheet with the list of users
+            showBottomSheet(users)
         }
     }
 
@@ -1140,19 +1304,19 @@ class AudioActivity : AppCompatActivity() {
 //                    snackbar.show()
 //                    progressDialog.dismiss()
 //                } else {
-                    // Download the audio file to the specified location
-                    val downloadTask = storageReference.getFile(localFile)
+                // Download the audio file to the specified location
+                val downloadTask = storageReference.getFile(localFile)
 
-                    downloadTask.addOnSuccessListener {
-                        Toast.makeText(this, "Download completed", Toast.LENGTH_SHORT).show()
-                        progressDialog.dismiss()
-                    }.addOnFailureListener {
-                        Toast.makeText(this, "Download failed: $it", Toast.LENGTH_SHORT).show()
-                    }.addOnProgressListener { taskSnapshot ->
-                        val progress =
-                            (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
-                        val limitedProgress = progress.coerceAtMost(100)
-                        progressDialog.progress = limitedProgress
+                downloadTask.addOnSuccessListener {
+                    Toast.makeText(this, "Download completed", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Download failed: $it", Toast.LENGTH_SHORT).show()
+                }.addOnProgressListener { taskSnapshot ->
+                    val progress =
+                        (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                    val limitedProgress = progress.coerceAtMost(100)
+                    progressDialog.progress = limitedProgress
 
                 }
             }.addOnFailureListener {
@@ -1187,6 +1351,12 @@ class AudioActivity : AppCompatActivity() {
 //        this.maxFileSizeBytes =
 //            preferences.getLong("maxFileSizeBytes", DEFAULT_MAX_FILE_SIZE.toLong())
 //    }
+
+    override fun onStop() {
+        super.onStop()
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+    }
 
     companion object {
         const val EXTRA_PLAYLIST_SEEN = "seen"

@@ -35,6 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name of song"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />

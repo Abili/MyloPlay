@@ -4,61 +4,38 @@ package com.abig.myloplay.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.abig.myloplay.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ActivityMainBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final ConstraintLayout rootView;
 
   @NonNull
-  public final Button buttonLogIn;
+  public final BottomNavigationView bottomNavigationView;
 
   @NonNull
-  public final Button buttonSignOut;
+  public final FrameLayout fragmentContainer;
 
-  @NonNull
-  public final Button buttonSignUp;
-
-  @NonNull
-  public final EditText editTextEmail;
-
-  @NonNull
-  public final EditText editTextPassword;
-
-  @NonNull
-  public final Button phonenumber;
-
-  @NonNull
-  public final TextView textViewStatus;
-
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button buttonLogIn,
-      @NonNull Button buttonSignOut, @NonNull Button buttonSignUp, @NonNull EditText editTextEmail,
-      @NonNull EditText editTextPassword, @NonNull Button phonenumber,
-      @NonNull TextView textViewStatus) {
+  private ActivityMainBinding(@NonNull ConstraintLayout rootView,
+      @NonNull BottomNavigationView bottomNavigationView, @NonNull FrameLayout fragmentContainer) {
     this.rootView = rootView;
-    this.buttonLogIn = buttonLogIn;
-    this.buttonSignOut = buttonSignOut;
-    this.buttonSignUp = buttonSignUp;
-    this.editTextEmail = editTextEmail;
-    this.editTextPassword = editTextPassword;
-    this.phonenumber = phonenumber;
-    this.textViewStatus = textViewStatus;
+    this.bottomNavigationView = bottomNavigationView;
+    this.fragmentContainer = fragmentContainer;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -83,50 +60,20 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.buttonLogIn;
-      Button buttonLogIn = ViewBindings.findChildViewById(rootView, id);
-      if (buttonLogIn == null) {
+      id = R.id.bottomNavigationView;
+      BottomNavigationView bottomNavigationView = ViewBindings.findChildViewById(rootView, id);
+      if (bottomNavigationView == null) {
         break missingId;
       }
 
-      id = R.id.buttonSignOut;
-      Button buttonSignOut = ViewBindings.findChildViewById(rootView, id);
-      if (buttonSignOut == null) {
+      id = R.id.fragment_container;
+      FrameLayout fragmentContainer = ViewBindings.findChildViewById(rootView, id);
+      if (fragmentContainer == null) {
         break missingId;
       }
 
-      id = R.id.buttonSignUp;
-      Button buttonSignUp = ViewBindings.findChildViewById(rootView, id);
-      if (buttonSignUp == null) {
-        break missingId;
-      }
-
-      id = R.id.editTextEmail;
-      EditText editTextEmail = ViewBindings.findChildViewById(rootView, id);
-      if (editTextEmail == null) {
-        break missingId;
-      }
-
-      id = R.id.editTextPassword;
-      EditText editTextPassword = ViewBindings.findChildViewById(rootView, id);
-      if (editTextPassword == null) {
-        break missingId;
-      }
-
-      id = R.id.phonenumber;
-      Button phonenumber = ViewBindings.findChildViewById(rootView, id);
-      if (phonenumber == null) {
-        break missingId;
-      }
-
-      id = R.id.textViewStatus;
-      TextView textViewStatus = ViewBindings.findChildViewById(rootView, id);
-      if (textViewStatus == null) {
-        break missingId;
-      }
-
-      return new ActivityMainBinding((LinearLayout) rootView, buttonLogIn, buttonSignOut,
-          buttonSignUp, editTextEmail, editTextPassword, phonenumber, textViewStatus);
+      return new ActivityMainBinding((ConstraintLayout) rootView, bottomNavigationView,
+          fragmentContainer);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

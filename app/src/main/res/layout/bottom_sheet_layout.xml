@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/playlistNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:padding="16dp"
+        android:text="@string/playlist_name"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Playlist"
+        app:drawableStartCompat="@drawable/ic_delete" />
+    <View
+        android:layout_width="match_parent"
+        android:background="#C1C1C1"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:drawablePadding="20dp"
+        android:drawableStart="@drawable/ic_download"
+        android:id="@+id/download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Download Playlist" />
+    <View
+        android:layout_width="match_parent"
+        android:background="#FFC1C1C1"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="music_genres">
+        <item>Pop</item>
+        <item>Rock</item>
+        <item>Hip Hop</item>
+        <item>Jazz</item>
+        <item>Blues</item>
+        <item>Classical</item>
+        <item>Country</item>
+        <item>Electronic</item>
+        <item>Reggae</item>
+        <item>R&amp;B (Rhythm and Blues)</item>
+        <item>Metal</item>
+        <item>Folk</item>
+        <item>Punk</item>
+        <item>Indie</item>
+        <item>Funk</item>
+        <item>Soul</item>
+        <item>Dance</item>
+        <item>Gospel</item>
+        <item>Alternative</item>
+        <item>Rap</item>
+
+    </string-array>
+</resources>

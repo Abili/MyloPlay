@@ -1,20 +1,19 @@
+// AudioListAdapter.kt
 package com.abig.myloplay
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.ItemSongBinding
 
 class AudioListAdapter(
-    private val onRemoveClickListener: (AudioFile) -> Unit,
-    private val onRecommendClickListener: (AudioFile) -> Unit
-) :
-    RecyclerView.Adapter<AudioListAdapter.ViewHolder>() {
+    private val onRemoveClickListener: ((AudioFile) -> Unit)?,
+    private val onRecommendClickListener: ((AudioFile) -> Unit)?,
+    private val onClickListener: ((MutableList<AudioFile>, position: Int) -> Unit)?
+) : RecyclerView.Adapter<AudioListAdapter.ViewHolder>() {
+
     private val songs = mutableListOf<AudioFile>()
 
     interface OnShuffleClickListener {
@@ -26,8 +25,6 @@ class AudioListAdapter(
         shuffledSongs.shuffle()
         return shuffledSongs
     }
-
-
 
     fun setData(song: MutableList<AudioFile>) {
         songs.clear()
@@ -47,7 +44,6 @@ class AudioListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val song = songs[position]
         holder.bind(song)
-
     }
 
     override fun getItemCount(): Int {
@@ -59,122 +55,28 @@ class AudioListAdapter(
 
         init {
             itemView.setOnClickListener {
-                // Handle playlist item click here
-
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val selectedSong = songs[position]
-                    showPlayerBottomSheet(selectedSong)
-                }
-
-                //val position = adapterPosition
-//                if (position != RecyclerView.NO_POSITION) {
-//                    val selectedSong = songs[position]
-//                    // Implement logic to display songs for the selected playlist
-//                    val intent = Intent(itemView.context, MiniPlayerActivity::class.java)
-//                    intent.putStringArrayListExtra(
-//                        MiniPlayerActivity.PLAYLIST,
-//                        ArrayList(songs.map { it.downloadUrl })
-//                    )
-//                    intent.putExtra(MiniPlayerActivity.CURRENT_POSITION, position)
-//                    intent.putExtra(MiniPlayerActivity.SONG_ID, selectedSong.downloadUrl)
-//                    intent.putStringArrayListExtra(
-//                        MiniPlayerActivity.SONG_TITLE,
-//                        ArrayList(songs.map { it.title })
-//                    )
-//                    intent.putStringArrayListExtra(
-//                        MiniPlayerActivity.ARTIST,
-//                        ArrayList(songs.map { it.artist })
-//                    )
-//                    intent.putExtra(MiniPlayerActivity.SONG_DURATION, selectedSong.duration)
-//                    itemView.context.startActivity(intent)
-//                }
-            }
-
-            binding.songMenu.setOnClickListener { view ->
-                val popupMenu = PopupMenu(view.context, binding.rootLayout)
-                popupMenu.inflate(R.menu.song_menu)
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.song_download -> {
-                            // Handle the download action
-                            val position = adapterPosition
-                            if (position != RecyclerView.NO_POSITION) {
-                                val selectedSong = songs[position]
-                                // Pass the download URL to the AudioActivity
-                                (view.context as? AudioActivity)?.downloadSong(
-                                    selectedSong.downloadUrl!!,
-                                    selectedSong.title
-                                )
-                            }
-                            true // Return true to indicate that the item is handled
-                        }
-
-                        R.id.song_recommend -> {
-                            val position = adapterPosition
-                            if (position != RecyclerView.NO_POSITION) {
-                                val selectedSong = songs[position]
-                                // Call the recommend click listener
-                                onRecommendClickListener.invoke(selectedSong)
-                            }
-                            true
-                        }
-
-                        R.id.deleteSong -> {
-                            // Handle the recommend action
-                            val position = adapterPosition
-                            if (position != RecyclerView.NO_POSITION) {
-                                val selectedSong = songs[position]
-                                showRemoveConfirmationDialog(selectedSong)
-                            }
-                            true
-                        }
-
-                        else -> false // Return false for unhandled items
+                    onClickListener?.invoke(songs, position)
+                    val context = itemView.context
+                    val intent = Intent(context, MiniPlayerActivity::class.java).apply {
+                        putStringArrayListExtra(MiniPlayerActivity.PLAYLIST, ArrayList(songs.map { it.downloadUrl }))
+                        putStringArrayListExtra(MiniPlayerActivity.SONG_TITLE, ArrayList(songs.map { it.title }))
+                        putStringArrayListExtra(MiniPlayerActivity.ARTIST, ArrayList(songs.map { it.artist }))
+                        putStringArrayListExtra(MiniPlayerActivity.SONG_DURATION, ArrayList(songs.map { it.duration }))
+                        putExtra(MiniPlayerActivity.CURRENT_POSITION, position)
+                        putParcelableArrayListExtra(MiniPlayerActivity.SONG_LISTS, ArrayList(songs))
                     }
+                    context.startActivity(intent)
                 }
-                popupMenu.show()
             }
         }
 
         fun bind(song: AudioFile) {
             binding.textTitle.text = song.title
-            binding.textDuration.text = song.duration.toString()
-            binding.textArtist.text = song.artist.toString()
+            binding.textArtist.text = song.artist
             binding.textTitle.isSelected = true
-
         }
-
-         fun showPlayerBottomSheet(selectedSong: AudioFile) {
-            val bottomSheetFragment = MiniPlayerActivity()
-            val bundle = Bundle()
-            // Pass necessary data to the bottom sheet fragment
-            bundle.putString(MyloPlayer.SONG_ID, selectedSong.downloadUrl)
-            bundle.putStringArrayList(
-                MiniPlayerActivity.SONG_TITLE,
-                ArrayList(songs.map { it.title })
-            )
-            bundle.putStringArrayList(
-                MiniPlayerActivity.PLAYLIST,
-                ArrayList(songs.map { it.downloadUrl })
-            )
-            bundle.putStringArrayList(
-                MiniPlayerActivity.ARTIST,
-            ArrayList(songs.map { it.artist })
-            )
-            bundle.putStringArrayList(
-                MiniPlayerActivity.SONG_DURATION,
-                ArrayList(songs.map { it.duration })
-            )
-            // Add any other necessary data to the bundle
-            bottomSheetFragment.arguments = bundle
-
-            bottomSheetFragment.show(
-                (itemView.context as AppCompatActivity).supportFragmentManager,
-                bottomSheetFragment.tag
-            )
-        }
-
 
         private fun showRemoveConfirmationDialog(song: AudioFile) {
             val context = binding.root.context
@@ -182,13 +84,10 @@ class AudioListAdapter(
                 .setTitle("Remove Song")
                 .setMessage("Are you sure you want to remove this song from the playlist?")
                 .setPositiveButton("Remove") { _, _ ->
-                    // User confirmed, invoke the remove click listener
-                    onRemoveClickListener.invoke(song)
+                    onRemoveClickListener?.invoke(song)
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
         }
     }
-
-
 }

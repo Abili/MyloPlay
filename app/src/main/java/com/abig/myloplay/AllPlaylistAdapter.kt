@@ -1,8 +1,10 @@
 package com.abig.myloplay
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.OwnerPlItemBinding
 import com.bumptech.glide.Glide
@@ -12,7 +14,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewHolder>() {
+class AllPlaylistAdapter(private val fragmentManager: FragmentManager) :
+    RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -61,6 +64,19 @@ class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewH
         fun bind(playlist: Playlist) {
             binding.textViewPlaylistName.text = playlist.name
             retrieveCurrentUserPlaylists(playlist.id!!, playlist.userId!!)
+
+            binding.options.setOnClickListener {
+                val optionsBottomSheetFragment = OptionsBottomSheetFragment()
+                val args = Bundle()
+                args.putString("playlistName", playlist.name)
+                args.putString("userId", playlist.userId)
+                args.putString("playlistId", playlist.id)
+                args.putString("playlistType", "single")
+
+                optionsBottomSheetFragment.arguments = args
+                optionsBottomSheetFragment.show(fragmentManager, optionsBottomSheetFragment.tag)
+
+            }
         }
 
         private fun retrieveCurrentUserPlaylists(playlistId: String, userId: String) {
@@ -91,7 +107,7 @@ class AllPlaylistAdapter : RecyclerView.Adapter<AllPlaylistAdapter.PlaylistViewH
                         Glide.with(binding.root).load(lastSongAlbumArtUrl).centerCrop()
                             .into(binding.ownersProfileImage)
                     } else {
-                        Glide.with(binding.root).load(R.drawable.mylo_bg_logo).centerCrop()
+                        Glide.with(binding.root).load(R.drawable.mylogo).centerCrop()
                             .into(binding.ownersProfileImage)
                     }
                 }

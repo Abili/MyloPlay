@@ -3190,6 +3190,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable add_song
 drawable app_settings
 drawable avd_hide_password
 drawable avd_show_password
@@ -3477,6 +3478,7 @@ drawable flag_wallis_and_futuna
 drawable flag_yemen
 drawable flag_zambia
 drawable flag_zimbabwe
+drawable frnd_tail
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable ic_arrow_back_black_24
@@ -3491,6 +3493,7 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable ic_chat
 drawable ic_check
 drawable ic_check_mark
 drawable ic_clear
@@ -3499,8 +3502,11 @@ drawable ic_clear_black_24dp
 drawable ic_clock_black_24dp
 drawable ic_delete
 drawable ic_download
+drawable ic_downloads
 drawable ic_edit
 drawable ic_email
+drawable ic_error
+drawable ic_folder
 drawable ic_group
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
@@ -3509,22 +3515,27 @@ drawable ic_like
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
+drawable ic_message_read
+drawable ic_message_sent
 drawable ic_more_vert
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_notification
 drawable ic_password
 drawable ic_phone
 drawable ic_play
 drawable ic_play_circle
 drawable ic_playlist
 drawable ic_playlist_add
+drawable ic_playlists
 drawable ic_recommend
 drawable ic_save
 drawable ic_search_black_24
 drawable ic_see
 drawable ic_send
+drawable ic_share
 drawable ic_shuffle
 drawable ic_upward
 drawable ic_user
@@ -3615,7 +3626,9 @@ drawable play
 drawable playlist_add_check
 drawable preference_list_divider_material
 drawable previous
+drawable settings_black_24dp
 drawable stop
+drawable tail
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -3639,7 +3652,6 @@ id FIXED_LINE
 id FIXED_LINE_OR_MOBILE
 id FRENCH
 id FUNCTION
-id FirstFragment
 id GERMAN
 id GREEK
 id GUJARATI
@@ -3688,7 +3700,6 @@ id SLOVENIAN
 id SPANISH
 id SWEDISH
 id SYM
-id SecondFragment
 id TAGALOG
 id TOLL_FREE
 id TOP_END
@@ -3740,8 +3751,6 @@ id accessibility_custom_action_9
 id actionDown
 id actionDownUp
 id actionUp
-id action_FirstFragment_to_SecondFragment
-id action_SecondFragment_to_FirstFragment
 id action_bar
 id action_bar_activity_content
 id action_bar_container
@@ -3752,18 +3761,22 @@ id action_bar_title
 id action_container
 id action_context_bar
 id action_divider
+id action_downloads
+id action_downloadsFragment_to_downloadDetailsFragment
 id action_image
 id action_menu_divider
 id action_menu_presenter
 id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
+id action_playlists
 id action_text
 id actions
 id activity_chooser_view_content
 id add
 id addSong
 id add_user
+id addsong
 id adduser_btns
 id adjust_height
 id adjust_width
@@ -3793,6 +3806,7 @@ id beginning
 id bestChoice
 id blocking
 id bottom
+id bottomNavigationView
 id bounce
 id bounceBoth
 id bounceEnd
@@ -3805,10 +3819,8 @@ id browser_actions_menu_view
 id btnUpdatePrivacy
 id buttonEditPlaylist
 id buttonLayout
-id buttonLogIn
 id buttonPanel
 id buttonSignOut
-id buttonSignUp
 id buttonVerifyCode
 id button_first
 id button_second
@@ -3828,6 +3840,11 @@ id center_vertical
 id chain
 id chain2
 id chains
+id chat
+id chat_text
+id chatime
+id chatrecycler
+id chattime
 id checkbox
 id checked
 id checkmarkImageView
@@ -3865,6 +3882,7 @@ id countryCodeHolder
 id cradle
 id creatGroupplaylistBtn
 id create_playlist
+id creatingPl_dialog
 id creatmyplaylistBtn
 id currentState
 id currentUserPlaylistsRecycler
@@ -3880,6 +3898,7 @@ id decelerate
 id decelerateAndComplete
 id decor_content_parent
 id default_activity_button
+id deleteButton
 id deleteSong
 id deltaRelative
 id dependency_ordering
@@ -3896,6 +3915,9 @@ id disableIntraAutoTransition
 id disablePostScroll
 id disableScroll
 id disjoint
+id download
+id downloadDetailsFragment
+id downloadsFragment
 id dragAnticlockwise
 id dragClockwise
 id dragDown
@@ -3911,8 +3933,6 @@ id easeOut
 id east
 id edge
 id editPl
-id editTextEmail
-id editTextPassword
 id editTextPhone
 id editTextPlaylistName
 id editTextTextEmailAddress
@@ -3937,6 +3957,7 @@ id fabOption1
 id fabOption2
 id fade
 id fastscroll
+id fileNameTextView
 id fileSizeReference
 id fileSizeSeekBar
 id fill
@@ -3953,6 +3974,7 @@ id flip
 id floating
 id floatingActionButton
 id forever
+id fragment_container
 id fragment_container_view_tag
 id friendsPlTv
 id friendsTv
@@ -3978,6 +4000,7 @@ id hide_in_inspector_tag
 id hideable
 id home
 id homeAsUp
+id hometv
 id honorRequest
 id horizontal_only
 id icon
@@ -4062,6 +4085,9 @@ id month_navigation_next
 id month_navigation_previous
 id month_title
 id motion_base
+id msg
+id msg_read
+id msg_sent
 id mtrl_anchor_parent
 id mtrl_calendar_day_selector_frame
 id mtrl_calendar_days_of_week
@@ -4107,9 +4133,11 @@ id noState
 id none
 id normal
 id north
+id not_sent
 id notification_background
 id notification_main_column
 id notification_main_column_container
+id notifications
 id off
 id on
 id onAttachStateChangeListener
@@ -4129,6 +4157,7 @@ id open_search_view_search_prefix
 id open_search_view_status_bar_spacer
 id open_search_view_toolbar
 id open_search_view_toolbar_container
+id options
 id otherUsersPlaylistsRecycler
 id other_users_playlists
 id others_profile_image
@@ -4150,12 +4179,13 @@ id percent
 id phoneAuth
 id phoneTextView
 id phoneauthLayout
-id phonenumber
 id pin
 id playBtn
 id play_btn
+id playerRecycler
 id player_background
 id playlistImageView
+id playlistNameTextView
 id playlist_name
 id playlist_num_songs
 id playlist_play_btn
@@ -4190,6 +4220,7 @@ id recommendationsLayout
 id recommendations_recy
 id recommender
 id rectangles
+id recyclerView
 id recyclerViewSongs
 id recycler_countryDialog
 id recycler_view
@@ -4238,6 +4269,7 @@ id select_dialog_listview
 id selected
 id selection_type
 id sendBtn
+id sendmsg
 id seperationTv
 id settings
 id sharedValueSet
@@ -4256,6 +4288,7 @@ id skipped
 id slide
 id sliding_pane_detail_container
 id sliding_pane_layout
+id small_player
 id snackbar_action
 id snackbar_image
 id snackbar_text
@@ -4328,6 +4361,9 @@ id textStart
 id textTitle
 id textTop
 id textView
+id textViewArtist
+id textViewDuration
+id textViewName
 id textViewNumSongs
 id textViewPlaylistName
 id textViewStatus
@@ -4375,6 +4411,7 @@ id uniform
 id unlabeled
 id up
 id useLogo
+id username
 id usernameTextView
 id verifyCode
 id vertical_only
@@ -4518,6 +4555,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_all_playlists
 layout activity_audio
+layout activity_chat
 layout activity_edit_playlist
 layout activity_group_playlist_contacts
 layout activity_home
@@ -4534,8 +4572,10 @@ layout activity_user_contacts
 layout activity_user_privacy_contacts
 layout activity_user_profile
 layout activity_verification_code
+layout bottom_sheet_layout
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
+layout chat_model
 layout custom_dialog
 layout custom_snackbar_layout
 layout design_bottom_navigation_item
@@ -4557,12 +4597,17 @@ layout dialog_add_playlist
 layout dialog_privacy_settings
 layout expand_button
 layout fastscroll__default_bubble
+layout fragment_download_details
+layout fragment_downloads
 layout fragment_first
 layout fragment_second
+layout friends_chat_model
 layout image_frame
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_contact
+layout item_download_detail
+layout item_downloaded_file
 layout item_privacy_contact
 layout item_song
 layout layout_code_picker
@@ -4631,6 +4676,7 @@ layout notification_template_part_time
 layout others_playlist_item
 layout owner_pl_item
 layout owner_playlist_item
+layout player_item_song
 layout playlist_item
 layout popup_layout
 layout preference
@@ -4653,8 +4699,11 @@ layout recommendations_item
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout small_player
 layout song_item
 layout support_simple_spinner_dropdown_item
+menu bottom_navigation_menu
+menu chatmenu
 menu settings
 menu song_menu
 mipmap ic_launcher
@@ -4830,6 +4879,7 @@ string fab_transformation_sheet_behavior
 string fallback_menu_item_copy_link
 string fallback_menu_item_open_in_browser
 string fallback_menu_item_share_link
+string fcm_fallback_notification_channel_label
 string firebase_database_url
 string first_fragment_label
 string first_name
@@ -4840,6 +4890,7 @@ string google_api_key
 string google_app_id
 string google_crash_reporting_api_key
 string google_storage_bucket
+string hello_blank_fragment
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
 string in_progress
@@ -6367,4 +6418,5 @@ styleable fastscroll__fastScroller fastscroll__bubbleColor fastscroll__bubbleTex
 styleable include constraintSet
 xml backup_rules
 xml data_extraction_rules
+xml file_paths
 xml image_share_filepaths

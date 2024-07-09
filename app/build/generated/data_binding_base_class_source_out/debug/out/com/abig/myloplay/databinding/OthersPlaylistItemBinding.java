@@ -17,6 +17,9 @@ import java.lang.Object;
 
 public abstract class OthersPlaylistItemBinding extends ViewDataBinding {
   @NonNull
+  public final ImageView options;
+
+  @NonNull
   public final ImageView othersProfileImage;
 
   @NonNull
@@ -32,9 +35,10 @@ public abstract class OthersPlaylistItemBinding extends ViewDataBinding {
   public final LinearLayout textViewsContainer2;
 
   protected OthersPlaylistItemBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      ImageView othersProfileImage, TextView textViewNumSongs, TextView textViewPlaylistName,
-      TextView textViewUserName, LinearLayout textViewsContainer2) {
+      ImageView options, ImageView othersProfileImage, TextView textViewNumSongs,
+      TextView textViewPlaylistName, TextView textViewUserName, LinearLayout textViewsContainer2) {
     super(_bindingComponent, _root, _localFieldCount);
+    this.options = options;
     this.othersProfileImage = othersProfileImage;
     this.textViewNumSongs = textViewNumSongs;
     this.textViewPlaylistName = textViewPlaylistName;

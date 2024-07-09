@@ -73,4 +73,15 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="sign_in_with_phonenumber">Signin with PhoneNumber</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user001">user001</string>
+    <string name="title_activity_pool_of_music">PoolOfMusic</string>
+    <string name="select_genre">Please Select Genre</string>
+    <string name="play_pause">playpause\n</string>
+    <string name="artist_name">artistname\n</string>
+    <string name="music_icon">musicicon\n</string>
+    <string name="song_title">songtitle</string>
+    <string name="album_art">thmbnail\n</string>
+    <string name="prev">prev</string>
 </resources>

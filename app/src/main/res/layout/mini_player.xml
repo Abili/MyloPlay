@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/miniplayer_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical">
 
@@ -27,16 +27,29 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/show_lyrics"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:src="@drawable/ic_upward"
-        android:text="lyrics"
-        android:textColor="@color/white"
-        app:drawableBottomCompat="@drawable/ic_upward" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/show_lyrics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="No Lyrics"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playerRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,9 +59,9 @@
 
         <TextView
             android:id="@+id/songTitle"
-            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="Name of song"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -75,7 +88,7 @@
         app:layout_constraintTop_toBottomOf="@id/titles_tv">
 
         <TextView
-            android:id="@+id/endsongDuration"
+            android:id="@+id/end_song_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -83,7 +96,7 @@
             android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/startsongDuration"
+            android:id="@+id/start_song_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -93,7 +106,7 @@
 
 
     <SeekBar
-        android:id="@+id/seekbar"
+        android:id="@+id/seek_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"
@@ -125,16 +138,29 @@
             app:civ_border_overlay="true"
             app:civ_border_width="1dp" />
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/play_btn"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:src="@drawable/play"
             app:civ_border_color="@color/white"
             app:civ_border_overlay="true"
             app:civ_border_width="1dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/pause_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/pause"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="true"
+            app:civ_border_width="1dp" />
+        </FrameLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/next_btn"

@@ -22,56 +22,93 @@
 
                 <LinearLayout
                     android:layout_width="@dimen/column_width"
-                    android:layout_height="250dp"
+                    android:layout_height="300dp"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/others_profile_image"
-                        android:layout_width="match_parent"
+                    <FrameLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_weight="2"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/nice_bg"
-                        app:civ_border_color="#FF000000"
-                        app:civ_border_width="0.7dp" />
+                        android:layout_weight="1.5">
+
+                        <ImageView
+                            android:elevation="10dp"
+                            android:id="@+id/options"
+                            android:layout_width="25dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="top|end"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_more_vert"
+                            app:civ_border_color="#FF000000"
+                            app:civ_border_width="0.7dp" />
+                        <ImageView
+                            android:id="@+id/others_profile_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/nice_bg"
+                            app:civ_border_color="#FF000000"
+                            app:civ_border_width="0.7dp" />
+
+                    </FrameLayout>
 
                     <LinearLayout
+
                         android:id="@+id/textViewsContainer2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="5dp">
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewNumSongs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|center_horizontal"
-                            android:background="@color/white"
+                            android:background="@color/black"
+                            android:paddingStart="10dp"
                             android:text="0 songs"
-                            android:textColor="@color/black"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="marquee"
-                            android:singleLine="true"
-                            android:text="username"
-                            android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/textViewPlaylistName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:ellipsize="marquee"
+                            android:paddingStart="10dp"
                             android:singleLine="true"
                             android:text="@string/playlist_name"
                             android:textColor="@color/black"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="20dp"
+                            app:cardBackgroundColor="@color/black"
+                            app:cardCornerRadius="20dp">
+
+                            <TextView
+                                android:id="@+id/textViewUserName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:ellipsize="marquee"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:paddingTop="5dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="5dp"
+                                android:singleLine="true"
+                                android:text="@string/username"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+                        </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
                 </LinearLayout>

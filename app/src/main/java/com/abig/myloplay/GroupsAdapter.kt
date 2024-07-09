@@ -1,10 +1,12 @@
 package com.abig.myloplay
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.OthersPlaylistItemBinding
 import com.bumptech.glide.Glide
@@ -14,7 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class GroupsAdapter : RecyclerView.Adapter<GroupsAdapter.PlaylistViewHolder>() {
+class GroupsAdapter(private val fragmentManager: FragmentManager) : RecyclerView.Adapter<GroupsAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -65,6 +67,19 @@ class GroupsAdapter : RecyclerView.Adapter<GroupsAdapter.PlaylistViewHolder>() {
             retrieveGroupPlaylists(playlist.id!!, playlist.userId!!)
             playlistName.text = playlist.name
             binding.textViewUserName.text = playlist.userName
+            binding.options.setOnClickListener {
+                val optionsBottomSheetFragment = OptionsBottomSheetFragment()
+                val args = Bundle()
+                args.putString("playlistName", playlist.name)
+                args.putString("userId", playlist.userId)
+                args.putString("userId", playlist.userId)
+                args.putString("playlistId", playlist.id)
+                args.putString("playlistType", "group")
+
+                optionsBottomSheetFragment.arguments = args
+                optionsBottomSheetFragment.show(fragmentManager, optionsBottomSheetFragment.tag)
+
+            }
         }
 
         private fun retrieveGroupPlaylists(playlistId: String, uid: String) {

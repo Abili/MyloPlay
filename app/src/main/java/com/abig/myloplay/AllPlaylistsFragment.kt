@@ -1,7 +1,8 @@
 package com.abig.myloplay
 
 import android.Manifest
-import android.content.Context
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -12,9 +13,9 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.Menu
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -23,8 +24,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.abig.myloplay.Util.formatPhoneNumber
 import com.abig.myloplay.databinding.ActivityAllPlaylistsBinding
 import com.abig.myloplay.databinding.DialogAddPlaylistBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -38,7 +41,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
-class AllPlaylists : AppCompatActivity() {
+class AllPlaylistsFragment : AppCompatActivity() {
 
     private lateinit var othersPlayListAdapter: OthersAdapter
     private lateinit var recommendationsAdapter: RecommendationsAdapter
@@ -57,35 +60,42 @@ class AllPlaylists : AppCompatActivity() {
     private var isOptionsVisible = false
     private var allPlaylists: MutableList<Playlist> = mutableListOf()
     private lateinit var filteredPlaylists: MutableList<Playlist>
+    lateinit var playListViewModel: PlayListViewModel
+    val isAdded = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         binding = ActivityAllPlaylistsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        onOptionsItemSelected()
         contactsRetriever = ContactsRetriever(this)
         // Check and request permissions
         database = FirebaseDatabase.getInstance().reference
-        checkAndRequestContactsPermission()
+
 
         auth = FirebaseAuth.getInstance()
+//        playListViewModel = ViewModelProvider(
+//            this, PlayListViewModel.Factory(this)
+//        )[PlayListViewModel::class.java]
 
         // Initialize FirebaseAuth
         //auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            startActivity(Intent(this@AllPlaylists, SignUp::class.java))
-            finish()
+            startActivity(Intent(this, SignUp::class.java))
+            this.finish()
         }
 
 
 
         binding.currentUserPlaylistsRecycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        currentPlayListAdapter = AllPlaylistAdapter()
-        othersPlayListAdapter = OthersAdapter()
-        groupsAdapter = GroupsAdapter()
+        currentPlayListAdapter = AllPlaylistAdapter(supportFragmentManager)
+        othersPlayListAdapter = OthersAdapter(supportFragmentManager)
+        groupsAdapter = GroupsAdapter(supportFragmentManager)
 
         retrieveRecommendedSongs()
 
@@ -125,6 +135,10 @@ class AllPlaylists : AppCompatActivity() {
 //            )
 //        )
 
+        binding.creatmyplaylistBtn.setOnClickListener {
+            openAudioSelection()
+        }
+
         binding.createPlaylist.setOnClickListener {
             toggleOptionsVisibility()
         }
@@ -138,7 +152,7 @@ class AllPlaylists : AppCompatActivity() {
         }
 
         binding.groupPlaylist.setOnClickListener {
-            openAudioSelection()
+            //openAudioSelection()
             AnimationUtils.loadAnimation(this, R.anim.slide_down)
             startActivity(Intent(this, GroupPlaylistContacts::class.java))
         }
@@ -156,8 +170,22 @@ class AllPlaylists : AppCompatActivity() {
 
 
         retrieveCurrentUserPlaylists()
-        //retrieveOtherUsersPlaylists()
+        retrieveOtherUsersPlaylists()
+//        playListViewModel.loadMyPlaylists()
+//        playListViewModel.myplaylists.observe(viewLifecycleOwner) { playlists ->
+//            if (playlists.isNotEmpty()) {
+//                currentPlayListAdapter.setPlaylists(playlists)
+//            } else {
+//                binding.myplTv.visibility = View.VISIBLE
+//                binding.creatmyplaylistBtn.visibility = View.VISIBLE
+//                binding.currentUserPlaylistsRecycler.visibility = View.GONE
+//            }
+//
+//
+//        }
+        checkAndRequestContactsPermission()
     }
+
 
     private fun filterPlaylists(query: String?) {
         query?.let {
@@ -214,12 +242,15 @@ class AllPlaylists : AppCompatActivity() {
             else -> {
                 // Permission not granted, request it
                 ActivityCompat.requestPermissions(
-                    this, arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CONTACTS_PERMISSION
+                    this,
+                    arrayOf(Manifest.permission.READ_CONTACTS),
+                    REQUEST_CONTACTS_PERMISSION
                 )
             }
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
@@ -229,10 +260,21 @@ class AllPlaylists : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, retrieve contacts
                 retrieveOtherUsersPlaylists()
+//                playListViewModel.loadGroupPlaylists()
+//                playListViewModel.groupPlaylists.observe(viewLifecycleOwner) { othersPlaylist ->
+//                    if (othersPlaylist.isNotEmpty()) {
+//                        othersPlayListAdapter.setPlaylists(othersPlaylist)
+//                    } else {
+//                        binding.groupPlTv.visibility = View.VISIBLE
+//                        binding.creatGroupplaylistBtn.visibility = View.VISIBLE
+//                        binding.groupPlaylistsRecycler.visibility = View.GONE
+//                    }
+//                }
+
                 retrieveGroupPlaylists()
             } else {
                 // Permission denied, handle accordingly
-                finish()
+                this.finish()
             }
         }
     }
@@ -287,13 +329,13 @@ class AllPlaylists : AppCompatActivity() {
         }
     }
 
-    private fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(this, message, duration).show()
     }
 
 
     private fun getAudioFileFromUri(uri: Uri): AudioFile? {
-        val cursor = contentResolver.query(uri, null, null, null, null)
+        val cursor = this.contentResolver.query(uri, null, null, null, null)
         cursor?.use {
             if (cursor.moveToFirst()) {
                 val titleColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
@@ -344,7 +386,7 @@ class AllPlaylists : AppCompatActivity() {
 
     private fun getDurationFromMediaStore(uri: Uri): Long {
         val mediaPlayer = MediaPlayer()
-        mediaPlayer.setDataSource(applicationContext, uri)
+        mediaPlayer.setDataSource(this, uri)
         mediaPlayer.prepare()
         val duration = mediaPlayer.duration.toLong()
         mediaPlayer.release()
@@ -354,21 +396,21 @@ class AllPlaylists : AppCompatActivity() {
 
     private fun showPlaylistNameDialog(selectedSongs: List<AudioFile>) {
         val dialogBinding = DialogAddPlaylistBinding.inflate(layoutInflater)
-        val dialog =
-            AlertDialog.Builder(this).setView(dialogBinding.root).setTitle("Enter Playlist Name")
-                .setPositiveButton("Save") { _, _ ->
-                    val playlistName = dialogBinding.editTextPlaylistName.text.toString()
+        val dialog = AlertDialog.Builder(this).setView(dialogBinding.root)
+            .setTitle("Enter Playlist Name").setPositiveButton("Save") { _, _ ->
+                val playlistName = dialogBinding.editTextPlaylistName.text.toString()
 
-                    if (playlistName.isNotBlank()) {
-                        savePlaylistToDatabase(selectedSongs, playlistName)
-                        selectedAudioFiles.clear()
+                if (playlistName.isNotBlank()) {
+                    binding.creatingPlDialog.visibility = View.VISIBLE
+                    savePlaylistToDatabase(selectedSongs, playlistName)
+                    selectedAudioFiles.clear()
 
-                    } else {
-                        showToast("Playlist name cannot be empty.")
-                    }
-                }.setNegativeButton("Cancel") { _, _ ->
-                    // Dismiss the dialog
-                }.create()
+                } else {
+                    showToast("Playlist name cannot be empty.")
+                }
+            }.setNegativeButton("Cancel") { _, _ ->
+                // Dismiss the dialog
+            }.create()
 
         dialog.show()
     }
@@ -386,7 +428,7 @@ class AllPlaylists : AppCompatActivity() {
 
         // Clear the previous songs data for this playlist
         val songsRef = playlistRef.child("songs")
-        songsRef.removeValue() // This removes all data under "songs" for the current playlist
+        songsRef.removeValue() // this removes all data under "songs" for the current playlist
 
         // Iterate through the selected songs and store them in the Firebase Realtime Database
         selectedSongs.forEach { audioFile ->
@@ -437,6 +479,9 @@ class AllPlaylists : AppCompatActivity() {
 
                                     // Save the song details to the Firebase Realtime Database
                                     songEntryRef.setValue(songDetails)
+                                    binding.creatingPlDialog.visibility = View.GONE
+                                    showToast("Playlist '$playlistName' created successfully.")
+
                                 }.addOnFailureListener { _ ->
                                     showToast("Failed to retrieve the download URL for the album art.")
                                 }
@@ -446,6 +491,8 @@ class AllPlaylists : AppCompatActivity() {
                         } else {
                             // No album art, save the song details without it
                             songEntryRef.setValue(songDetails)
+                            binding.creatingPlDialog.visibility = View.GONE
+                            showToast("Playlist '$playlistName' created successfully.")
                         }
                     }.addOnFailureListener { _ ->
                         showToast("Failed to retrieve the download URL for the song.")
@@ -455,7 +502,7 @@ class AllPlaylists : AppCompatActivity() {
             }
         }
 
-        showToast("Playlist '$playlistName' created successfully.")
+
     }
 
 
@@ -470,6 +517,7 @@ class AllPlaylists : AppCompatActivity() {
 
                     val playlists = mutableListOf<Playlist>()
                     val username = usersnap.child("username").getValue(String::class.java)
+                    val uid = usersnap.child("id").getValue(String::class.java)
                     val plsnapshot =
                         snapshot.child(userId).child("playlists").child("single").child("playlists")
                     if (snapshot.exists()) {
@@ -558,7 +606,9 @@ class AllPlaylists : AppCompatActivity() {
                                     // allPlaylists.add(playlist)
                                 }
                             } else {
-
+                                binding.friendsPlTv.visibility = View.VISIBLE
+                                binding.inviteFriends.visibility = View.VISIBLE
+                                binding.otherUsersPlaylistsRecycler.visibility = View.GONE
                             }
                         }
                     }
@@ -595,11 +645,16 @@ class AllPlaylists : AppCompatActivity() {
                             val userIdsSnapshot = playlistShot.child("userIds")
                             if (playlistShot.child("userId").value == currentUserId || userIdsSnapshot.children.any { it.value == currentUserId }) {
                                 // Log playlist information for debugging
-                                Toast.makeText(
-                                    this@AllPlaylists,
-                                    "PlaylistDebug $playlistName",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
+//                                if (isAdded) {
+//                                    Toast.makeText(
+//                                        this,
+//                                        "PlaylistDebug $playlistName",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else {
+//                                    showToast("error")
+//                                }
 
                                 val playlist = Playlist(
                                     playlistId!!,
@@ -633,15 +688,7 @@ class AllPlaylists : AppCompatActivity() {
 
 
     // Function to format the phone number
-    private fun formatPhoneNumber(phone: String): String {
-        return if (phone.startsWith("0")) {
-            // Convert phone number starting with zero to +256 format
-            "+256${phone.substring(1).replace(" ", "")}"
-        } else {
-            // Keep the existing format if it already starts with +256
-            phone.replace(" ", "")
-        }
-    }
+
 
     private fun retrieveRecommendedSongs() {
         // Retrieve playlists for other users
@@ -740,20 +787,16 @@ class AllPlaylists : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.settings, menu)
-        return true
-    }
+    fun onOptionsItemSelected() {
+        binding.settings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
+
+//        binding.notifications.setOnClickListener {
+//            startActivity(Intent(this, ChatActivity::class.java))
+//
+//        }
     }
 
     companion object {

@@ -5,10 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abig.myloplay.databinding.OthersPlaylistItemBinding
 import com.bumptech.glide.Glide
@@ -19,7 +21,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlin.random.Random
 
-class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
+class OthersAdapter(private val fragmentManager: FragmentManager) :
+    RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -71,6 +74,20 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
             retrieveOtherUserPlaylists(playlist.id!!, playlist.userId!!)
             playlistName.text = playlist.name
             binding.textViewUserName.text = playlist.userName
+
+            binding.options.setOnClickListener {
+                val optionsBottomSheetFragment = OptionsBottomSheetFragment()
+                val args = Bundle()
+                args.putString("playlistName", playlist.name)
+                args.putString("userId", playlist.userId)
+                args.putString("userId", playlist.userId)
+                args.putString("playlistId", playlist.id)
+                args.putString("playlistType", "single")
+
+                optionsBottomSheetFragment.arguments = args
+                optionsBottomSheetFragment.show(fragmentManager, optionsBottomSheetFragment.tag)
+
+            }
         }
 
         private fun retrieveOtherUserPlaylists(playlistId: String, uid: String) {
@@ -126,7 +143,12 @@ class OthersAdapter : RecyclerView.Adapter<OthersAdapter.PlaylistViewHolder>() {
             val randomColor = Color.parseColor(colors[Random.nextInt(colors.size)])
 
             val alpha = (255 * 0.5).toInt()
-            return Color.argb(alpha, Color.red(randomColor), Color.green(randomColor), Color.blue(randomColor))
+            return Color.argb(
+                alpha,
+                Color.red(randomColor),
+                Color.green(randomColor),
+                Color.blue(randomColor)
+            )
 
         }
 

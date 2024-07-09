@@ -1,0 +1,18 @@
+package com.abig.myloplay
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import java.io.Serializable
+
+@TypeConverters(StringListConverter::class)
+data class Genre(
+    var id: String?="",
+    var name: String?="",
+    val userId: String?="",
+    var songIds: List<String>?=null,
+    var userName: String?="",// Add this field
+    //val time: Timestamp = Timestamp.now()
+    var time: Long = System.currentTimeMillis(),
+    var songs: List<AudioFile>?=null
+) : Serializable

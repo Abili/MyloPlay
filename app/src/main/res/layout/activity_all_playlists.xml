@@ -3,6 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/creatingPl_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="40dp"
+        android:visibility="gone"
+
+
+        app:cardCornerRadius="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="Creating Playlist..."
+            android:textSize="20sp" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            android:indeterminateTint="@color/black" />
+    </androidx.cardview.widget.CardView>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -11,6 +39,60 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@color/black">
+
+                <TextView
+                    android:id="@+id/hometv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <!--                <FrameLayout-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="end"-->
+                <!--                    android:layout_marginEnd="20dp"-->
+                <!--                    android:padding="5dp">-->
+
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/notif"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_gravity="end|bottom"-->
+                <!--                        android:layout_marginStart="20dp"-->
+                <!--                        android:layout_marginTop="10dp"-->
+                <!--                        android:text="0"-->
+                <!--                        android:textColor="@color/white"-->
+                <!--                        android:textSize="20sp" />-->
+
+                <!--                    <ImageView-->
+                <!--                        android:id="@+id/notifications"-->
+                <!--                        android:layout_width="25dp"-->
+                <!--                        android:layout_height="25dp"-->
+                <!--                        android:contentDescription="Notifications"-->
+                <!--                        android:src="@drawable/ic_notification" />-->
+                <!--                </FrameLayout>-->
+
+                <ImageView
+                    android:id="@+id/settings"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:contentDescription="Settings"
+                    android:src="@drawable/settings_black_24dp" />
+
+
+            </androidx.appcompat.widget.Toolbar>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -145,41 +227,49 @@
             </androidx.cardview.widget.CardView>
 
             <FrameLayout
-                android:background="#9C27B0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:background="#9C27B0">
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/myplTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/white"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/ic_error"
                     android:drawablePadding="10dp"
                     android:fontFamily="monospace"
-                    android:padding="4dp"
+                    android:padding="10dp"
                     android:text="You dont have Any Playlists yet"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:visibility="gone"
+                <androidx.cardview.widget.CardView
                     android:id="@+id/creatmyplaylistBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
-                    android:background="@color/white"
-                    android:drawableStart="@drawable/ic_playlist_add"
-                    android:drawablePadding="10dp"
-                    android:fontFamily="monospace"
-                    android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="Click to Create Playlist"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="50dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawableStart="@drawable/ic_playlist_add"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="monospace"
+                        android:gravity="center_vertical"
+                        android:padding="7dp"
+                        android:text="Click to Create Playlist"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </androidx.cardview.widget.CardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/currentUserPlaylistsRecycler"
@@ -219,48 +309,55 @@
             </androidx.cardview.widget.CardView>
 
 
-
             <FrameLayout
-                android:background="#F44336"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#F44336">
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/friendsPlTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/white"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/ic_error"
                     android:drawablePadding="10dp"
                     android:fontFamily="monospace"
-                    android:padding="4dp"
+                    android:padding="10dp"
                     android:text="No Friends have created Playlists yet"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:visibility="gone"
+                <androidx.cardview.widget.CardView
                     android:id="@+id/inviteFriends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
-                    android:background="@color/white"
-                    android:drawableStart="@drawable/ic_user"
-                    android:drawablePadding="10dp"
-                    android:fontFamily="monospace"
-                    android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="Invite Friends"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/otherUsersPlaylistsRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawableStart="@drawable/ic_user"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="monospace"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:text="Invite Friends"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/otherUsersPlaylistsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </FrameLayout>
 
             <androidx.cardview.widget.CardView
@@ -282,7 +379,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:drawableStart="@drawable/ic_playlist"
+                        android:drawableStart="@drawable/ic_group"
                         android:drawablePadding="10dp"
                         android:fontFamily="monospace"
                         android:padding="5dp"
@@ -293,42 +390,50 @@
             </androidx.cardview.widget.CardView>
 
             <FrameLayout
-                android:background="@color/purple_200"
-                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:background="@color/purple_200">
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/groupPlTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/white"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/ic_error"
                     android:drawablePadding="10dp"
                     android:fontFamily="monospace"
-                    android:padding="4dp"
+                    android:padding="10dp"
                     android:text="No Group Playlists yet"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:visibility="gone"
+                <androidx.cardview.widget.CardView
                     android:id="@+id/creatGroupplaylistBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
-                    android:background="@color/white"
-                    android:drawableStart="@drawable/ic_playlist_add"
-                    android:drawablePadding="10dp"
-                    android:fontFamily="monospace"
-                    android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="Click here to Create"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawableStart="@drawable/ic_playlist_add"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="monospace"
+                        android:gravity="center_vertical"
+                        android:padding="7dp"
+                        android:text="Click here to Create"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </androidx.cardview.widget.CardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/group_playlists_recycler"
